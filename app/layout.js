@@ -1,4 +1,4 @@
-import '../styles/globals.css';
+import './styles/globals.css';
 
 export default function Layout({ children }) {
   return (
@@ -7,4 +7,4 @@ export default function Layout({ children }) {
       <body>{children}</body>
     </html>
   );
-}
+};
