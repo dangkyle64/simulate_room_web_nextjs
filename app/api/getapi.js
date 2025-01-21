@@ -1,4 +1,4 @@
-const fetchData = async () => {
+async function fetchData() {
     try {
         const response = await fetch('http://localhost:5000/api/hello');
 
@@ -15,4 +15,5 @@ const fetchData = async () => {
     };
 };
 
+module.exports = { fetchData };
 fetchData();
