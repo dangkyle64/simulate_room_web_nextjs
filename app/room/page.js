@@ -1,6 +1,6 @@
 const { fetchRoomData } = require('../_api/roomApi')
 
-export default async function furnitureHome() {
+export default async function roomHome() {
 
     const data = await fetchRoomData();
     const convertedData = JSON.stringify(data);
