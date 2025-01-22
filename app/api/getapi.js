@@ -1,6 +1,7 @@
 async function fetchData() {
     try {
-        const response = await fetch('https://simulate-room-nodejs.onrender.com/api/hello');
+        const response = await fetch('https://simulate-room-nodejs.onrender.com/api/get/hello');
+        //const response = await fetch('http://localhost:5000/api/get/hello');
 
         if (!response.ok) {
             throw new Error('Failed to fetch data');
