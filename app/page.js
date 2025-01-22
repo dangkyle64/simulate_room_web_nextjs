@@ -1,4 +1,4 @@
-const { fetchData } = require('./api/getapi');
+const { fetchData } = require('./_api/getapi');
 
 export default async function Home() {
 

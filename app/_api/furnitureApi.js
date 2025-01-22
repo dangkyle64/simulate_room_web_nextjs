@@ -1,7 +1,7 @@
 async function fetchFurnitureData() {
     try {
-        //const response = await fetch('https://simulate-room-nodejs.onrender.com/api/furniture/');
-        const response = await fetch('http://localhost:5000/api/furniture/');
+        const response = await fetch('https://simulate-room-nodejs.onrender.com/api/furniture/');
+        //const response = await fetch('http://localhost:5000/api/furniture/');
 
         if (!response.ok) {
             throw new Error('Failed to fetch data');

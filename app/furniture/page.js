@@ -1,4 +1,4 @@
-const { fetchFurnitureData } = require('../api/furnitureApi')
+const { fetchFurnitureData } = require('../_api/furnitureApi')
 
 export default async function furnitureHome() {
 
