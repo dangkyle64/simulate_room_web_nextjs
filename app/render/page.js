@@ -43,9 +43,13 @@ export default function RenderPage() {
             cube.material.diffuseColor = BABYLON.Color3.Green();
         });
 
-        dragBehavior.onDragEndObservable.add(() => {
+        dragBehavior.onDragEndObservable.add((event) => {
+            console.log('Drag ended!');
             cube.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
             cube.material.diffuseColor  = BABYLON.Color3.White();
+
+            const finalPosition = cube.position;
+            console.log('Final position of the object:', finalPosition);
         });
 
         engine.runRenderLoop(() => {
