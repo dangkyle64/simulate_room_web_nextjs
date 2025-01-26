@@ -13,8 +13,9 @@ async function fetchFurnitureData() {
 
     } catch(error) {
         console.log('There was an error getting the data: ', error);
+        return [];
     };
 };
 
 module.exports = { fetchFurnitureData };
-fetchFurnitureData();
+//fetchFurnitureData();
