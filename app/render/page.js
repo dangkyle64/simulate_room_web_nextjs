@@ -1,10 +1,13 @@
 'use client';
 
 const BABYLON = require('@babylonjs/core');
-const { useEffect } = require('react');
+const { useEffect, useRef, useState } = require('react');
 
 export default function RenderPage() {
     
+    const canvasRef = useRef(null);
+    const selectedObjectRef = useRef(null);
+
     useEffect(() => {
 
         const canvas = document.getElementById('renderCanvas');
@@ -38,6 +41,37 @@ export default function RenderPage() {
         const dragBehavior = new BABYLON.PointerDragBehavior();
         cube.addBehavior(dragBehavior);
 
+        const dropSound = new BABYLON.Sound("dropSound", "/sounds/metal_pipe.mp3", scene, null, {
+            loop: false,
+            autoplay: false,
+        });
+
+        scene.onPointerDown = (event, pickResult) => {
+            if(pickResult.hit) {
+                selectedObjectRef.current = pickResult.pickedMesh;
+
+                console.log(`Selected object is now: ${selectedObjectRef.current.name}`);
+            };
+        };
+
+        const rotateSelectedObject  = () => {
+            if(selectedObjectRef.current) {
+                selectedObjectRef.current.rotate(BABYLON.Axis.Y, Math.PI / 180);
+                //console.log(`Rotating object: ${selectObject.name}`);
+            } else {
+                console.log('No object selected');
+            }
+        };
+
+        const handleKeyDown = (event) => {
+            //console.log(`Key pressed: ${event.key}`);
+            if (event.key === 'r' || event.key === 'R') {
+                rotateSelectedObject();
+            };
+        };
+
+        window.addEventListener('keydown', handleKeyDown);
+
         dragBehavior.onDragStartObservable.add(() => {
             cube.material = new BABYLON.StandardMaterial("dragMaterial", scene);
             cube.material.diffuseColor = BABYLON.Color3.Green();
@@ -50,6 +84,10 @@ export default function RenderPage() {
 
             const finalPosition = cube.position;
             console.log('Final position of the object:', finalPosition);
+
+            if (!dropSound.isPlaying) {
+                //dropSound.play();
+            };
         });
 
         engine.runRenderLoop(() => {
@@ -61,6 +99,7 @@ export default function RenderPage() {
         });
 
         return () => {
+            //window.removeEventListener('keydown', handleKeyDown);
             engine.dispose();
         };
     }, []);
@@ -69,7 +108,7 @@ export default function RenderPage() {
         <div>
             <h1>Babylon.js Cube Test</h1>    
             {/* Rendering 3D Scene Here */}
-            <canvas id="renderCanvas" style={{ width: '100%', height: '100%'}} />
+            <canvas ref = {canvasRef} id="renderCanvas" style={{ width: '100%', height: '100%'}} />
         </div>
     );
 };
