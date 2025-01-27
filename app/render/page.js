@@ -1,7 +1,8 @@
 'use client';
 
 const BABYLON = require('@babylonjs/core');
-const { useEffect, useRef, useState } = require('react');
+const CANNON = require('cannon');
+const { useEffect, useRef } = require('react');
 
 export default function RenderPage() {
     
@@ -49,42 +50,29 @@ export default function RenderPage() {
         // Creating Lights ----------------------------------------------------------------------------------------------------------
         const light = new BABYLON.HemisphericLight('light1', BABYLON.Vector3.Up(), scene);
 
-        // Creating Objects ----------------------------------------------------------------------------------------------------------
-        const { cube1, cube2 } = createFurniture(scene);
+        // Creating Physics ----------------------------------------------------------------------------------------------------------
+        window.CANNON = CANNON;
+        scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.CannonJSPlugin());
 
-        const ground = BABYLON.MeshBuilder.CreateGround('ground', { width: 30, height: 30 }, scene);
-        ground.position.y = -1; 
-        ground.isPickable = false;
-        ground.checkCollisions = true;
+        // Creating Objects ----------------------------------------------------------------------------------------------------------
+        const { cube1, cube2, cube3 } = createFurniture(scene);
+
+        //const ground = BABYLON.MeshBuilder.CreateGround('ground', { width: 30, height: 1 }, scene);
+        //ground.position.y = -1; 
+        //ground.isPickable = false;
+        //ground.checkCollisions = true;
+
+        cube1.physicsImpostor = new BABYLON.PhysicsImpostor(cube1, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1 }, scene);
+        cube2.physicsImpostor = new BABYLON.PhysicsImpostor(cube2, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1 }, scene);
+        cube3.physicsImpostor = new BABYLON.PhysicsImpostor(cube3, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
 
         scene.gravity = new BABYLON.Vector3(0, -0.1, 0);
         scene.collisionsEnabled = true;
+        cube3.isPickable = false;
 
         dragBehaviorService(cube1, cube2, scene);
 
         selectedObjectRef.current = cube1;
-
-        let hasHitGround = false;
-        const dropObject = () => {
-            if(selectedObjectRef.current) {
-                const droppedObject = selectedObjectRef.current;
-
-                droppedObject.position.y -= 0.1;
-
-                droppedObject.computeWorldMatrix(true);
-
-                if (droppedObject.intersectsMesh(cube2) && droppedObject !== cube2) {
-                    console.log('Cube1 Collided with Cube2');
-                    droppedObject.position.y = cube2.position.y + 2;
-                };
-
-                if (droppedObject.position.y <= ground.position.y + 1 && !hasHitGround) {
-                    console.log('Cube1 hit the ground');
-                    droppedObject.position.y = ground.position.y + 1;
-                    hasHitGround = true;
-                };
-            };
-        };
 
         scene.onPointerDown = (event, pickResult) => {
             if(pickResult.hit) {
@@ -113,7 +101,7 @@ export default function RenderPage() {
         window.addEventListener('keydown', handleKeyDown);
 
         const animate = () => {
-            dropObject();
+            //dropObject();
             scene.render();
         };
 
@@ -148,7 +136,7 @@ export default function RenderPage() {
         };
         canvasRef.current.focus();
     };
-    
+
     return (
         <div>
             <h1>Babylon.js Cube Test</h1>    
@@ -160,23 +148,29 @@ export default function RenderPage() {
 };
 
 const createFurniture = (scene) => {
-    const cube1 = BABYLON.MeshBuilder.CreateBox('box1', { size: 2}, scene);
-    cube1.position.set(0, 5, 0);
+    const cube1 = BABYLON.MeshBuilder.CreateBox('box1', { size: 2 }, scene);
+    cube1.position.set(0, 55, 0);
 
-    const cube2 = BABYLON.MeshBuilder.CreateBox('box2', { size: 2}, scene);
-    cube2.position.set(10, 5, 0);
+    const cube2 = BABYLON.MeshBuilder.CreateBox('box2', { size: 2 }, scene);
+    cube2.position.set(0, 50, 0);
+
+    const cube3 = BABYLON.MeshBuilder.CreateBox('box3', { width: 30, height: 1, depth: 30 }, scene);
+    cube3.position.set(0, -1, 0);
 
     // Properties of the cubes
     cube1.material = new BABYLON.StandardMaterial("cubeMaterial1", scene);
     cube1.material.diffuseColor  = BABYLON.Color3.Blue();
+    cube1.checkCollisions = true;
 
     cube2.material = new BABYLON.StandardMaterial("cubeMaterial2", scene);
     cube2.material.diffuseColor  = BABYLON.Color3.Green();
-
-    cube1.checkCollisions = true;
     cube2.checkCollisions = true; 
 
-    return { cube1, cube2 };
+    cube3.material = new BABYLON.StandardMaterial("cubeMaterial3", scene);
+    cube3.material.diffuseColor  = BABYLON.Color3.White();
+    cube3.checkCollisions = true; 
+
+    return { cube1, cube2, cube3 };
 };
 
 const dragBehaviorService = (cube1, cube2, scene) => {
