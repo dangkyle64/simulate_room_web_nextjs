@@ -35,7 +35,7 @@ export default function RenderPage() {
             BABYLON.Vector3.Zero(),
             scene
         );
-        //camera1.attachControl(canvas, true);
+        camera1.attachControl(canvas, true);
 
         camera2 = new BABYLON.UniversalCamera("camera2", new BABYLON.Vector3(0, 1, -10), scene);
         camera2.setTarget(BABYLON.Vector3.Zero());
@@ -44,25 +44,21 @@ export default function RenderPage() {
         camera2.speed = 0.5;
         camera2.angularSensibility = 1000;
 
-        scene.activeCamera = camera2;
+        scene.activeCamera = camera1;
 
         const light = new BABYLON.HemisphericLight('light1', BABYLON.Vector3.Up(), scene);
 
-        const cube1 = BABYLON.MeshBuilder.CreateBox('box', { size: 2 }, scene);
-        cube1.position.y = 5;
+        const { cube1, cube2 } = createFurniture(scene);
 
-        const cube2 = BABYLON.MeshBuilder.CreateBox('box', { size: 2 }, scene);
-        cube2.position.y = 1;
-
-        const ground = BABYLON.MeshBuilder.CreateGround('ground', { width: 10, height: 10 }, scene);
+        const ground = BABYLON.MeshBuilder.CreateGround('ground', { width: 30, height: 10 }, scene);
         ground.position.y = -1; 
+        ground.isPickable = false;
         
         cube1.checkCollisions = true;
         cube2.checkCollisions = true; 
         ground.checkCollisions = true;
 
         scene.gravity = new BABYLON.Vector3(0, -0.1, 0);
-        camera2.applyGravity = true;
 
         scene.collisionsEnabled = true;
 
@@ -183,4 +179,20 @@ export default function RenderPage() {
             <button onClick={switchCamera} style={{ marginTop: '20px' }}>SwitchCamera</button>
         </div>
     );
+};
+
+const createFurniture = (scene) => {
+    const cube1 = BABYLON.MeshBuilder.CreateBox('box1', { size: 2}, scene);
+    cube1.position.set(0, 1, 0);
+
+    const cube2 = BABYLON.MeshBuilder.CreateBox('box2', { size: 2}, scene);
+    cube2.position.set(0, 15, 0);
+
+    cube1.material = new BABYLON.StandardMaterial("cubeMaterial1", scene);
+    cube1.material.diffuseColor  = BABYLON.Color3.Blue();
+
+    cube2.material = new BABYLON.StandardMaterial("cubeMaterial2", scene);
+    cube2.material.diffuseColor  = BABYLON.Color3.Green();
+
+    return { cube1, cube2 };
 };
