@@ -84,11 +84,13 @@ export default function RenderPage() {
 
         const rotateSelectedObject  = () => {
             if(selectedObjectRef.current) {
-                selectedObjectRef.current.rotate(BABYLON.Axis.Y, Math.PI / 180);
-                //console.log(`Rotating object: ${selectObject.name}`);
+                const objectToRotate = selectedObjectRef.current;
+
+                const angularVelocity = new BABYLON.Vector3(0, Math.PI / 15, 0);
+                objectToRotate.physicsImpostor.setAngularVelocity(angularVelocity);
             } else {
                 console.log('No object selected');
-            }
+            };
         };
 
         const handleKeyDown = (event) => {
