@@ -2,6 +2,8 @@
 
 const BABYLON = require('@babylonjs/core');
 const CANNON = require('cannon');
+const { OBJFileLoader } = require('@babylonjs/loaders');
+
 const { useEffect, useRef } = require('react');
 
 export default function RenderPage() {
@@ -12,6 +14,14 @@ export default function RenderPage() {
     let scene;
     let camera1;
     let camera2;
+
+
+    // Ensure the loader is activated
+    BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (plugin) {
+        if (plugin.name === "obj") {
+            console.log("OBJ loader is now ready");
+        }
+    });
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -57,11 +67,6 @@ export default function RenderPage() {
         // Creating Objects ----------------------------------------------------------------------------------------------------------
         const { cube1, cube2, cube3 } = createFurniture(scene);
 
-        //const ground = BABYLON.MeshBuilder.CreateGround('ground', { width: 30, height: 1 }, scene);
-        //ground.position.y = -1; 
-        //ground.isPickable = false;
-        //ground.checkCollisions = true;
-
         cube1.physicsImpostor = new BABYLON.PhysicsImpostor(cube1, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1 }, scene);
         cube2.physicsImpostor = new BABYLON.PhysicsImpostor(cube2, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1 }, scene);
         cube3.physicsImpostor = new BABYLON.PhysicsImpostor(cube3, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
@@ -70,9 +75,9 @@ export default function RenderPage() {
         scene.collisionsEnabled = true;
         cube3.isPickable = false;
 
+        
+        // Call Drag Behavior ----------------------------------------------------------------------------------------------------------
         dragBehaviorService(cube1, cube2, scene);
-
-        selectedObjectRef.current = cube1;
 
         scene.onPointerDown = (event, pickResult) => {
             if(pickResult.hit) {
@@ -103,7 +108,6 @@ export default function RenderPage() {
         window.addEventListener('keydown', handleKeyDown);
 
         const animate = () => {
-            //dropObject();
             scene.render();
         };
 
@@ -114,7 +118,7 @@ export default function RenderPage() {
         });
 
         return () => {
-            //window.removeEventListener('keydown', handleKeyDown);
+            window.removeEventListener('keydown', handleKeyDown);
             scene.dispose();
             engine.dispose();
         };
@@ -198,16 +202,6 @@ const dragBehaviorService = (cube1, cube2, scene) => {
         cube2.material.diffuseColor = BABYLON.Color3.Blue();
     });
 
-    dragBehavior.onDragStartObservable.add(() => {
-        cube1.material = new BABYLON.StandardMaterial("dragMaterial", scene);
-        cube1.material.diffuseColor = BABYLON.Color3.Green();
-    });
-
-    dragBehavior2.onDragStartObservable.add(() => {
-        cube2.material = new BABYLON.StandardMaterial("dragMaterial2", scene);
-        cube2.material.diffuseColor = BABYLON.Color3.Blue();
-    });
-
     dragBehavior.onDragEndObservable.add((event) => {
         //console.log('Drag ended!');
         cube1.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
@@ -234,3 +228,4 @@ const dragBehaviorService = (cube1, cube2, scene) => {
         };
     });
 };
+
