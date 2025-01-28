@@ -251,23 +251,36 @@ const loadCustomObj = async (scene) => {
 
         const sofa = meshes[0];
 
+        sofa.refreshBoundingInfo();
+
+        sofa.position.y = sofa.getBoundingInfo().boundingBox.maximum.y;
+
         const dragBehaviorSofa = new BABYLON.PointerDragBehavior();
-        sofa.addBehavior(dragBehaviorSofa);
+        sofa.addBehavior(dragBehaviorSofa); 
 
         dragBehaviorSofa.onDragStartObservable.add(() => {
             sofa.material = new BABYLON.StandardMaterial("dragMaterial", scene);
             sofa.material.diffuseColor = BABYLON.Color3.Green();
 
+            //sofa.physicsImpostor.setParam("mass", 0);
+            //sofa.physicsImpostor.setParam("isKinematic", true);
+        
+        });
+
         dragBehaviorSofa.onDragEndObservable.add((event) => {
             sofa.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
             sofa.material.diffuseColor  = BABYLON.Color3.White();
-        
+            
+            //sofa.physicsImposter.setParam("mass", 1);
+            //sofa.physicsImposter.setParam("isKinematic", false);
+
             const finalPosition = sofa.position;
             console.log('Final position of the object1:', finalPosition);
         });
-    });
 
-
+        sofa.checkCollisions = true;
+        sofa.physicsImpostor = new BABYLON.PhysicsImpostor(sofa, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, friction: 0.5 }, scene);
+    
     } catch(error) {
         console.error("Error loading .obj file", error);
     };
