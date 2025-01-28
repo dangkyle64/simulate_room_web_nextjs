@@ -75,7 +75,8 @@ export default function RenderPage() {
         scene.collisionsEnabled = true;
         cube3.isPickable = false;
 
-        
+        loadCustomObj(scene);
+
         // Call Drag Behavior ----------------------------------------------------------------------------------------------------------
         dragBehaviorService(cube1, cube2, scene);
 
@@ -227,5 +228,48 @@ const dragBehaviorService = (cube1, cube2, scene) => {
             //dropSound.play();
         };
     });
+};
+
+const loadCustomObj = async (scene) => {
+    try {
+        const path = '/assets/';
+        const fileName = 'sofa1.obj';
+
+        const result = await BABYLON.SceneLoader.ImportMeshAsync(
+            "",
+            path,
+            fileName,
+            scene,
+        );
+
+        const meshes = result.meshes;
+        console.log('Loaded meshes: ', meshes);
+
+        //meshes.forEach(mesh => {
+        //    mesh.position = new BABYLON.Vector3(0, 0, 0);
+        //});
+
+        const sofa = meshes[0];
+
+        const dragBehaviorSofa = new BABYLON.PointerDragBehavior();
+        sofa.addBehavior(dragBehaviorSofa);
+
+        dragBehaviorSofa.onDragStartObservable.add(() => {
+            sofa.material = new BABYLON.StandardMaterial("dragMaterial", scene);
+            sofa.material.diffuseColor = BABYLON.Color3.Green();
+
+        dragBehaviorSofa.onDragEndObservable.add((event) => {
+            sofa.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
+            sofa.material.diffuseColor  = BABYLON.Color3.White();
+        
+            const finalPosition = sofa.position;
+            console.log('Final position of the object1:', finalPosition);
+        });
+    });
+
+
+    } catch(error) {
+        console.error("Error loading .obj file", error);
+    };
 };
 
