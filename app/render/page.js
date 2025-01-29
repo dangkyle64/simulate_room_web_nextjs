@@ -262,8 +262,8 @@ const loadCustomObj = async (scene) => {
             sofa.material = new BABYLON.StandardMaterial("dragMaterial", scene);
             sofa.material.diffuseColor = BABYLON.Color3.Green();
 
-            //sofa.physicsImpostor.setParam("mass", 0);
-            //sofa.physicsImpostor.setParam("isKinematic", true);
+            sofa.physicsImpostor.mass = 0;
+            sofa.physicsImpostor.isKinematic = true;
         
         });
 
@@ -271,8 +271,8 @@ const loadCustomObj = async (scene) => {
             sofa.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
             sofa.material.diffuseColor  = BABYLON.Color3.White();
             
-            //sofa.physicsImposter.setParam("mass", 1);
-            //sofa.physicsImposter.setParam("isKinematic", false);
+            sofa.physicsImpostor.mass = 1;
+            sofa.physicsImpostor.isKinematic = false;
 
             const finalPosition = sofa.position;
             console.log('Final position of the object1:', finalPosition);
