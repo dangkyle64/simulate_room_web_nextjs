@@ -3,7 +3,7 @@
 const BABYLON = require('@babylonjs/core');
 const CANNON = require('cannon');
 const { OBJFileLoader } = require('@babylonjs/loaders');
-
+const { GUI } = require('@babylonjs/gui');
 const { useEffect, useRef } = require('react');
 
 export default function RenderPage() {
@@ -137,7 +137,6 @@ export default function RenderPage() {
         scene.activeCamera.attachControl(canvasRef.current, true);
 
         if (scene.activeCamera instanceof BABYLON.UniversalCamera) {
-            console.log('rah')
             scene.activeCamera.speed = 1.0;  // Adjust movement speed
             scene.activeCamera.inertia = 0.9; // Adjust inertia (smoothness of movement)
         };
@@ -150,6 +149,7 @@ export default function RenderPage() {
             {/* Rendering 3D Scene Here */}
             <canvas ref = {canvasRef} id="renderCanvas" style={{ width: '100%', height: '100%'}} />
             <button onClick={switchCamera} style={{ marginTop: '20px' }}>SwitchCamera</button>
+            <button onClick={createTempFurniture} stype={{ marginTop: '40px' }}>CreateTempShape</button>
         </div>
     );
 };
@@ -286,3 +286,9 @@ const loadCustomObj = async (scene) => {
     };
 };
 
+const popUpScreen = (scene) => {
+    var advancedTexture = GUI.AdvancedDynamicTexture.createFullScreenUI("UI", true, scene);
+};
+const createTempFurniture = (scene) => {
+    console.log('Function createTempFurniture');
+};
