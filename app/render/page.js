@@ -3,7 +3,7 @@
 const BABYLON = require('@babylonjs/core');
 const CANNON = require('cannon');
 const { OBJFileLoader } = require('@babylonjs/loaders');
-const { GUI } = require('@babylonjs/gui');
+const GUI = require('@babylonjs/gui');
 const { useEffect, useRef } = require('react');
 
 export default function RenderPage() {
@@ -287,8 +287,36 @@ const loadCustomObj = async (scene) => {
 };
 
 const popUpScreen = (scene) => {
-    var advancedTexture = GUI.AdvancedDynamicTexture.createFullScreenUI("UI", true, scene);
+    var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene);
+
+    var popUpWindow = new GUI.StackPanel();
+    popUpWindow.width = "300px";
+    popUpWindow.height = "200px";
+    popUpWindow.top = "20%";
+    popUpWindow.left = "35%";
+    popUpWindow.isHitTestVisible = true;
+    popUpWindow.background = "rgba(0, 0, 0, 0.7)";
+
+    advancedTexture.addControl(popUpWindow);
+
+    var contentText = new GUI.TextBlock();
+    contentText.text = "Here content";
+    contentText.color = "white";
+    popUpWindow.addControl(contentText);
+
+    var closeButton = GUI.Button.CreateSimpleButton("closeButton", "Close");
+    closeButton.width = "100px";
+    closeButton.height = "40px";
+    closeButton.top = "150px";
+    closeButton.background = "red";
+    closeButton.onPointerUpObservable.add(function() {
+        popUpWindow.isVisible = false;
+    });
+
+    popUpWindow.addControl(closeButton);
 };
+
 const createTempFurniture = (scene) => {
     console.log('Function createTempFurniture');
+    popUpScreen();
 };
