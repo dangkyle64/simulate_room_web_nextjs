@@ -210,6 +210,7 @@ export default function RenderPage() {
             <canvas ref = {canvasRef} id="renderCanvas" style={{ width: '100%', height: '100%'}} />
             <button onClick={switchCamera} style={{ marginTop: '20px' }}>SwitchCamera</button>
             <button onClick={createTempFurnitureHandle} style={{ marginTop: '40px' }}>CreateTempShape</button>
+            <button onClick={popUpScreen} style={{ marginTop:'60px' }}>PopupButton</button>
         </div>
     );
 };
@@ -364,6 +365,15 @@ const popUpScreen = (scene) => {
     contentText.color = "white";
     popUpWindow.addControl(contentText);
 
+    var inputField = new GUI.InputText();
+    inputField.width = "200px";
+    inputField.height = "40px";
+    inputField.top = "50px";
+    inputField.color = "white";
+    inputField.background = "black";
+    inputField.text = "";
+    popUpWindow.addControl(inputField);
+
     var closeButton = GUI.Button.CreateSimpleButton("closeButton", "Close");
     closeButton.width = "100px";
     closeButton.height = "40px";
@@ -372,8 +382,22 @@ const popUpScreen = (scene) => {
     closeButton.onPointerUpObservable.add(function() {
         popUpWindow.isVisible = false;
     });
-
     popUpWindow.addControl(closeButton);
+
+    var submitButton = GUI.Button.CreateSimpleButton("submitButton", "Submit");
+    submitButton.width = "100px";
+    submitButton.height = "40px";
+    submitButton.top = "100px";
+    submitButton.background = "green";
+    submitButton.onPointerClickObservable.add(function() {
+        var userInput = inputField.text;
+        console.log("User Input in the Popup is: ", userInput);
+
+        //example function call with userinput
+        //useInputData(userInput);
+    });
+
+    popUpWindow.addControl(submitButton);
 
 };
 
