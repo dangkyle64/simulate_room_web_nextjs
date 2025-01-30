@@ -203,6 +203,10 @@ export default function RenderPage() {
         return object;
     };
 
+    // -----------------------------------------------------------------------------------------------------------------------------
+
+
+
     return (
         <div>
             <h1>Babylon.js Cube Test</h1>    
@@ -210,7 +214,8 @@ export default function RenderPage() {
             <canvas ref = {canvasRef} id="renderCanvas" style={{ width: '100%', height: '100%'}} />
             <button onClick={switchCamera} style={{ marginTop: '20px' }}>SwitchCamera</button>
             <button onClick={createTempFurnitureHandle} style={{ marginTop: '40px' }}>CreateTempShape</button>
-            <button onClick={popUpScreen} style={{ marginTop:'60px' }}>PopupButton</button>
+            <button onClick={popUpScreen} style={{ marginTop: '60px' }}>PopupButton</button>
+            <button onClick={objectInfoWindow} style={{ marginTop: '80px' }}>TestObjectInfoWindow</button>
         </div>
     );
 };
@@ -357,7 +362,6 @@ const popUpScreen = (scene) => {
     popUpWindow.left = "35%";
     popUpWindow.isHitTestVisible = true;
     popUpWindow.background = "rgba(0, 0, 0, 0.7)";
-
     advancedTexture.addControl(popUpWindow);
 
     var contentText = new GUI.TextBlock();
@@ -398,7 +402,21 @@ const popUpScreen = (scene) => {
     });
 
     popUpWindow.addControl(submitButton);
+};
 
+const objectInfoWindow = (scene) => {
+
+    var advancedTextureObjectInfoWindow = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene);
+
+    var popUpObjectInfoWindow = new GUI.StackPanel();
+    popUpObjectInfoWindow.width = "300px";
+    popUpObjectInfoWindow.height = "100vh";
+    popUpObjectInfoWindow.top = "0%";
+    popUpObjectInfoWindow.left = "50%";
+    popUpObjectInfoWindow.isHitTestVisible = true;
+    popUpObjectInfoWindow.background = "rgba(0, 0, 0, 0.7)";
+
+    advancedTextureObjectInfoWindow.addControl(popUpObjectInfoWindow);
 };
 
 
