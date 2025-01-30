@@ -162,16 +162,16 @@ export default function RenderPage() {
         };
     };
 
-    const createTempFurniture = (scene, type = "box") => {
+    const createTempFurniture = (scene, type = "box", size = 2, position = { x: 0, y: 55, z: 0 }) => {
         let object; 
         let uniqueName = `object_${Date.now()}`;
 
         // select type
         if(type === "box") {
-            object = BABYLON.MeshBuilder.CreateBox(uniqueName, { size: 2 }, scene);
+            object = BABYLON.MeshBuilder.CreateBox(uniqueName, { size: size }, scene);
         };
         
-        object.position.set(0, 55, 0);
+        object.position.set(position.x, position.y, position.z);
         
         // object properties
         object.material = new BABYLON.StandardMaterial("material", scene);
