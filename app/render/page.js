@@ -166,16 +166,19 @@ export default function RenderPage() {
         let object; 
         let uniqueName = `object_${Date.now()}`;
 
+        // select type
         if(type === "box") {
             object = BABYLON.MeshBuilder.CreateBox(uniqueName, { size: 2 }, scene);
         };
-         
+        
         object.position.set(0, 55, 0);
-    
+        
+        // object properties
         object.material = new BABYLON.StandardMaterial("material", scene);
         object.material.diffuseColor  = BABYLON.Color3.Blue();
         object.physicsImpostor = new BABYLON.PhysicsImpostor(object, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1 }, scene);
         
+        // drag behavior 
         const dragBehavior = new BABYLON.PointerDragBehavior();
         object.addBehavior(dragBehavior);
 
@@ -187,7 +190,6 @@ export default function RenderPage() {
         });
 
         dragBehavior.onDragEndObservable.add((event) => {
-            //console.log('Drag ended!');
             object.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
             object.material.diffuseColor  = BABYLON.Color3.White();
             object.physicsImpostor.mass = 1;
