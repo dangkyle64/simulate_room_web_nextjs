@@ -81,6 +81,8 @@ export default function RenderPage() {
         // Call Drag Behavior ----------------------------------------------------------------------------------------------------------
         dragBehaviorService(cube1, cube2, scene);
 
+        // -----------------------------------------------------------------------------------------------------------------------------
+
         scene.onPointerDown = (event, pickResult) => {
             if(pickResult.hit) {
                 selectedObjectRef.current = pickResult.pickedMesh;
@@ -88,6 +90,8 @@ export default function RenderPage() {
                 console.log(`Selected object is now: ${selectedObjectRef.current.name}`);
             };
         };
+
+        // -----------------------------------------------------------------------------------------------------------------------------
 
         const rotateSelectedObject  = () => {
             if(selectedObjectRef.current) {
@@ -109,6 +113,8 @@ export default function RenderPage() {
 
         window.addEventListener('keydown', handleKeyDown);
 
+        // -----------------------------------------------------------------------------------------------------------------------------
+
         const animate = () => {
             scene.render();
         };
@@ -126,6 +132,8 @@ export default function RenderPage() {
         };
     }, []);
 
+    // -----------------------------------------------------------------------------------------------------------------------------
+
     const switchCamera = () => {
         scene.activeCamera.detachControl(canvasRef.current);
 
@@ -142,6 +150,34 @@ export default function RenderPage() {
             scene.activeCamera.inertia = 0.9; // Adjust inertia (smoothness of movement)
         };
         canvasRef.current.focus();
+    };
+
+    // -----------------------------------------------------------------------------------------------------------------------------
+
+    const createTempFurnitureHandle = () => {
+        if(scene) {
+            createTempFurniture(scene);
+        } else {
+            console.log("scene is not initialized");
+        };
+    };
+
+    const createTempFurniture = (scene, type = "box") => {
+        let object; 
+        let uniqueName = `object_${Date.now()}`;
+
+        if(type === "box") {
+            object = BABYLON.MeshBuilder.CreateBox(uniqueName, { size: 2 }, scene);
+        }
+         
+        object.position.set(0, 55, 0);
+    
+        object.material = new BABYLON.StandardMaterial("material", scene);
+        object.material.diffuseColor  = BABYLON.Color3.Blue();
+        //object.checkCollisions = true;
+        object.physicsImpostor = new BABYLON.PhysicsImpostor(object, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1 }, scene);
+    
+        return object;
     };
 
     return (
