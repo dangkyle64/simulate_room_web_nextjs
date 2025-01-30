@@ -76,6 +76,7 @@ export default function RenderPage() {
         cube3.isPickable = false;
 
         loadCustomObj(scene);
+        //createTempFurniture(scene);
 
         // Call Drag Behavior ----------------------------------------------------------------------------------------------------------
         dragBehaviorService(cube1, cube2, scene);
@@ -149,7 +150,7 @@ export default function RenderPage() {
             {/* Rendering 3D Scene Here */}
             <canvas ref = {canvasRef} id="renderCanvas" style={{ width: '100%', height: '100%'}} />
             <button onClick={switchCamera} style={{ marginTop: '20px' }}>SwitchCamera</button>
-            <button onClick={createTempFurniture} stype={{ marginTop: '40px' }}>CreateTempShape</button>
+            <button onClick={createTempFurnitureHandle} style={{ marginTop: '40px' }}>CreateTempShape</button>
         </div>
     );
 };
@@ -314,9 +315,7 @@ const popUpScreen = (scene) => {
     });
 
     popUpWindow.addControl(closeButton);
+
 };
 
-const createTempFurniture = (scene) => {
-    console.log('Function createTempFurniture');
-    popUpScreen();
-};
+
