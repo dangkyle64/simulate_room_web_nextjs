@@ -168,15 +168,36 @@ export default function RenderPage() {
 
         if(type === "box") {
             object = BABYLON.MeshBuilder.CreateBox(uniqueName, { size: 2 }, scene);
-        }
+        };
          
         object.position.set(0, 55, 0);
     
         object.material = new BABYLON.StandardMaterial("material", scene);
         object.material.diffuseColor  = BABYLON.Color3.Blue();
-        //object.checkCollisions = true;
         object.physicsImpostor = new BABYLON.PhysicsImpostor(object, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1 }, scene);
-    
+        
+        const dragBehavior = new BABYLON.PointerDragBehavior();
+        object.addBehavior(dragBehavior);
+
+        dragBehavior.onDragStartObservable.add(() => {
+            object.material = new BABYLON.StandardMaterial("dragMaterial", scene);
+            object.material.diffuseColor = BABYLON.Color3.Green();
+            object.physicsImpostor.mass = 0;
+            object.physicsImpostor.isKinematic = true;
+        });
+
+        dragBehavior.onDragEndObservable.add((event) => {
+            //console.log('Drag ended!');
+            object.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
+            object.material.diffuseColor  = BABYLON.Color3.White();
+            object.physicsImpostor.mass = 1;
+            object.physicsImpostor.isKinematic = false;
+
+            const finalPosition = object.position;
+            console.log('Final position of the object1:', finalPosition);
+
+        });
+
         return object;
     };
 
