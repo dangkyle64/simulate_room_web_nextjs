@@ -435,11 +435,13 @@ const objectInfoWindow = (scene, object) => {
     popUpObjectInfoWindow.addControl(objectInfo);
 
     function adjustTextSize() {
+
         var width = popUpObjectInfoWindow.widthInPixels;
         var height = popUpObjectInfoWindow.heightInPixels;
 
         var fontSize = Math.min(width, height) / 10;
 
+        console.log("Adjusting text size to:", fontSize); 
         objectInfo.fontSize = fontSize;
     };
 
@@ -452,11 +454,11 @@ const objectInfoWindow = (scene, object) => {
     objectInfo.text += "\nPosition Z: " + object_pos_z.toString();
 
     window.addEventListener("resize", function(){
-        adjustTextSize();
+        
         updatePopupWidth();
+        adjustTextSize();
     });
 
     currentPopUp = popUpObjectInfoWindow;
 };
-
 
