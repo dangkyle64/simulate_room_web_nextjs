@@ -87,6 +87,7 @@ export default function RenderPage() {
             if(pickResult.hit) {
                 selectedObjectRef.current = pickResult.pickedMesh;
 
+                objectInfoWindow(scene, selectedObjectRef.current);
                 console.log(`Selected object is now: ${selectedObjectRef.current.name}`);
             };
         };
@@ -215,11 +216,11 @@ export default function RenderPage() {
             <button onClick={switchCamera} style={{ marginTop: '20px' }}>SwitchCamera</button>
             <button onClick={createTempFurnitureHandle} style={{ marginTop: '40px' }}>CreateTempShape</button>
             <button onClick={popUpScreen} style={{ marginTop: '60px' }}>PopupButton</button>
-            <button onClick={objectInfoWindow} style={{ marginTop: '80px' }}>TestObjectInfoWindow</button>
+            
         </div>
     );
 };
-
+//<button onClick={objectInfoWindow} style={{ marginTop: '80px' }}>TestObjectInfoWindow</button>
 const createFurniture = (scene) => {
     const cube1 = BABYLON.MeshBuilder.CreateBox('box1', { size: 2 }, scene);
     cube1.position.set(0, 55, 0);
@@ -404,7 +405,7 @@ const popUpScreen = (scene) => {
     popUpWindow.addControl(submitButton);
 };
 
-const objectInfoWindow = (scene) => {
+const objectInfoWindow = (scene, object) => {
 
     var advancedTextureObjectInfoWindow = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene);
 
@@ -426,7 +427,7 @@ const objectInfoWindow = (scene) => {
     advancedTextureObjectInfoWindow.addControl(popUpObjectInfoWindow);
 
     var objectInfo = new GUI.TextBlock();
-    objectInfo.text = "Here content";
+    objectInfo.text = object.name;
     objectInfo.color = "white";
     popUpObjectInfoWindow.addControl(objectInfo);
 
