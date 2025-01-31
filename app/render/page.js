@@ -75,7 +75,7 @@ export default function RenderPage() {
         scene.collisionsEnabled = true;
         cube3.isPickable = false;
 
-        loadCustomObj(scene);
+        loadCustomObj(scene, cube3);
         //createTempFurniture(scene);
 
         // Call Drag Behavior ----------------------------------------------------------------------------------------------------------
@@ -297,7 +297,7 @@ const dragBehaviorService = (cube1, cube2, scene) => {
     });
 };
 
-const loadCustomObj = async (scene) => {
+const loadCustomObj = async (scene, cube3) => {
     try {
         const path = '/assets/';
         const fileName = 'sofa1.obj';
@@ -322,6 +322,8 @@ const loadCustomObj = async (scene) => {
 
         sofa.position.y = sofa.getBoundingInfo().boundingBox.maximum.y;
 
+        sofa.checkCollisions = true;
+
         const dragBehaviorSofa = new BABYLON.PointerDragBehavior();
         sofa.addBehavior(dragBehaviorSofa); 
 
@@ -331,7 +333,8 @@ const loadCustomObj = async (scene) => {
 
             sofa.physicsImpostor.mass = 0;
             sofa.physicsImpostor.isKinematic = true;
-        
+            
+            sofa.checkCollisions = true;
         });
 
         dragBehaviorSofa.onDragEndObservable.add((event) => {
@@ -343,9 +346,10 @@ const loadCustomObj = async (scene) => {
 
             const finalPosition = sofa.position;
             console.log('Final position of the object1:', finalPosition);
+
+            sofa.checkCollisions = true;
         });
 
-        sofa.checkCollisions = true;
         sofa.physicsImpostor = new BABYLON.PhysicsImpostor(sofa, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, friction: 0.5 }, scene);
     
     } catch(error) {
@@ -405,7 +409,12 @@ const popUpScreen = (scene) => {
     popUpWindow.addControl(submitButton);
 };
 
+let currentPopUp = null;
 const objectInfoWindow = (scene, object) => {
+
+    if(currentPopUp) {
+        currentPopUp.isVisible = false;
+    };
 
     var advancedTextureObjectInfoWindow = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene);
 
@@ -432,6 +441,8 @@ const objectInfoWindow = (scene, object) => {
     popUpObjectInfoWindow.addControl(objectInfo);
 
     window.addEventListener("resize", updatePopupWidth);
+
+    currentPopUp = popUpObjectInfoWindow;
 };
 
 
