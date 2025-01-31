@@ -408,15 +408,29 @@ const objectInfoWindow = (scene) => {
 
     var advancedTextureObjectInfoWindow = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene);
 
-    var popUpObjectInfoWindow = new GUI.StackPanel();
-    popUpObjectInfoWindow.width = "300px";
+    var popUpObjectInfoWindow = new GUI.Rectangle();
+
+    const updatePopupWidth = () => {
+        const dynamicWidth = (window.innerWidth * 0.1) + "px"; // 20% of the window width
+        popUpObjectInfoWindow.width = dynamicWidth;
+    };
+
+    updatePopupWidth();
+
     popUpObjectInfoWindow.height = "100vh";
-    popUpObjectInfoWindow.top = "0%";
-    popUpObjectInfoWindow.left = "50%";
+    popUpObjectInfoWindow.right = "0%";
+    popUpObjectInfoWindow.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
+
     popUpObjectInfoWindow.isHitTestVisible = true;
     popUpObjectInfoWindow.background = "rgba(0, 0, 0, 0.7)";
-
     advancedTextureObjectInfoWindow.addControl(popUpObjectInfoWindow);
+
+    var objectInfo = new GUI.TextBlock();
+    objectInfo.text = "Here content";
+    objectInfo.color = "white";
+    popUpObjectInfoWindow.addControl(objectInfo);
+
+    window.addEventListener("resize", updatePopupWidth);
 };
 
 
