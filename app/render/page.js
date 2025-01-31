@@ -75,7 +75,7 @@ export default function RenderPage() {
         scene.collisionsEnabled = true;
         cube3.isPickable = false;
 
-        loadCustomObj(scene, cube3);
+        loadCustomObj(scene);
         //createTempFurniture(scene);
 
         // Call Drag Behavior ----------------------------------------------------------------------------------------------------------
@@ -220,7 +220,7 @@ export default function RenderPage() {
         </div>
     );
 };
-//<button onClick={objectInfoWindow} style={{ marginTop: '80px' }}>TestObjectInfoWindow</button>
+
 const createFurniture = (scene) => {
     const cube1 = BABYLON.MeshBuilder.CreateBox('box1', { size: 2 }, scene);
     cube1.position.set(0, 55, 0);
@@ -297,7 +297,7 @@ const dragBehaviorService = (cube1, cube2, scene) => {
     });
 };
 
-const loadCustomObj = async (scene, cube3) => {
+const loadCustomObj = async (scene) => {
     try {
         const path = '/assets/';
         const fileName = 'sofa1.obj';
@@ -312,17 +312,11 @@ const loadCustomObj = async (scene, cube3) => {
         const meshes = result.meshes;
         console.log('Loaded meshes: ', meshes);
 
-        //meshes.forEach(mesh => {
-        //    mesh.position = new BABYLON.Vector3(0, 0, 0);
-        //});
-
         const sofa = meshes[0];
 
         sofa.refreshBoundingInfo();
 
         sofa.position.y = sofa.getBoundingInfo().boundingBox.maximum.y;
-
-        sofa.checkCollisions = true;
 
         const dragBehaviorSofa = new BABYLON.PointerDragBehavior();
         sofa.addBehavior(dragBehaviorSofa); 
@@ -436,9 +430,14 @@ const objectInfoWindow = (scene, object) => {
     advancedTextureObjectInfoWindow.addControl(popUpObjectInfoWindow);
 
     var objectInfo = new GUI.TextBlock();
-    objectInfo.text = object.name;
+    objectInfo.text = "";
     objectInfo.color = "white";
     popUpObjectInfoWindow.addControl(objectInfo);
+
+    objectInfo.text += "\nObject Name: " + object.name.toString();
+    objectInfo.text += "\nPosition X: " + object.position.x.toString();
+    objectInfo.text += "\nPosition Y: " + object.position.y.toString();
+    objectInfo.text += "\nPosition Z: " + object.position.z.toString();
 
     window.addEventListener("resize", updatePopupWidth);
 
