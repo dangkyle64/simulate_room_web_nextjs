@@ -415,7 +415,7 @@ const objectInfoWindow = (scene, object) => {
     var popUpObjectInfoWindow = new GUI.Rectangle();
 
     const updatePopupWidth = () => {
-        const dynamicWidth = (window.innerWidth * 0.1) + "px"; // 20% of the window width
+        const dynamicWidth = (window.innerWidth * 0.2) + "px"; // 20% of the window width
         popUpObjectInfoWindow.width = dynamicWidth;
     };
 
@@ -434,12 +434,27 @@ const objectInfoWindow = (scene, object) => {
     objectInfo.color = "white";
     popUpObjectInfoWindow.addControl(objectInfo);
 
-    objectInfo.text += "\nObject Name: " + object.name.toString();
-    objectInfo.text += "\nPosition X: " + object.position.x.toString();
-    objectInfo.text += "\nPosition Y: " + object.position.y.toString();
-    objectInfo.text += "\nPosition Z: " + object.position.z.toString();
+    function adjustTextSize() {
+        var width = popUpObjectInfoWindow.widthInPixels;
+        var height = popUpObjectInfoWindow.heightInPixels;
 
-    window.addEventListener("resize", updatePopupWidth);
+        var fontSize = Math.min(width, height) / 10;
+
+        objectInfo.fontSize = fontSize;
+    };
+
+    let object_pos_x = object.position.x.toFixed(2);
+    let object_pos_y = object.position.y.toFixed(2);
+    let object_pos_z = object.position.z.toFixed(2);
+    objectInfo.text += "\nObject Name: " + object.name.toString();
+    objectInfo.text += "\nPosition X: " + object_pos_x.toString();
+    objectInfo.text += "\nPosition Y: " + object_pos_y.toString();
+    objectInfo.text += "\nPosition Z: " + object_pos_z.toString();
+
+    window.addEventListener("resize", function(){
+        adjustTextSize();
+        updatePopupWidth();
+    });
 
     currentPopUp = popUpObjectInfoWindow;
 };
