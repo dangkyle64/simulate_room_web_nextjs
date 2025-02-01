@@ -68,21 +68,14 @@ export default function RenderPage() {
         scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.CannonJSPlugin());
 
         // Creating Objects ----------------------------------------------------------------------------------------------------------
-        const { cube1, cube2, cube3 } = createFurniture(scene);
-
-        cube1.physicsImpostor = new BABYLON.PhysicsImpostor(cube1, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1 }, scene);
-        cube2.physicsImpostor = new BABYLON.PhysicsImpostor(cube2, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1 }, scene);
-        cube3.physicsImpostor = new BABYLON.PhysicsImpostor(cube3, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
+        createFloor(scene);
 
         scene.gravity = new BABYLON.Vector3(0, -0.1, 0);
         scene.collisionsEnabled = true;
-        cube3.isPickable = false;
 
         loadCustomObj(scene);
-        //createTempFurniture(scene);
 
         // Call Drag Behavior ----------------------------------------------------------------------------------------------------------
-        dragBehaviorService(cube1, cube2, scene);
 
         // -----------------------------------------------------------------------------------------------------------------------------
 
@@ -201,7 +194,7 @@ export default function RenderPage() {
             console.log('Final position of the object1:', finalPosition);
 
             object.physicsImpostor.linearDamping = 0;
-            
+
             object.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0));
             object.physicsImpostor.setAngularVelocity(new BABYLON.Vector3(0, 0, 0));
         });
@@ -226,80 +219,16 @@ export default function RenderPage() {
     );
 };
 
-const createFurniture = (scene) => {
-    const cube1 = BABYLON.MeshBuilder.CreateBox('box1', { size: 2 }, scene);
-    cube1.position.set(0, 55, 0);
+const createFloor = (scene) => {
+    const floor = BABYLON.MeshBuilder.CreateBox('floor', { width: 50, height: 1, depth: 50 }, scene);
+    floor.position.set(0, -1, 0);
 
-    const cube2 = BABYLON.MeshBuilder.CreateBox('box2', { size: 2 }, scene);
-    cube2.position.set(0, 50, 0);
+    floor.material = new BABYLON.StandardMaterial("floorMaterial", scene);
+    floor.material.diffuseColor = BABYLON.Color3.White();
+    floor.checkCollisions = true; 
 
-    const cube3 = BABYLON.MeshBuilder.CreateBox('box3', { width: 30, height: 1, depth: 30 }, scene);
-    cube3.position.set(0, -1, 0);
-
-    // Properties of the cubes
-    cube1.material = new BABYLON.StandardMaterial("cubeMaterial1", scene);
-    cube1.material.diffuseColor  = BABYLON.Color3.Blue();
-    cube1.checkCollisions = true;
-
-    cube2.material = new BABYLON.StandardMaterial("cubeMaterial2", scene);
-    cube2.material.diffuseColor  = BABYLON.Color3.Green();
-    cube2.checkCollisions = true; 
-
-    cube3.material = new BABYLON.StandardMaterial("cubeMaterial3", scene);
-    cube3.material.diffuseColor  = BABYLON.Color3.White();
-    cube3.checkCollisions = true; 
-
-    return { cube1, cube2, cube3 };
-};
-
-const dragBehaviorService = (cube1, cube2, scene) => {
-
-    const dropSound = new BABYLON.Sound("dropSound", "/sounds/metal_pipe.mp3", scene, null, {
-        loop: false,
-        autoplay: false,
-    });
-
-    const dragBehavior = new BABYLON.PointerDragBehavior();
-    cube1.addBehavior(dragBehavior);
-
-    const dragBehavior2 = new BABYLON.PointerDragBehavior();
-    cube2.addBehavior(dragBehavior2);
-
-    dragBehavior.onDragStartObservable.add(() => {
-        cube1.material = new BABYLON.StandardMaterial("dragMaterial", scene);
-        cube1.material.diffuseColor = BABYLON.Color3.Green();
-    });
-
-    dragBehavior2.onDragStartObservable.add(() => {
-        cube2.material = new BABYLON.StandardMaterial("dragMaterial2", scene);
-        cube2.material.diffuseColor = BABYLON.Color3.Blue();
-    });
-
-    dragBehavior.onDragEndObservable.add((event) => {
-        //console.log('Drag ended!');
-        cube1.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
-        cube1.material.diffuseColor  = BABYLON.Color3.White();
-
-        const finalPosition = cube1.position;
-        console.log('Final position of the object1:', finalPosition);
-
-        if (!dropSound.isPlaying) {
-            //dropSound.play();
-        };
-    });
-
-    dragBehavior2.onDragEndObservable.add((event) => {
-        //console.log('Drag ended!');
-        cube2.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
-        cube2.material.diffuseColor  = BABYLON.Color3.White();
-
-        const finalPosition2 = cube2.position;
-        console.log('Final position of the object2:', finalPosition2);
-
-        if (!dropSound.isPlaying) {
-            //dropSound.play();
-        };
-    });
+    floor.physicsImpostor = new BABYLON.PhysicsImpostor(floor, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
+    floor.isPickable = false;
 };
 
 const loadCustomObj = async (scene) => {
@@ -356,3 +285,56 @@ const loadCustomObj = async (scene) => {
     };
 };
 
+/*
+
+const dragBehaviorService = (cube1, cube2, scene) => {
+
+    const dropSound = new BABYLON.Sound("dropSound", "/sounds/metal_pipe.mp3", scene, null, {
+        loop: false,
+        autoplay: false,
+    });
+
+    const dragBehavior = new BABYLON.PointerDragBehavior();
+    cube1.addBehavior(dragBehavior);
+
+    const dragBehavior2 = new BABYLON.PointerDragBehavior();
+    cube2.addBehavior(dragBehavior2);
+
+    dragBehavior.onDragStartObservable.add(() => {
+        cube1.material = new BABYLON.StandardMaterial("dragMaterial", scene);
+        cube1.material.diffuseColor = BABYLON.Color3.Green();
+    });
+
+    dragBehavior2.onDragStartObservable.add(() => {
+        cube2.material = new BABYLON.StandardMaterial("dragMaterial2", scene);
+        cube2.material.diffuseColor = BABYLON.Color3.Blue();
+    });
+
+    dragBehavior.onDragEndObservable.add((event) => {
+        //console.log('Drag ended!');
+        cube1.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
+        cube1.material.diffuseColor  = BABYLON.Color3.White();
+
+        const finalPosition = cube1.position;
+        console.log('Final position of the object1:', finalPosition);
+
+        if (!dropSound.isPlaying) {
+            //dropSound.play();
+        };
+    });
+
+    dragBehavior2.onDragEndObservable.add((event) => {
+        //console.log('Drag ended!');
+        cube2.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
+        cube2.material.diffuseColor  = BABYLON.Color3.White();
+
+        const finalPosition2 = cube2.position;
+        console.log('Final position of the object2:', finalPosition2);
+
+        if (!dropSound.isPlaying) {
+            //dropSound.play();
+        };
+    });
+};
+
+*/
