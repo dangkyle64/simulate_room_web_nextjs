@@ -169,7 +169,7 @@ export default function RenderPage() {
     const createTempFurniture = (scene, type = "box", size = 2, position = { x: 0, y: 55, z: 0 }) => {
         let object; 
         let uniqueName = `object_${Date.now()}`;
-
+        scene.gravity = new BABYLON.Vector3(0, -0.1, 0);
         // select type
         if(type === "box") {
             object = BABYLON.MeshBuilder.CreateBox(uniqueName, { size: size }, scene);
@@ -189,19 +189,21 @@ export default function RenderPage() {
         dragBehavior.onDragStartObservable.add(() => {
             object.material = new BABYLON.StandardMaterial("dragMaterial", scene);
             object.material.diffuseColor = BABYLON.Color3.Green();
-            object.physicsImpostor.mass = 0;
-            object.physicsImpostor.isKinematic = true;
+
+            object.physicsImpostor.linearDamping = 0.9;
         });
 
         dragBehavior.onDragEndObservable.add((event) => {
             object.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
             object.material.diffuseColor  = BABYLON.Color3.White();
-            object.physicsImpostor.mass = 1;
-            object.physicsImpostor.isKinematic = false;
 
             const finalPosition = object.position;
             console.log('Final position of the object1:', finalPosition);
 
+            object.physicsImpostor.linearDamping = 0;
+            
+            object.physicsImpostor.setLinearVelocity(new BABYLON.Vector3(0, 0, 0));
+            object.physicsImpostor.setAngularVelocity(new BABYLON.Vector3(0, 0, 0));
         });
 
         return object;
