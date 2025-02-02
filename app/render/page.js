@@ -6,6 +6,7 @@ const { OBJFileLoader } = require('@babylonjs/loaders');
 const GUI = require('@babylonjs/gui');
 const { useEffect, useRef } = require('react');
 
+const { createBabylonScene }  = require('./_utils/loadBabylonScene');
 const { objectInfoWindow } = require('./_utils/objectInfoWindow');
 const { confirmPopupWindow } = require('./_utils/confirmationWindow');
 const { applyDragBehavior } = require('./_utils/dragBehavior');
@@ -14,18 +15,14 @@ const { load3DFurniture } = require('./_utils/renderFurniture');
 export default function RenderPage() {
     
     const canvasRef = useRef(null);
+    const sceneRef = useRef(null);
     const selectedObjectRef = useRef(null);
-    let engine;
-    let scene;
-    let camera1;
-    let camera2;
-
 
     // Ensure the loader is activated
     BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (plugin) {
         if (plugin.name === "obj") {
             console.log("OBJ loader is now ready");
-        }
+        };
     });
 
     useEffect(() => {
@@ -34,50 +31,18 @@ export default function RenderPage() {
             return;
         };
 
-        engine = new BABYLON.Engine(canvas, true, {
-            preserveDrawingBuffer: true,
-            stencil: true,
-            antialias: false,
-        });
+        const { engine, scene, camera1, camera2, light } = createBabylonScene(canvas)
 
-        scene = new BABYLON.Scene(engine);
-
-        // Creating Cameras ----------------------------------------------------------------------------------------------------------
-        camera1 = new BABYLON.ArcRotateCamera(
-            'camera1',
-            Math.PI / 2,
-            Math.PI / 2,
-            5,
-            BABYLON.Vector3.Zero(),
-            scene
-        );
-        camera1.attachControl(canvas, true);
-
-        camera2 = new BABYLON.UniversalCamera("camera2", new BABYLON.Vector3(0, 1, -10), scene);
-        camera2.setTarget(BABYLON.Vector3.Zero());
-        camera2.attachControl(canvas, true);
-
-        camera2.speed = 0.5;
-        camera2.angularSensibility = 1000;
-
-        scene.activeCamera = camera1;
-
-        // Creating Lights ----------------------------------------------------------------------------------------------------------
-        const light = new BABYLON.HemisphericLight('light1', BABYLON.Vector3.Up(), scene);
-
-        // Creating Physics ----------------------------------------------------------------------------------------------------------
-        window.CANNON = CANNON;
-        scene.enablePhysics(new BABYLON.Vector3(0, -9.81, 0), new BABYLON.CannonJSPlugin());
+        sceneRef.current = scene;
 
         // Creating Objects ----------------------------------------------------------------------------------------------------------
+
         createFloor(scene);
 
         scene.gravity = new BABYLON.Vector3(0, -0.1, 0);
         scene.collisionsEnabled = true;
 
         loadCustomObj(scene);
-
-        // Call Drag Behavior ----------------------------------------------------------------------------------------------------------
 
         // -----------------------------------------------------------------------------------------------------------------------------
 
@@ -114,16 +79,6 @@ export default function RenderPage() {
 
         // -----------------------------------------------------------------------------------------------------------------------------
 
-        const animate = () => {
-            scene.render();
-        };
-
-        engine.runRenderLoop(animate);
-
-        window.addEventListener('resize', () => {
-            engine.resize();
-        });
-
         return () => {
             window.removeEventListener('keydown', handleKeyDown);
             scene.dispose();
@@ -154,9 +109,9 @@ export default function RenderPage() {
     // -----------------------------------------------------------------------------------------------------------------------------
 
     const createTempFurnitureHandle = () => {
-        if(scene) {
-            const loadedObject = load3DFurniture(scene);
-            applyDragBehavior(loadedObject, scene);
+        if(sceneRef.current) {
+            const loadedObject = load3DFurniture(sceneRef.current);
+            applyDragBehavior(loadedObject, sceneRef.current);
         } else {
             console.log("scene is not initialized");
         };
