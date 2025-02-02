@@ -1,9 +1,7 @@
 'use client';
 
 const BABYLON = require('@babylonjs/core');
-const CANNON = require('cannon');
 const { OBJFileLoader } = require('@babylonjs/loaders');
-const GUI = require('@babylonjs/gui');
 const { useEffect, useRef } = require('react');
 
 const { createBabylonScene }  = require('./_utils/loadBabylonScene');
@@ -92,7 +90,7 @@ export default function RenderPage() {
 
     // -----------------------------------------------------------------------------------------------------------------------------
 
-    const handleSwitchCamera = () => {
+    const switchCameraHandle = () => {
         switchCamera(sceneRef.current, canvasRef.current, camerasRef.current);
     };
 
@@ -114,7 +112,7 @@ export default function RenderPage() {
             <h1>Babylon.js Cube Test</h1>    
             {/* Rendering 3D Scene Here */}
             <canvas ref = {canvasRef} id="renderCanvas" style={{ width: '100%', height: '100%'}} />
-            <button onClick={handleSwitchCamera} style={{ marginTop: '20px' }}>SwitchCamera</button>
+            <button onClick={switchCameraHandle} style={{ marginTop: '20px' }}>SwitchCamera</button>
             <button onClick={createTempFurnitureHandle} style={{ marginTop: '40px' }}>CreateTempShape</button>
             <button onClick={confirmPopupWindow} style={{ marginTop: '60px' }}>PopupButton</button>
             

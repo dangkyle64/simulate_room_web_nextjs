@@ -1,6 +1,14 @@
 const BABYLON = require('@babylonjs/core');
 
 const switchCamera = (scene, canvas, cameras) => {
+
+        if (!scene || !canvas || !cameras) {
+            console.log('One of the arguments is missing inside of the switchCamera util file.');
+            console.log('Scene: ', scene);
+            console.log('Canvas: ', canvas);
+            console.log('Cameras: ', cameras);
+            return;
+        };
         scene.activeCamera.detachControl(canvas);
 
         // Finding next camera to rotate properly through all of them
