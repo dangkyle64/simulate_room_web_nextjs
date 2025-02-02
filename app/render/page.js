@@ -11,11 +11,14 @@ const { objectInfoWindow } = require('./_utils/objectInfoWindow');
 const { confirmPopupWindow } = require('./_utils/confirmationWindow');
 const { applyDragBehavior } = require('./_utils/dragBehavior');
 const { load3DFurniture } = require('./_utils/renderFurniture');
+const { switchCamera } = require('./_utils/switchCamera');
 
 export default function RenderPage() {
     
     const canvasRef = useRef(null);
     const sceneRef = useRef(null);
+    const camerasRef = useRef([]);
+
     const selectedObjectRef = useRef(null);
 
     // Ensure the loader is activated
@@ -34,6 +37,7 @@ export default function RenderPage() {
         const { engine, scene, camera1, camera2, light } = createBabylonScene(canvas)
 
         sceneRef.current = scene;
+        camerasRef.current = [camera1, camera2];
 
         // Creating Objects ----------------------------------------------------------------------------------------------------------
 
@@ -88,22 +92,8 @@ export default function RenderPage() {
 
     // -----------------------------------------------------------------------------------------------------------------------------
 
-    const switchCamera = () => {
-        scene.activeCamera.detachControl(canvasRef.current);
-
-        if (scene.activeCamera === camera1) {
-            scene.activeCamera = camera2;
-        } else {
-            scene.activeCamera = camera1;
-        };
-
-        scene.activeCamera.attachControl(canvasRef.current, true);
-
-        if (scene.activeCamera instanceof BABYLON.UniversalCamera) {
-            scene.activeCamera.speed = 1.0;  // Adjust movement speed
-            scene.activeCamera.inertia = 0.9; // Adjust inertia (smoothness of movement)
-        };
-        canvasRef.current.focus();
+    const handleSwitchCamera = () => {
+        switchCamera(sceneRef.current, canvasRef.current, camerasRef.current);
     };
 
     // -----------------------------------------------------------------------------------------------------------------------------
@@ -124,7 +114,7 @@ export default function RenderPage() {
             <h1>Babylon.js Cube Test</h1>    
             {/* Rendering 3D Scene Here */}
             <canvas ref = {canvasRef} id="renderCanvas" style={{ width: '100%', height: '100%'}} />
-            <button onClick={switchCamera} style={{ marginTop: '20px' }}>SwitchCamera</button>
+            <button onClick={handleSwitchCamera} style={{ marginTop: '20px' }}>SwitchCamera</button>
             <button onClick={createTempFurnitureHandle} style={{ marginTop: '40px' }}>CreateTempShape</button>
             <button onClick={confirmPopupWindow} style={{ marginTop: '60px' }}>PopupButton</button>
             
@@ -197,3 +187,4 @@ const loadCustomObj = async (scene) => {
         console.error("Error loading .obj file", error);
     };
 };
+
