@@ -9,6 +9,8 @@ const { useEffect, useRef } = require('react');
 const { objectInfoWindow } = require('./_utils/objectInfoWindow');
 const { confirmPopupWindow } = require('./_utils/confirmationWindow');
 const { applyDragBehavior } = require('./_utils/dragBehavior');
+const { load3DFurniture } = require('./_utils/renderFurniture');
+
 export default function RenderPage() {
     
     const canvasRef = useRef(null);
@@ -153,36 +155,14 @@ export default function RenderPage() {
 
     const createTempFurnitureHandle = () => {
         if(scene) {
-            createTempFurniture(scene);
+            const loadedObject = load3DFurniture(scene);
+            applyDragBehavior(loadedObject, scene);
         } else {
             console.log("scene is not initialized");
         };
     };
 
-    const createTempFurniture = (scene, type = "box", size = 2, position = { x: 0, y: 55, z: 0 }) => {
-        let object; 
-        let uniqueName = `object_${Date.now()}`;
-        scene.gravity = new BABYLON.Vector3(0, -0.1, 0);
-        // select type
-        if(type === "box") {
-            object = BABYLON.MeshBuilder.CreateBox(uniqueName, { size: size }, scene);
-        };
-        
-        object.position.set(position.x, position.y, position.z);
-        
-        // object properties
-        object.material = new BABYLON.StandardMaterial("material", scene);
-        object.material.diffuseColor  = BABYLON.Color3.Blue();
-        object.physicsImpostor = new BABYLON.PhysicsImpostor(object, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1 }, scene);
-        
-        applyDragBehavior(object, scene);
-
-        return object;
-    };
-
     // -----------------------------------------------------------------------------------------------------------------------------
-
-
 
     return (
         <div>
