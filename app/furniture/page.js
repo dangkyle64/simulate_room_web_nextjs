@@ -3,6 +3,7 @@
 const { fetchFurnitureData } = require('../_api/furnitureApi');
 const FurnitureCard = require('./FurnitureCard').default;
 const { useEffect, useState } = require('react');
+const Modal = require('./Modal').default;
 const styles = require('./FurnitureCard.module.css')
 export default function furnitureHome() {
 
@@ -23,6 +24,10 @@ export default function furnitureHome() {
         setSelectedFurniture(furniture);
     };
 
+    const handleCloseModal = () => {
+      setSelectedFurniture(null); // Close the modal
+    };
+
     return (
       <div>
         <h1>Skeleton Furniture Home Page</h1>
@@ -40,12 +45,7 @@ export default function furnitureHome() {
         </div>
 
         {selectedFurniture && (
-          <div className="furniture-details">
-            <h2>{selectedFurniture.type}</h2>
-            <p>Length: {selectedFurniture.length}, Width: {selectedFurniture.width}, Height: {selectedFurniture.height}</p>
-            <p>Location: x:{selectedFurniture.x_position}, y:{selectedFurniture.y_position}, z:{selectedFurniture.z_position}</p>
-            <p>Rotation: x: {selectedFurniture.rotation_x} y: {selectedFurniture.rotation_y} z: {selectedFurniture.rotation_z}</p>
-          </div>
+          <Modal selectedFurniture={selectedFurniture} onClose={handleCloseModal} />
         )}
         
       </div>
