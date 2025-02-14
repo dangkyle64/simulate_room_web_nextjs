@@ -1,10 +1,12 @@
+const styles = require('./Modal.module.css')
+
 const Modal = ({ selectedFurniture, onClose }) => {
     console.log("Testing", selectedFurniture);
     if (!selectedFurniture) return null;
   
     return (
-      <div className="modal-overlay" onClick={onClose}>
-        <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+      <div className={styles['modal-overlay']} onClick={onClose}>
+        <div className={styles['modal-content']} onClick={(e) => e.stopPropagation()}>
           <h2>{selectedFurniture.type}</h2>
           <p>Length: {selectedFurniture.length}, Width: {selectedFurniture.width}, Height: {selectedFurniture.height}</p>
           <p>Location: x:{selectedFurniture.x_position}, y:{selectedFurniture.y_position}, z:{selectedFurniture.z_position}</p>
