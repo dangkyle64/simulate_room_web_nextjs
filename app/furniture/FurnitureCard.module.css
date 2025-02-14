@@ -4,16 +4,18 @@
     width: 100%;            /* Ensure it takes up the full width of its parent */
     min-height: 100vh; 
     padding: 20px;
+    
 }
 
 .furniture-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));  /* Responsive grid columns */
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));  /* Responsive grid columns */
     gap: .2px;                        /* Space between grid items */
     padding: 20px;
-    width: 40%;                        /* Set the grid to take up 40% of the page width (or adjust as needed) */
+    width: 20%;                        /* Set the grid to take up 40% of the page width (or adjust as needed) */
     max-width: 800px;                  /* Optional: Set a maximum width */
     box-sizing: border-box;
+    background-color: aquamarine;
 }
 
 .card {
@@ -25,6 +27,7 @@
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: white;
 }
 
 .card:hover {
