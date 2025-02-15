@@ -4,12 +4,14 @@ const { fetchFurnitureData, createFurnitureData, updateFurnitureData, deleteFurn
 const { useEffect, useState } = require('react');
 const FurnitureCard = require('./FurnitureCard').default;
 const Modal = require('./Modal').default;
+const CRUDModal = require('./CRUDModal').default;
 const CRUDButtons = require('./CRUDButtons').default;
 const styles = require('./FurnitureCard.module.css')
 export default function furnitureHome() {
 
     const [selectedFurniture, setSelectedFurniture] = useState(null);
     const [furnitureData, setFurnitureData] = useState([]);
+    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
       async function fetchData() {
@@ -29,10 +31,14 @@ export default function furnitureHome() {
       setSelectedFurniture(null); // Close the modal
     };
 
-    const handleCreate = async () => {
+    const handleCloseCRUDModal = () => {
+      setShowModal(false);
+    };
+
+    const handleCreate = async (inputNewFurnitureData) => {
 
         //test input
-        const inputNewFurnitureData = {
+        inputNewFurnitureData = {
             type: 'Chair',
             modelUrl: 'https://example.com/chair-model',
             length: 50,
@@ -70,7 +76,7 @@ export default function furnitureHome() {
         <p>Skeleton Furniture Home Page for Simulate Room</p>
 
         <CRUDButtons
-          onCreate={handleCreate}
+          onCreate={() => setShowModal(true)}
           onUpdate={handleUpdate}
           onDelete={handleDelete}
         />
@@ -86,7 +92,10 @@ export default function furnitureHome() {
             ))}
           </div>
         </div>
-
+        
+        {showModal && (
+          <CRUDModal onClose={handleCloseCRUDModal} onCreate={handleCreate}/>
+        )}
         {selectedFurniture && (
           <Modal selectedFurniture={selectedFurniture} onClose={handleCloseModal} />
         )}

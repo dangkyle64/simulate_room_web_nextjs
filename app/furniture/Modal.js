@@ -1,7 +1,7 @@
 const styles = require('./Modal.module.css')
 
 const Modal = ({ selectedFurniture, onClose }) => {
-    console.log("Testing", selectedFurniture);
+    //console.log("Testing", selectedFurniture);
     if (!selectedFurniture) return null;
   
     return (
