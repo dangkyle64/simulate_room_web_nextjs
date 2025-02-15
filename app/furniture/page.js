@@ -30,7 +30,23 @@ export default function furnitureHome() {
     };
 
     const handleCreate = async () => {
-        const newFurniture = await createFurnitureData();
+
+        //test input
+        const inputNewFurnitureData = {
+            type: 'Chair',
+            modelUrl: 'https://example.com/chair-model',
+            length: 50,
+            width: 60,
+            height: 100,
+            x_position: 10,
+            y_position: 20,
+            z_position: 30,
+            rotation_x: 0,
+            rotation_y: 45,
+            rotation_z: 90,
+        };
+
+        const newFurniture = await createFurnitureData(inputNewFurnitureData);
         setFurnitureData(prev => [...prev, newFurniture]);
     };
 
@@ -58,7 +74,7 @@ export default function furnitureHome() {
           onUpdate={handleUpdate}
           onDelete={handleDelete}
         />
-        
+
         <div className={styles['furniture-grid-container']}>
           <div className={styles['furniture-grid']}>
             {furnitureData.map(furniture => (

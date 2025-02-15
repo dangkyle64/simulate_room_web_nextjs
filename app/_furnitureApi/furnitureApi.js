@@ -17,10 +17,17 @@ async function fetchFurnitureData() {
     };
 };
 
-async function createFurnitureData() {
+async function createFurnitureData(newFurniture) {
     try {
         //const response = await fetch('https://simulate-room-nodejs.onrender.com/api/furniture/', {method: 'POST'});
-        const response = await fetch('http://localhost:5000/api/furniture/', {method: 'POST'});
+        const response = await fetch('http://localhost:5000/api/furniture/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(newFurniture),
+        });
+        
         if (!response.ok) {
             throw new Error('Failed to create data, response was not okay.');
         };
