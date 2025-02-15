@@ -56,8 +56,25 @@ export default function furnitureHome() {
         setFurnitureData(prev => [...prev, newFurniture]);
     };
 
-    const handleUpdate = async (id) => {
-        const updatedFurniture = await updateFurnitureData(id);
+    const handleUpdate = async (id, inputUpdateFurnitureData) => {
+
+        inputUpdateFurnitureData = {
+          type: 'Updated Chair',
+          modelUrl: 'https://example.com/updated-chair-model',
+          length: 55,
+          width: 65,
+          height: 110,
+          x_position: 15,
+          y_position: 25,
+          z_position: 35,
+          rotation_x: 10,
+          rotation_y: 50,
+          rotation_z: 100,
+        };
+
+        id = 1
+
+        const updatedFurniture = await updateFurnitureData(id, inputUpdateFurnitureData);
         setFurnitureData(prev => 
             prev.map(furniture =>
                 furniture.id === id ? updatedFurniture : furniture

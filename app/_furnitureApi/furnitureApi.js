@@ -27,7 +27,7 @@ async function createFurnitureData(newFurniture) {
             },
             body: JSON.stringify(newFurniture),
         });
-        
+
         if (!response.ok) {
             throw new Error('Failed to create data, response was not okay.');
         };
@@ -41,10 +41,17 @@ async function createFurnitureData(newFurniture) {
     };
 };
 
-async function updateFurnitureData(id) {
+async function updateFurnitureData(id, updateFurniture) {
     try {
         //const response = await fetch(`https://simulate-room-nodejs.onrender.com/api/furniture/${id}`, {method: 'PUT'});
-        const response = await fetch(`http://localhost:5000/api/furniture/${id}`, {method: 'PUT'});
+        const response = await fetch(`http://localhost:5000/api/furniture/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updateFurniture),
+        });
+
         if (!response.ok) {
             throw new Error('Failed to update data, response was not okay.');
         };
