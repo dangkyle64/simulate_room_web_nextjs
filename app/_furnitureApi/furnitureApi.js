@@ -1,7 +1,7 @@
 async function fetchFurnitureData() {
     try {
-        const response = await fetch('https://simulate-room-nodejs.onrender.com/api/furniture/');
-        //const response = await fetch('http://localhost:5000/api/furniture/');
+        //const response = await fetch('https://simulate-room-nodejs.onrender.com/api/furniture/');
+        const response = await fetch('http://localhost:5000/api/furniture/');
 
         if (!response.ok) {
             throw new Error('Failed to fetch data, response was not okay.');
@@ -19,8 +19,8 @@ async function fetchFurnitureData() {
 
 async function createFurnitureData() {
     try {
-        const response = await fetch('https://simulate-room-nodejs.onrender.com/api/furniture/', {method: 'POST'});
-
+        //const response = await fetch('https://simulate-room-nodejs.onrender.com/api/furniture/', {method: 'POST'});
+        const response = await fetch('http://localhost:5000/api/furniture/', {method: 'POST'});
         if (!response.ok) {
             throw new Error('Failed to create data, response was not okay.');
         };
@@ -36,8 +36,8 @@ async function createFurnitureData() {
 
 async function updateFurnitureData(id) {
     try {
-        const response = await fetch(`https://simulate-room-nodejs.onrender.com/api/furniture/${id}`, {method: 'PUT'});
-
+        //const response = await fetch(`https://simulate-room-nodejs.onrender.com/api/furniture/${id}`, {method: 'PUT'});
+        const response = await fetch(`http://localhost:5000/api/furniture/${id}`, {method: 'PUT'});
         if (!response.ok) {
             throw new Error('Failed to update data, response was not okay.');
         };
@@ -51,10 +51,10 @@ async function updateFurnitureData(id) {
     };
 };
 
-async function deleteFurnitureData() {
+async function deleteFurnitureData(id) {
     try {
-        const response = await fetch(`https://simulate-room-nodejs.onrender.com/api/furniture/${id}`, {method: 'DELETE'});
-
+        //const response = await fetch(`https://simulate-room-nodejs.onrender.com/api/furniture/${id}`, {method: 'DELETE'});
+        const response = await fetch(`http://localhost:5000/api/furniture/${id}`);
         if (!response.ok) {
             throw new Error('Failed to update data, response was not okay.');
         };
