@@ -1,8 +1,8 @@
 "use client";
 
-const { fetchFurnitureData } = require('../_api/furnitureApi');
-const FurnitureCard = require('./FurnitureCard').default;
+const { fetchFurnitureData, createFurnitureData, updateFurnitureData, deleteFurnitureData } = require('../_furnitureApi/furnitureApi')
 const { useEffect, useState } = require('react');
+const FurnitureCard = require('./FurnitureCard').default;
 const Modal = require('./Modal').default;
 const styles = require('./FurnitureCard.module.css')
 export default function furnitureHome() {
