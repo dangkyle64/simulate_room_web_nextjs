@@ -1,8 +1,8 @@
 const React = require('react');
 const styles = require('./CRUDModal.module.css');
-const { useState } = require('react');
+const { useState, useEffect } = require('react');
 
-const CRUDModal = ({ onClose, onCreate }) => {
+const CRUDModal = ({ onClose, onCreate, onUpdate, existingFurniture }) => {
     const [formData, setFormData] = useState({
         type: '',
         modelUrl: '',
@@ -17,6 +17,24 @@ const CRUDModal = ({ onClose, onCreate }) => {
         rotation_z: '',
     });
 
+    useEffect(() => {
+        if (existingFurniture) {
+            setFormData({
+                type: existingFurniture.type || '',
+                modelUrl: existingFurniture.modelUrl || '',
+                length: existingFurniture.length || '',
+                width: existingFurniture.width || '',
+                height: existingFurniture.height || '',
+                x_position: existingFurniture.x_position || '',
+                y_position: existingFurniture.y_position || '',
+                z_position: existingFurniture.z_position || '',
+                rotation_x: existingFurniture.rotation_x || '',
+                rotation_y: existingFurniture.rotation_y || '',
+                rotation_z: existingFurniture.rotation_z || '',
+            });
+        };
+    }, [existingFurniture]);
+
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData((prevData) => ({
@@ -27,14 +45,18 @@ const CRUDModal = ({ onClose, onCreate }) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        await onCreate(formData);
+        if (existingFurniture) {
+            await onUpdate(formData);
+        } else {
+            await onCreate(formData);
+        };
         onClose();
     };
 
     return (
         <div className={styles["crud-modal"]}>
             <div className={styles["crud-modal-content"]}>
-                <h2>Create New Furniture</h2>
+                <h2>{existingFurniture ? 'Update Furniture' : 'Create New Furniture'}</h2>
                 <form onSubmit={handleSubmit}>
                     <label>Type:</label>
                     <input
@@ -77,7 +99,7 @@ const CRUDModal = ({ onClose, onCreate }) => {
                     />
 
                     <div>
-                        <button type="submit">Create Furniture</button>
+                        <button type="submit">{existingFurniture ? 'Update Furniture' : 'Create Furniture'}</button>
                         <button type="button" onClick={onClose}>Close</button>
                     </div>
                 </form>

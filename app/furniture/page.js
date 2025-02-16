@@ -11,7 +11,8 @@ export default function furnitureHome() {
 
     const [selectedFurniture, setSelectedFurniture] = useState(null);
     const [furnitureData, setFurnitureData] = useState([]);
-    const [showModal, setShowModal] = useState(false);
+    const [showCreateModal, setCreateShowModal] = useState(false);
+    const [showUpdateModal, setUpdateShowModal] = useState(false);
 
     useEffect(() => {
       async function fetchData() {
@@ -25,6 +26,7 @@ export default function furnitureHome() {
     const handleFurnitureCardClick = (furniture) => {
         console.log('Selected Furniture', furniture);
         setSelectedFurniture(furniture);
+        setUpdateShowModal(true)
     };
 
     const handleCloseModal = () => {
@@ -32,11 +34,11 @@ export default function furnitureHome() {
     };
 
     const handleCloseCRUDModal = () => {
-      setShowModal(false);
+      setCreateShowModal(false);
+      setUpdateShowModal(false);
     };
 
     const handleCreate = async (inputNewFurnitureData) => {
-
         //test input
         inputNewFurnitureData = {
             type: 'Chair',
@@ -54,9 +56,10 @@ export default function furnitureHome() {
 
         const newFurniture = await createFurnitureData(inputNewFurnitureData);
         setFurnitureData(prev => [...prev, newFurniture]);
+        setCreateShowModal(false);
     };
 
-    const handleUpdate = async (id, inputUpdateFurnitureData) => {
+    const handleUpdate = async (inputUpdateFurnitureData) => {
 
         inputUpdateFurnitureData = {
           type: 'Updated Chair',
@@ -74,12 +77,15 @@ export default function furnitureHome() {
 
         id = 1
 
-        const updatedFurniture = await updateFurnitureData(id, inputUpdateFurnitureData);
+        const updatedFurniture = await updateFurnitureData(selectedFurniture.id, inputUpdateFurnitureData);
         setFurnitureData(prev => 
             prev.map(furniture =>
-                furniture.id === id ? updatedFurniture : furniture
+                furniture.id === selectedFurniture.id ? updatedFurniture : furniture
             )
         );
+
+        setUpdateShowModal(false);
+        setSelectedFurniture(null);
     };
 
     const handleDelete = async (id) => {
@@ -87,14 +93,21 @@ export default function furnitureHome() {
         setFurnitureData(prev => prev.filter(furniture => furniture.id !== id));
     };
 
+    const handleUpdateButtonClick = () => {
+      console.log('selectedFurniture in handleUpdateButtonClick:', selectedFurniture);
+      if (selectedFurniture) {
+          setUpdateShowModal(true); 
+      } else {
+          alert('Please select a piece of furniture to update.');
+      }
+    };
     return (
       <div>
         <h1>Skeleton Furniture Home Page</h1>
         <p>Skeleton Furniture Home Page for Simulate Room</p>
 
         <CRUDButtons
-          onCreate={() => setShowModal(true)}
-          onUpdate={handleUpdate}
+          onCreate={() => setCreateShowModal(true)}
           onDelete={handleDelete}
         />
 
@@ -104,19 +117,26 @@ export default function furnitureHome() {
               <FurnitureCard
                 key={furniture.id}
                 furniture={furniture}
-                onClick={handleFurnitureCardClick}
+                onClick={() => handleFurnitureCardClick(furniture)}
               />
             ))}
           </div>
         </div>
         
-        {showModal && (
-          <CRUDModal onClose={handleCloseCRUDModal} onCreate={handleCreate}/>
+        {showCreateModal && (
+          <CRUDModal onClose={handleCloseCRUDModal} onCreate={handleCreate} existingFurniture={null}/>
         )}
-        {selectedFurniture && (
-          <Modal selectedFurniture={selectedFurniture} onClose={handleCloseModal} />
+        {showUpdateModal && selectedFurniture &&(
+          <CRUDModal onClose={handleCloseCRUDModal} onUpdate={handleUpdate} existingFurniture={selectedFurniture}/>
         )}
-        
       </div>
     );
 };
+
+/*
+
+        {selectedFurniture && !showCreateModal && !showUpdateModal && (
+          <Modal selectedFurniture={selectedFurniture} onClose={handleCloseModal} />
+        )}
+
+*/

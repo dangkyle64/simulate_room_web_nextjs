@@ -10,6 +10,6 @@ export default function FurnitureCard({ furniture, onClick }) {
     return (
         <div className={styles.card} onClick={() => onClick(furniture)}>
             <h2>{furniture.type}</h2>
-            </div>
+        </div>
     );
 }
