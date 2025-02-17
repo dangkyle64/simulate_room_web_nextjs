@@ -2,13 +2,14 @@
 
 const { fetchFurnitureData, createFurnitureData, updateFurnitureData, deleteFurnitureData } = require('../_furnitureApi/furnitureApi')
 const { useEffect, useState } = require('react');
-const FurnitureCard = require('./FurnitureCard').default;
-const Modal = require('./Modal').default;
-const CRUDModal = require('./CRUDModal').default;
-const CRUDButtons = require('./CRUDButtons').default;
-const styles = require('./FurnitureCard.module.css')
+const FurnitureCard = require('./_components/furnitureCard/FurnitureCard').default;
+const Modal = require('./_components/modals/Modal').default;
+const CRUDModal = require('./_components/modals/CRUDModal').default;
+const CRUDButtons = require('./_components/button/CRUDButtons').default;
+const styles = require('./_components/furnitureCard/FurnitureCard.module.css');
 export default function furnitureHome() {
 
+    const [isUpdating, setIsUpdating] = useState(false);
     const [selectedFurniture, setSelectedFurniture] = useState(null);
     const [furnitureData, setFurnitureData] = useState([]);
     const [showCreateModal, setCreateShowModal] = useState(false);
@@ -61,31 +62,37 @@ export default function furnitureHome() {
 
     const handleUpdate = async (inputUpdateFurnitureData) => {
 
-        inputUpdateFurnitureData = {
-          type: 'Updated Chair',
-          modelUrl: 'https://example.com/updated-chair-model',
-          length: 55,
-          width: 65,
-          height: 110,
-          x_position: 15,
-          y_position: 25,
-          z_position: 35,
-          rotation_x: 10,
-          rotation_y: 50,
-          rotation_z: 100,
-        };
+        if (!selectedFurniture.id)  {
+          console.error("No selected furniture to update");
+          return;
+        }
 
-        id = 1
-
-        const updatedFurniture = await updateFurnitureData(selectedFurniture.id, inputUpdateFurnitureData);
-        setFurnitureData(prev => 
+        console.log('Updating furniture:', selectedFurniture);
+        setIsUpdating(true); // Set loading state
+        try {
+          
+          const updatedFurniture = await updateFurnitureData(selectedFurniture.id, inputUpdateFurnitureData);
+          
+          if (updatedFurniture) {
+            setFurnitureData(prev =>
             prev.map(furniture =>
-                furniture.id === selectedFurniture.id ? updatedFurniture : furniture
+              furniture.id === selectedFurniture.id ? updatedFurniture : furniture
             )
-        );
+          );
+          } else {
+            console.error("Update failed, no data returned from the server");
+          }
+          // Update the furnitureData list
+          
 
-        setUpdateShowModal(false);
-        setSelectedFurniture(null);
+          // Close modal after update and clear selectedFurniture
+          setIsUpdating(false);
+          setUpdateShowModal(false);
+          setSelectedFurniture(null);
+
+        } catch(error) {
+          console.error("Error updating furniture:", error);
+        }  
     };
 
     const handleDelete = async (id) => {
@@ -93,14 +100,6 @@ export default function furnitureHome() {
         setFurnitureData(prev => prev.filter(furniture => furniture.id !== id));
     };
 
-    const handleUpdateButtonClick = () => {
-      console.log('selectedFurniture in handleUpdateButtonClick:', selectedFurniture);
-      if (selectedFurniture) {
-          setUpdateShowModal(true); 
-      } else {
-          alert('Please select a piece of furniture to update.');
-      }
-    };
     return (
       <div>
         <h1>Skeleton Furniture Home Page</h1>
@@ -111,17 +110,21 @@ export default function furnitureHome() {
           onDelete={handleDelete}
         />
 
-        <div className={styles['furniture-grid-container']}>
-          <div className={styles['furniture-grid']}>
-            {furnitureData.map(furniture => (
+      <div className={styles['furniture-grid-container']}>
+        <div className={styles['furniture-grid']}>
+          {!isUpdating && furnitureData.map(furniture => (
+            furniture && furniture.id ? (
               <FurnitureCard
                 key={furniture.id}
                 furniture={furniture}
                 onClick={() => handleFurnitureCardClick(furniture)}
               />
-            ))}
-          </div>
+            ) : null
+          ))}
         </div>
+      </div>
+
+
         
         {showCreateModal && (
           <CRUDModal onClose={handleCloseCRUDModal} onCreate={handleCreate} existingFurniture={null}/>
