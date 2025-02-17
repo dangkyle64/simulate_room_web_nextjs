@@ -98,6 +98,14 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, existingFurniture }) => {
                         onChange={handleChange}
                     />
 
+                    <label>Rotation X:</label>
+                    <input
+                        type="number"
+                        name="rotation_x"
+                        value={formData.rotation_x}
+                        onChange={handleChange}
+                    />
+
                     <div>
                         <button type="submit">{existingFurniture ? 'Update Furniture' : 'Create Furniture'}</button>
                         <button type="button" onClick={onClose}>Close</button>
