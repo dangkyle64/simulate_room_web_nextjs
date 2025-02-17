@@ -1,7 +1,6 @@
 "use client";
 
-const { fetchFurnitureData, createFurnitureData, updateFurnitureData, deleteFurnitureData } = require('../_furnitureApi/furnitureApi')
-const { useEffect, useState } = require('react');
+const { deleteFurnitureData } = require('../_furnitureApi/furnitureApi')
 const FurnitureCard = require('./_components/furnitureCard/FurnitureCard').default;
 const Modal = require('./_components/modals/Modal').default;
 const CRUDModal = require('./_components/modals/CRUDModal').default;
@@ -12,18 +11,16 @@ const { useFurnitureState } = require('./_hooks/furnitureState');
 
 export default function furnitureHome() {
 
-    const [isUpdating, setIsUpdating] = useState(false);
-    //const [selectedFurniture, setSelectedFurniture] = useState(null);
-    //const [furnitureData, setFurnitureData] = useState([]);
-    //const [showCreateModal, setCreateShowModal] = useState(false);
-    //const [showUpdateModal, setUpdateShowModal] = useState(false);
-
     const {
         furnitureData,
         selectedFurniture,
+        isUpdatingFurnitureData,
         showUpdateModal,
         showCreateModal,
         createFurniture,
+        updateFurniture,
+        startUpdating,
+        stopUpdating,
         openUpdateModal,
         closeUpdateModal,
         openCreateModal,
@@ -67,31 +64,9 @@ export default function furnitureHome() {
         }
 
         console.log('Updating furniture:', selectedFurniture);
-        setIsUpdating(true); // Set loading state
-        try {
-          
-          const updatedFurniture = await updateFurnitureData(selectedFurniture.id, inputUpdateFurnitureData);
-          
-          if (updatedFurniture) {
-            setFurnitureData(prev =>
-            prev.map(furniture =>
-              furniture.id === selectedFurniture.id ? updatedFurniture : furniture
-            )
-          );
-          } else {
-            console.error("Update failed, no data returned from the server");
-          }
-          // Update the furnitureData list
-          
+        startUpdating();
 
-          // Close modal after update and clear selectedFurniture
-          setIsUpdating(false);
-          setUpdateShowModal(false);
-          setSelectedFurniture(null);
-
-        } catch(error) {
-          console.error("Error updating furniture:", error);
-        }  
+        await updateFurniture(inputUpdateFurnitureData);
     };
 
     const handleDelete = async (id) => {
@@ -111,7 +86,7 @@ export default function furnitureHome() {
 
       <div className={styles['furniture-grid-container']}>
         <div className={styles['furniture-grid']}>
-          {!isUpdating && furnitureData.map(furniture => (
+          {!isUpdatingFurnitureData && furnitureData.map(furniture => (
             furniture && furniture.id ? (
               <FurnitureCard
                 key={furniture.id}
