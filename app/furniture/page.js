@@ -14,24 +14,20 @@ export default function furnitureHome() {
 
     const [isUpdating, setIsUpdating] = useState(false);
     //const [selectedFurniture, setSelectedFurniture] = useState(null);
-    const [furnitureData, setFurnitureData] = useState([]);
-    const [showCreateModal, setCreateShowModal] = useState(false);
+    //const [furnitureData, setFurnitureData] = useState([]);
+    //const [showCreateModal, setCreateShowModal] = useState(false);
     //const [showUpdateModal, setUpdateShowModal] = useState(false);
 
-    useEffect(() => {
-      async function fetchData() {
-        const data = await fetchFurnitureData();
-        setFurnitureData(data);
-      }
-
-      fetchData();
-    }, []);
-
     const {
+        furnitureData,
         selectedFurniture,
         showUpdateModal,
+        showCreateModal,
+        createFurniture,
         openUpdateModal,
-        closeUpdateModal,  
+        closeUpdateModal,
+        openCreateModal,
+        closeCreateModal,
     } = useFurnitureState();
 
     const handleFurnitureCardClick = (furniture) => {
@@ -40,6 +36,7 @@ export default function furnitureHome() {
     };
 
     const handleCloseCRUDModal = () => {
+        closeCreateModal();
         closeUpdateModal();
     };
 
@@ -59,9 +56,7 @@ export default function furnitureHome() {
             rotation_z: 90,
         };
 
-        const newFurniture = await createFurnitureData(inputNewFurnitureData);
-        setFurnitureData(prev => [...prev, newFurniture]);
-        setCreateShowModal(false);
+        await createFurniture(inputNewFurnitureData)
     };
 
     const handleUpdate = async (inputUpdateFurnitureData) => {
@@ -110,7 +105,7 @@ export default function furnitureHome() {
         <p>Skeleton Furniture Home Page for Simulate Room</p>
 
         <CRUDButtons
-          onCreate={() => setCreateShowModal(true)}
+          onCreate={() => openCreateModal()}
           onDelete={handleDelete}
         />
 

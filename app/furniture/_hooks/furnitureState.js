@@ -1,5 +1,5 @@
 const { useEffect, useState } = require('react');
-const { fetchFurnitureData } = require('../../_furnitureApi/furnitureApi');
+const { fetchFurnitureData, createFurnitureData } = require('../../_furnitureApi/furnitureApi');
 
 export function useFurnitureState() {
 
@@ -23,6 +23,25 @@ export function useFurnitureState() {
         fetchData();
     }, []);
 
+    const createFurniture = async (inputNewFurnitureData) => {
+        try {
+            const newFurniture = await createFurnitureData(inputNewFurnitureData);
+            setFurnitureData((prev) => [...prev, newFurniture]);
+            setCreateShowModal(false);
+        } catch(error) {
+            console.error(error);
+            setError(error.message);
+        };
+    };
+
+    const openCreateModal = () => {
+        setCreateShowModal(true);
+    };
+
+    const closeCreateModal = () => {
+        setCreateShowModal(false);
+    };
+
     const openUpdateModal = (furniture) => {
         setSelectedFurniture(furniture);
         setUpdateShowModal(true);
@@ -34,9 +53,14 @@ export function useFurnitureState() {
     };
 
     return {
+        furnitureData,
         selectedFurniture,
         showUpdateModal,
+        showCreateModal,
+        createFurniture,
         openUpdateModal,
-        closeUpdateModal,  
+        closeUpdateModal,
+        openCreateModal,
+        closeCreateModal,
     };
 };
