@@ -7,13 +7,16 @@ const Modal = require('./_components/modals/Modal').default;
 const CRUDModal = require('./_components/modals/CRUDModal').default;
 const CRUDButtons = require('./_components/button/CRUDButtons').default;
 const styles = require('./_components/furnitureCard/FurnitureCard.module.css');
+
+const { useFurnitureState } = require('./_hooks/furnitureState');
+
 export default function furnitureHome() {
 
     const [isUpdating, setIsUpdating] = useState(false);
-    const [selectedFurniture, setSelectedFurniture] = useState(null);
+    //const [selectedFurniture, setSelectedFurniture] = useState(null);
     const [furnitureData, setFurnitureData] = useState([]);
     const [showCreateModal, setCreateShowModal] = useState(false);
-    const [showUpdateModal, setUpdateShowModal] = useState(false);
+    //const [showUpdateModal, setUpdateShowModal] = useState(false);
 
     useEffect(() => {
       async function fetchData() {
@@ -24,19 +27,20 @@ export default function furnitureHome() {
       fetchData();
     }, []);
 
-    const handleFurnitureCardClick = (furniture) => {
-        console.log('Selected Furniture', furniture);
-        setSelectedFurniture(furniture);
-        setUpdateShowModal(true)
-    };
+    const {
+        selectedFurniture,
+        showUpdateModal,
+        openUpdateModal,
+        closeUpdateModal,  
+    } = useFurnitureState();
 
-    const handleCloseModal = () => {
-      setSelectedFurniture(null); // Close the modal
+    const handleFurnitureCardClick = (furniture) => {
+        //console.log('Selected Furniture', furniture);
+        openUpdateModal(furniture);
     };
 
     const handleCloseCRUDModal = () => {
-      setCreateShowModal(false);
-      setUpdateShowModal(false);
+        closeUpdateModal();
     };
 
     const handleCreate = async (inputNewFurnitureData) => {
@@ -135,11 +139,3 @@ export default function furnitureHome() {
       </div>
     );
 };
-
-/*
-
-        {selectedFurniture && !showCreateModal && !showUpdateModal && (
-          <Modal selectedFurniture={selectedFurniture} onClose={handleCloseModal} />
-        )}
-
-*/
