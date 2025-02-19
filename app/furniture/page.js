@@ -1,6 +1,5 @@
 "use client";
 
-const { deleteFurnitureData } = require('../_furnitureApi/furnitureApi')
 const FurnitureCard = require('./_components/furnitureCard/FurnitureCard').default;
 const Modal = require('./_components/modals/Modal').default;
 const CRUDModal = require('./_components/modals/CRUDModal').default;
@@ -15,12 +14,13 @@ export default function furnitureHome() {
         furnitureData,
         selectedFurniture,
         isUpdatingFurnitureData,
+        isDeletingFurnitureData,
         showUpdateModal,
         showCreateModal,
         createFurniture,
         updateFurniture,
+        deleteFurniture,
         startUpdating,
-        stopUpdating,
         openUpdateModal,
         closeUpdateModal,
         openCreateModal,
@@ -59,8 +59,8 @@ export default function furnitureHome() {
     const handleUpdate = async (inputUpdateFurnitureData) => {
 
         if (!selectedFurniture.id)  {
-          console.error("No selected furniture to update");
-          return;
+            console.error("No selected furniture to update");
+            return;
         }
 
         console.log('Updating furniture:', selectedFurniture);
@@ -70,8 +70,13 @@ export default function furnitureHome() {
     };
 
     const handleDelete = async (id) => {
-        await deleteFurnitureData(id);
-        setFurnitureData(prev => prev.filter(furniture => furniture.id !== id));
+
+        if (!selectedFurniture.id) {
+            console.error("No selected furniture to delete");
+            return;
+        };
+        console.log('Deleting Furniture', selectedFurniture);
+        await deleteFurniture();
     };
 
     return (
@@ -104,7 +109,7 @@ export default function furnitureHome() {
           <CRUDModal onClose={handleCloseCRUDModal} onCreate={handleCreate} existingFurniture={null}/>
         )}
         {showUpdateModal && selectedFurniture &&(
-          <CRUDModal onClose={handleCloseCRUDModal} onUpdate={handleUpdate} existingFurniture={selectedFurniture}/>
+          <CRUDModal onClose={handleCloseCRUDModal} onUpdate={handleUpdate} onDelete={handleDelete} existingFurniture={selectedFurniture}/>
         )}
       </div>
     );
