@@ -1,5 +1,5 @@
 const { useEffect, useState } = require('react');
-const { fetchFurnitureData, fetchSpecificFurnitureData, createFurnitureData, updateFurnitureData } = require('../../_furnitureApi/furnitureApi');
+const { fetchFurnitureData, fetchSpecificFurnitureData, createFurnitureData, updateFurnitureData, deleteFurnitureData } = require('../../_furnitureApi/furnitureApi');
 
 export function useFurnitureState() {
 
@@ -7,7 +7,8 @@ export function useFurnitureState() {
     const [selectedFurniture, setSelectedFurniture] = useState(null);
 
     const [isUpdatingFurnitureData, setIsUpdatingFurnitureData] = useState(false);
-    
+    const [isDeletingFurnitureData, setIsDeletingFurnitureData] = useState(false);
+
     const [showCreateModal, setCreateShowModal] = useState(false);
     const [showUpdateModal, setUpdateShowModal] = useState(false);
 
@@ -57,12 +58,39 @@ export function useFurnitureState() {
         };
     };
 
+    const deleteFurniture  = async () => {
+        try {
+            await deleteFurnitureData(selectedFurniture.id);
+
+            console.log('Deleted Furniture from Backend: ', selectedFurniture );
+
+            setFurnitureData((prev) =>
+                prev.filter(furniture => furniture.id !== selectedFurniture.id)
+            );
+
+            setSelectedFurniture(null);
+            setIsDeletingFurnitureData(false);
+
+        } catch(error) {
+            console.error(error);
+            setError(error.message);
+        };
+    };
+
     const startUpdating = () => {
         setIsUpdatingFurnitureData(true);
     };
 
     const stopUpdating = () => {
         setIsUpdatingFurnitureData(false);
+    };
+
+    const startDeleting = () => {
+        setIsDeletingFurnitureData(true);
+    };
+
+    const stopDeleting = () => {
+        setIsDeletingFurnitureData(false);
     };
 
     const openCreateModal = () => {
@@ -87,12 +115,16 @@ export function useFurnitureState() {
         furnitureData,
         selectedFurniture,
         isUpdatingFurnitureData,
+        isDeletingFurnitureData,
         showUpdateModal,
         showCreateModal,
         createFurniture,
         updateFurniture,
+        deleteFurniture,
         startUpdating,
         stopUpdating,
+        startDeleting,
+        stopDeleting,
         openUpdateModal,
         closeUpdateModal,
         openCreateModal,
