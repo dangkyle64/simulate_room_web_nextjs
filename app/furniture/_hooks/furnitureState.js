@@ -11,6 +11,7 @@ export function useFurnitureState() {
 
     const [showCreateModal, setCreateShowModal] = useState(false);
     const [showUpdateModal, setUpdateShowModal] = useState(false);
+    const [showDeleteConfirmModal, setDeleteConfirmModal] = useState(false);
 
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -24,6 +25,7 @@ export function useFurnitureState() {
         fetchData();
     }, []);
 
+    // CRUD Related State Management 
     const createFurniture = async (inputNewFurnitureData) => {
         try {
             const newFurniture = await createFurnitureData(inputNewFurnitureData);
@@ -58,7 +60,7 @@ export function useFurnitureState() {
         };
     };
 
-    const deleteFurniture  = async () => {
+    const deleteFurniture = async () => {
         try {
             await deleteFurnitureData(selectedFurniture.id);
 
@@ -71,12 +73,17 @@ export function useFurnitureState() {
             setSelectedFurniture(null);
             setIsDeletingFurnitureData(false);
 
+            //resync FurnitureData
+            const data = await fetchFurnitureData();
+            setFurnitureData(data);
+
         } catch(error) {
             console.error(error);
             setError(error.message);
         };
     };
 
+    // Loading State Management
     const startUpdating = () => {
         setIsUpdatingFurnitureData(true);
     };
@@ -93,6 +100,7 @@ export function useFurnitureState() {
         setIsDeletingFurnitureData(false);
     };
 
+    // Modal State Management
     const openCreateModal = () => {
         setCreateShowModal(true);
     };
@@ -111,6 +119,14 @@ export function useFurnitureState() {
         setUpdateShowModal(false);
     };
 
+    const openDeleteConfirmModal = () => {
+        setDeleteConfirmModal(true);
+    };
+
+    const closeDeleteConfirmModal = () => {
+        setDeleteConfirmModal(false);
+    };
+
     return {
         furnitureData,
         selectedFurniture,
@@ -118,6 +134,7 @@ export function useFurnitureState() {
         isDeletingFurnitureData,
         showUpdateModal,
         showCreateModal,
+        showDeleteConfirmModal,
         createFurniture,
         updateFurniture,
         deleteFurniture,
@@ -129,5 +146,7 @@ export function useFurnitureState() {
         closeUpdateModal,
         openCreateModal,
         closeCreateModal,
+        openDeleteConfirmModal,
+        closeDeleteConfirmModal,
     };
 };

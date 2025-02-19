@@ -91,13 +91,16 @@ async function updateFurnitureData(id, updateFurniture) {
 async function deleteFurnitureData(id) {
     try {
         //const response = await fetch(`https://simulate-room-nodejs.onrender.com/api/furniture/${id}`, {method: 'DELETE'});
-        const response = await fetch(`http://localhost:5000/api/furniture/${id}`);
+        const response = await fetch(`http://localhost:5000/api/furniture/${id}`, {
+            method: 'DELETE', 
+            headers: {
+                'Content-Type': 'application/json', 
+            },
+        });
+
         if (!response.ok) {
             throw new Error('Failed to update data, response was not okay.');
         };
-
-        const data = await response.json();
-        return data;
         
     } catch(error) {
         console.log('There was an error deleting the furniture data: ', error);

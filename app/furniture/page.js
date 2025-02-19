@@ -2,6 +2,7 @@
 
 const FurnitureCard = require('./_components/furnitureCard/FurnitureCard').default;
 const Modal = require('./_components/modals/Modal').default;
+const ConfirmDeleteModal = require('./_components/modals/ConfirmDeleteModal').default;
 const CRUDModal = require('./_components/modals/CRUDModal').default;
 const CRUDButtons = require('./_components/button/CRUDButtons').default;
 const styles = require('./_components/furnitureCard/FurnitureCard.module.css');
@@ -17,6 +18,7 @@ export default function furnitureHome() {
         isDeletingFurnitureData,
         showUpdateModal,
         showCreateModal,
+        showDeleteConfirmModal,
         createFurniture,
         updateFurniture,
         deleteFurniture,
@@ -25,6 +27,8 @@ export default function furnitureHome() {
         closeUpdateModal,
         openCreateModal,
         closeCreateModal,
+        openDeleteConfirmModal,
+        closeDeleteConfirmModal,
     } = useFurnitureState();
 
     const handleFurnitureCardClick = (furniture) => {
@@ -35,6 +39,7 @@ export default function furnitureHome() {
     const handleCloseCRUDModal = () => {
         closeCreateModal();
         closeUpdateModal();
+        closeDeleteConfirmModal();
     };
 
     const handleCreate = async (inputNewFurnitureData) => {
@@ -69,7 +74,16 @@ export default function furnitureHome() {
         await updateFurniture(inputUpdateFurnitureData);
     };
 
-    const handleDelete = async (id) => {
+    const handleDeleteConfirm = () => {
+        if (!selectedFurniture.id) {
+            console.error("No selected furniture to confirm delete");
+            return;
+        };
+        //console.log('DeleteConfirmModal function called.');
+        openDeleteConfirmModal();
+    };
+
+    const handleDelete = async () => {
 
         if (!selectedFurniture.id) {
             console.error("No selected furniture to delete");
@@ -86,7 +100,6 @@ export default function furnitureHome() {
 
         <CRUDButtons
           onCreate={() => openCreateModal()}
-          onDelete={handleDelete}
         />
 
       <div className={styles['furniture-grid-container']}>
@@ -108,8 +121,12 @@ export default function furnitureHome() {
         {showCreateModal && (
           <CRUDModal onClose={handleCloseCRUDModal} onCreate={handleCreate} existingFurniture={null}/>
         )}
-        {showUpdateModal && selectedFurniture &&(
-          <CRUDModal onClose={handleCloseCRUDModal} onUpdate={handleUpdate} onDelete={handleDelete} existingFurniture={selectedFurniture}/>
+        {showUpdateModal && selectedFurniture && (
+          <CRUDModal onClose={handleCloseCRUDModal} onUpdate={handleUpdate} onDeleteConfirm={handleDeleteConfirm} existingFurniture={selectedFurniture}/>
+        )}
+
+        {showDeleteConfirmModal && (
+          <ConfirmDeleteModal onClose={handleCloseCRUDModal} onDelete={handleDelete} existingFurniture={selectedFurniture} /> 
         )}
       </div>
     );
