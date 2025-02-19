@@ -2,7 +2,7 @@ const React = require('react');
 const styles = require('./CRUDModal.module.css');
 const { useState, useEffect } = require('react');
 
-const CRUDModal = ({ onClose, onCreate, onUpdate, existingFurniture }) => {
+const CRUDModal = ({ onClose, onCreate, onUpdate, onDelete, existingFurniture }) => {
     const [formData, setFormData] = useState({
         type: '',
         modelUrl: '',
@@ -51,6 +51,13 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, existingFurniture }) => {
             await onCreate(formData);
         };
         onClose();
+    };
+
+    const handleDelete = async (event) => {
+        if (existingFurniture) {
+            await onDelete();
+            onClose();
+        };
     };
 
     return (
@@ -108,6 +115,11 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, existingFurniture }) => {
 
                     <div>
                         <button type="submit">{existingFurniture ? 'Update Furniture' : 'Create Furniture'}</button>
+                        {existingFurniture && (
+                            <button type="button" onClick={handleDelete} className={styles["delete-button"]}>
+                                Delete Furniture
+                            </button>
+                        )}
                         <button type="button" onClick={onClose}>Close</button>
                     </div>
                 </form>
