@@ -1,6 +1,9 @@
+// import react package and required hooks
 const React = require('react');
-const styles = require('./CRUDModal.module.css');
 const { useState, useEffect } = require('react');
+
+// import styles file for the CRUDModal component
+const styles = require('./CRUDModal.module.css');
 
 const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurniture }) => {
     const [formData, setFormData] = useState({

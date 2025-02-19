@@ -1,13 +1,26 @@
+// importing the styles file for the ConfirmDeleteModal component
 const styles = require('./ConfirmDeleteModal.module.css');
+
+
+/**
+ * ConfirmDeleteModal component - A modal that asks the user to confirm if they want to delete a furniture item.
+ * 
+ * @param {Object} props
+ * @param {function} props.onDelete - Function to call when the user confirms deletion.
+ * @param {function} props.onClose - Function to call when the modal is closed without deletion.
+ * @param {Object} props.existingFurniture - The furniture item to be deleted, contains properties like `type`.
+ * 
+ * @returns {JSX.Element} The modal UI with options to delete or close.
+ */
 
 const ConfirmDeleteModal = ({ onDelete, onClose, existingFurniture }) => {
 
+    // handles delete action
+    // calls `onDelete` prop function to delete the item 
     const handleDelete = async () => {
-        console.log("Called handleDelete in Modal");
         await onDelete();
     };
 
-    //console.log("ConfirmDelete Modal loaded.")
     return (
         <div className={styles["confirm-delete-modal-overlay"]} onClick={onClose}>
             <div className={styles["confirm-delete-modal-content"]}>
@@ -20,5 +33,5 @@ const ConfirmDeleteModal = ({ onDelete, onClose, existingFurniture }) => {
     );
 };
 
+// Export the component so it can be used in other parts of the application
 export default ConfirmDeleteModal;
-// click button -> load up this modal to ask for confirmation -> if yes delete, if not close the window 
