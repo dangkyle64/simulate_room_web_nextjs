@@ -98,8 +98,18 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
     };
 
     /**
-     * Handles form submission, either creating or updating furniture data.
-     * @param {Event} event - The form submit event.
+     * Handles the form submission, validating the input fields and either creating or updating the furniture data.
+     * 
+     * The function performs the following actions:
+     * - Clears any previous error messages.
+     * - Validates the form fields (`type`, `modelUrl`, `length`, `width`, `height`).
+     * - If validation fails, error messages are set and the form submission does not happen.
+     * - If validation succeeds, it calls either `onUpdate` (if the furniture already exists) or `onCreate` (if it's a new piece of furniture).
+     * - Closes the form/modal via `onClose` after create/update is complete.
+     * 
+     * @param {Event} event - The form submit event. This is typically passed by the browser when the form is submitted.
+     * 
+     * @returns {Promise<void>} A promise that resolves once the form submission is handled (either creation or update).
      */
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -107,12 +117,36 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
         setErrors({
             type: '',
             modelUrl: '',
+            length: '',
+            width: '',
+            height: '',
+            x_position: '',
+            y_position: '',
+            z_position: '',
+            rotation_x: '',
+            rotation_y: '',
+            rotation_z: '',
         });
 
         const newErrors = {};
-        if (!formData.type) {
-            console.log('Invalid type input.');
-            newErrors.type = 'Type is required';
+        if (formData.type.trim().length === 0 || typeof formData.type !== 'string') {
+            newErrors.type = 'Type is required (Example: Chair)';
+        };
+        const urlPattern = /^(https?:\/\/)?([a-z0-9]+([-\w]*[a-z0-9])*\.)+[a-z0-9]{2,}(:[0-9]+)?(\/[-\w]*)*(\?[;&a-z\%=]*)?(#[a-z]*)?$/i;
+        if (formData.modelUrl.trim().length === 0 || typeof formData.type !== 'string' || !urlPattern.test(formData.modelUrl)) {
+            newErrors.modelUrl = 'modelUrl is required (Example: https://example.com/chair-model)';
+        };
+
+        if (!Number.isInteger(formData.length) || formData.length > 20 || formData.length <= 0) {
+            newErrors.length = 'Length is required and currently only supports up to a nonzero positive 20 measurements (Example: 15)';
+        };
+
+        if (!Number.isInteger(formData.width) || formData.width > 20 || formData.length <= 0) {
+            newErrors.width = 'Width is required and currently only supports up to a nonzero positive 20 measurements (Example: 12)';
+        };
+
+        if (!Number.isInteger(formData.height) || formData.height > 20 || formData.length <= 0) {
+            newErrors.height = 'Height is required and currently only supports up to a nonzero positive 20 measurements (Example: 1)';
         };
 
         if(Object.keys(newErrors).length > 0) {
@@ -160,6 +194,7 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
                         value={formData.modelUrl}
                         onChange={handleChange}
                     />
+                    {errors.modelUrl && <div className="error">{errors.modelUrl}</div>}
 
                     <label>Length:</label>
                     <input
@@ -168,6 +203,7 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
                         value={formData.length}
                         onChange={handleChange}
                     />
+                    {errors.length && <div className="error">{errors.length}</div>}
 
                     <label>Width:</label>
                     <input
@@ -176,6 +212,7 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
                         value={formData.width}
                         onChange={handleChange}
                     />
+                    {errors.width && <div className="error">{errors.width}</div>}
 
                     <label>Height:</label>
                     <input
@@ -184,6 +221,7 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
                         value={formData.height}
                         onChange={handleChange}
                     />
+                    {errors.height && <div className="error">{errors.height}</div>}
 
                     <label>Rotation X:</label>
                     <input
