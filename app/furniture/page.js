@@ -1,10 +1,8 @@
 "use client";
 
 const FurnitureCard = require('./_components/furnitureCard/FurnitureCard').default;
-const Modal = require('./_components/modals/Modal').default;
 const ConfirmDeleteModal = require('./_components/modals/ConfirmDeleteModal').default;
 const CRUDModal = require('./_components/modals/CRUDModal').default;
-const CRUDButtons = require('./_components/button/CRUDButtons').default;
 const styles = require('./_components/furnitureCard/FurnitureCard.module.css');
 
 const { useFurnitureState } = require('./_hooks/furnitureState');
@@ -95,12 +93,12 @@ export default function furnitureHome() {
 
     return (
       <div>
-        <h1>Skeleton Furniture Home Page</h1>
-        <p>Skeleton Furniture Home Page for Simulate Room</p>
+          <h1>Skeleton Furniture Home Page</h1>
+          <p>Skeleton Furniture Home Page for Simulate Room</p>
 
-        <CRUDButtons
-          onCreate={() => openCreateModal()}
-        />
+      <div>
+          <button onClick={() => openCreateModal()}>Create</button>
+      </div>
 
       <div className={styles['furniture-grid-container']}>
         <div className={styles['furniture-grid']}>

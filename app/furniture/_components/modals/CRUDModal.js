@@ -5,7 +5,35 @@ const { useState, useEffect } = require('react');
 // import styles file for the CRUDModal component
 const styles = require('./CRUDModal.module.css');
 
+/**
+ * CRUDModal component handles the creation, update, and deletion of furniture data.
+ * 
+ * @component
+ * @param {Object} props - Component props.
+ * @param {Function} props.onClose - Function to close the modal.
+ * @param {Function} props.onCreate - Function to create new furniture.
+ * @param {Function} props.onUpdate - Function to update existing furniture.
+ * @param {Function} props.onDeleteConfirm - Function to delete furniture.
+ * @param {Object|null} props.existingFurniture - Furniture data to edit, or null for creating new furniture.
+ * @returns {JSX.Element} - The rendered CRUDModal component.
+ */
 const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurniture }) => {
+
+    /**
+     * State to manage the form data for the modal.
+     * @type {Object}
+     * @property {string} type - Type of the furniture.
+     * @property {string} modelUrl - URL for the model.
+     * @property {string} length - Length of the furniture.
+     * @property {string} width - Width of the furniture.
+     * @property {string} height - Height of the furniture.
+     * @property {string} x_position - X position of the furniture.
+     * @property {string} y_position - Y position of the furniture.
+     * @property {string} z_position - Z position of the furniture.
+     * @property {string} rotation_x - Rotation in the X axis.
+     * @property {string} rotation_y - Rotation in the Y axis.
+     * @property {string} rotation_z - Rotation in the Z axis.
+     */
     const [formData, setFormData] = useState({
         type: '',
         modelUrl: '',
@@ -20,6 +48,11 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
         rotation_z: '',
     });
 
+    /**
+     * Effect hook to initialize form data with existing furniture data.
+     * Runs when `existingFurniture` prop changes.
+     * @param {Object} existingFurniture - Furniture object to populate the form fields.
+     */
     useEffect(() => {
         if (existingFurniture) {
             setFormData({
@@ -38,6 +71,10 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
         };
     }, [existingFurniture]);
 
+    /**
+     * Handles changes to form input fields.
+     * @param {Event} event - The event triggered by the input change.
+     */
     const handleChange = (event) => {
         const { name, value } = event.target;
         setFormData((prevData) => ({
@@ -46,6 +83,10 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
         }));
     };
 
+    /**
+     * Handles form submission, either creating or updating furniture data.
+     * @param {Event} event - The form submit event.
+     */
     const handleSubmit = async (event) => {
         event.preventDefault();
         if (existingFurniture) {
@@ -56,6 +97,10 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
         onClose();
     };
 
+    /**
+     * Handles the confirmation of deleting furniture data.
+     * @param {Event} event - The event triggered by the delete button.
+     */
     const handleDeleteConfirm = (event) => {
         console.log("Called handleDeleteConfirm. ")
         if (existingFurniture) {
