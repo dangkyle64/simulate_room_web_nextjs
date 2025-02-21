@@ -48,6 +48,20 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
         rotation_z: '',
     });
 
+    const [errors, setErrors] = useState({
+        type: '',
+        modelUrl: '',
+        length: '',
+        width: '',
+        height: '',
+        x_position: '',
+        y_position: '',
+        z_position: '',
+        rotation_x: '',
+        rotation_y: '',
+        rotation_z: '',
+    });
+
     /**
      * Effect hook to initialize form data with existing furniture data.
      * Runs when `existingFurniture` prop changes.
@@ -89,6 +103,23 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
      */
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        setErrors({
+            type: '',
+            modelUrl: '',
+        });
+
+        const newErrors = {};
+        if (!formData.type) {
+            console.log('Invalid type input.');
+            newErrors.type = 'Type is required';
+        };
+
+        if(Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+        };
+
         if (existingFurniture) {
             await onUpdate(formData);
         } else {
@@ -120,6 +151,7 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
                         value={formData.type}
                         onChange={handleChange}
                     />
+                    {errors.type && <div className="error">{errors.type}</div>}
 
                     <label>Model URL:</label>
                     <input
