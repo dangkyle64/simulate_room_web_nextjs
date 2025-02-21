@@ -34,4 +34,4 @@ const useErrorState =  () => {
     };
 };
 
-export default useErrorState;
+module.exports = useErrorState;

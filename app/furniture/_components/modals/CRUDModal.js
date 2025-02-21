@@ -255,5 +255,5 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
     );
 };
 
-export default CRUDModal;
+module.exports = CRUDModal;
 
