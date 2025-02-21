@@ -1,11 +1,18 @@
 const React = require('react');
 const styles = require('./FurnitureCard.module.css')
 
-/*
-            <p>Length: {furniture.length}, Width: {furniture.width}, Height: {furniture.height}</p>
-            <p>Location: x:{furniture.x_position}, y:{furniture.y_position}, z:{furniture.z_position}</p>
-            <p>Rotation: x: {furniture.rotation_x} y: {furniture.rotation_y} z: {furniture.rotation_z}</p>
-*/
+/**
+ * FurnitureCard component displays an individual furniture item.
+ * It renders a card with the furniture type, which is clickable.
+ * 
+ * @param {Object} props - The props passed to the component.
+ * @param {Object} props.furniture - The furniture object to display.
+ * @param {string} props.furniture.type - The type of the furniture (e.g., chair, table).
+ * @param {Function} props.onClick - The callback function to call when the card is clicked.
+ * 
+ * @returns {JSX.Element} The rendered FurnitureCard component.
+ */
+
 export default function FurnitureCard({ furniture, onClick }) {
     return (
         <div className={styles.card} onClick={() => onClick(furniture)}>
