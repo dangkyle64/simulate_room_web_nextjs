@@ -6,11 +6,12 @@
 const useFormInputValidationState = (formData) => {
     const validate = () => {
         const newErrors = {};
-        if (formData.type.trim().length === 0 || typeof formData.type !== 'string') {
+        if (typeof formData.type !== 'string' || formData.type.trim().length === 0 ) {
             newErrors.type = 'Type is required (Example: Chair)';
         };
-        const urlPattern = /^(https?:\/\/)?([a-z0-9]+([-\w]*[a-z0-9])*\.)+[a-z0-9]{2,}(:[0-9]+)?(\/[-\w]*)*(\?[;&a-z\%=]*)?(#[a-z]*)?$/i;
-        if (formData.modelUrl.trim().length === 0 || typeof formData.type !== 'string' || !urlPattern.test(formData.modelUrl)) {
+        
+        const urlPattern = /^(https?:\/\/)[a-z0-9]+([-\w]*[a-z0-9])*\.[a-z]{2,}(:[0-9]+)?(\/[-\w]*)*(\?[;&a-z\%=]*)?(#[a-z]*)?$/i;
+        if (typeof formData.type !== 'string' || formData.modelUrl.trim().length === 0 || !urlPattern.test(formData.modelUrl)) {
             newErrors.modelUrl = 'modelUrl is required (Example: https://example.com/chair-model)';
         };
 

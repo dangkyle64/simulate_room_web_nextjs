@@ -18,6 +18,115 @@ describe('useForInputValidationState', () => {
 
         const { result } = renderHook(() => useFormInputValidationState(invalidFormData));
 
-        assert.strictEqual(result.current.type, 'Type is required (Example: Chair)');
+        assert.ok(result.current.type);
+        assert.ok(result.current.modelUrl);
+        assert.ok(result.current.length);
+        assert.ok(result.current.width);
+        assert.ok(result.current.height);
+        assert.ok(result.current.rotation_x);
+        assert.ok(result.current.rotation_y);
+        assert.ok(result.current.rotation_z);
     });
+
+    it('return errors for invalid type with spaces', () => {
+        const invalidFormDataWithSpaces = { 
+            type: '   ', 
+            modelUrl: 'https://example.com', 
+            length: 10, 
+            width: 10, 
+            height: 10, 
+            rotation_x: 0, 
+            rotation_y: 0, 
+            rotation_z: 0 
+        };
+
+        const { result } = renderHook(() => useFormInputValidationState(invalidFormDataWithSpaces));
+
+        assert.ok(result.current.type);
+    });
+
+    it('return errors for invalid type integer input', () => {
+        const invalidFormDataWithNonStringType = { 
+            type: 123, 
+            modelUrl: 'https://example.com', 
+            length: 10, 
+            width: 10, 
+            height: 10, 
+            rotation_x: 0, 
+            rotation_y: 0, 
+            rotation_z: 0 
+        };
+
+        const { result } = renderHook(() => useFormInputValidationState(invalidFormDataWithNonStringType));
+
+        assert.ok(result.current.type);
+    });
+
+    it('return errors for invalid type null input', () => {
+        const invalidFormDataWithNullType = { 
+            type: null, 
+            modelUrl: 'https://example.com', 
+            length: 10, 
+            width: 10, 
+            height: 10, 
+            rotation_x: 0, 
+            rotation_y: 0, 
+            rotation_z: 0 
+        };
+
+        const { result } = renderHook(() => useFormInputValidationState(invalidFormDataWithNullType));
+
+        assert.ok(result.current.type);
+    });
+
+    it('return errors for invalid type boolean input', () => {
+        const invalidFormDataWithBooleanType = { 
+            type: true, 
+            modelUrl: 'https://example.com', 
+            length: 10, 
+            width: 10, 
+            height: 10, 
+            rotation_x: 0, 
+            rotation_y: 0, 
+            rotation_z: 0 
+        };
+
+        const { result } = renderHook(() => useFormInputValidationState(invalidFormDataWithBooleanType));
+
+        assert.ok(result.current.type);
+    });
+
+    it('return errors for invalid url format input', () => {
+        const invalidFormDataWithIncorrectUrl = { 
+            type: 'Chair', 
+            modelUrl: 'www.example.com', 
+            length: 10, 
+            width: 10, 
+            height: 10, 
+            rotation_x: 0, 
+            rotation_y: 0, 
+            rotation_z: 0 
+        };
+
+        const { result } = renderHook(() => useFormInputValidationState(invalidFormDataWithIncorrectUrl));
+
+        assert.ok(result.current.modelUrl);
+    });
+
+    it('returns no errors for valid data', () => {
+        const validFormData = {
+            type: 'Chair',
+            modelUrl: 'https://example.com/chair-model',
+            length: 10,
+            width: 12,
+            height: 15,
+            rotation_x: 190,
+            rotation_y: 50,
+            rotation_z: 100,
+        };
+    
+        const { result } = renderHook(() => useFormInputValidationState(validFormData));
+
+        assert.deepStrictEqual(result.current, {});
+    })
 });
