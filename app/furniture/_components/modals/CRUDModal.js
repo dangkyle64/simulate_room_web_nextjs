@@ -102,7 +102,7 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
      * 
      * The function performs the following actions:
      * - Clears any previous error messages.
-     * - Validates the form fields (`type`, `modelUrl`, `length`, `width`, `height`).
+     * - Validates the form fields (`type`, `modelUrl`, `length`, `width`, `height`, `rotation_x`, `rotation_y`, `rotation_z`).
      * - If validation fails, error messages are set and the form submission does not happen.
      * - If validation succeeds, it calls either `onUpdate` (if the furniture already exists) or `onCreate` (if it's a new piece of furniture).
      * - Closes the form/modal via `onClose` after create/update is complete.
@@ -147,6 +147,18 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
 
         if (!Number.isInteger(formData.height) || formData.height > 20 || formData.length <= 0) {
             newErrors.height = 'Height is required and currently only supports up to a nonzero positive 20 measurements (Example: 1)';
+        };
+
+        if (!Number.isInteger(formData.rotation_x)) {
+            newErrors.rotation_x = 'Rotation X value is required (Example: 190)';
+        };
+
+        if (!Number.isInteger(formData.rotation_y)) {
+            newErrors.rotation_y = 'Rotation Y value is required (Example: 50)';
+        };
+
+        if (!Number.isInteger(formData.rotation_z)) {
+            newErrors.rotation_z = 'Rotation Z value is required (Example: 100)';
         };
 
         if(Object.keys(newErrors).length > 0) {
@@ -230,6 +242,25 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
                         value={formData.rotation_x}
                         onChange={handleChange}
                     />
+                    {errors.rotation_x && <div className="error">{errors.rotation_x}</div>}
+
+                    <label>Rotation Y:</label>
+                    <input
+                        type="number"
+                        name="rotation_y"
+                        value={formData.rotation_y}
+                        onChange={handleChange}
+                    />
+                    {errors.rotation_y && <div className="error">{errors.rotation_y}</div>}
+
+                    <label>Rotation Z:</label>
+                    <input
+                        type="number"
+                        name="rotation_z"
+                        value={formData.rotation_z}
+                        onChange={handleChange}
+                    />
+                    {errors.rotation_z && <div className="error">{errors.rotation_z}</div>}
 
                     <div>
                         <button type="submit">{existingFurniture ? 'Update Furniture' : 'Create Furniture'}</button>
