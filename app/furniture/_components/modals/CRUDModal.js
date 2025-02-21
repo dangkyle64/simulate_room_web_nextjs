@@ -5,6 +5,10 @@ const { useState, useEffect } = require('react');
 // import styles file for the CRUDModal component
 const styles = require('./CRUDModal.module.css');
 
+// import hooks for validating form input
+const useErrorState = require('../../_hooks/useErrorState').default;
+const useFormInputValidationState = require ('../../_hooks/useFormInputValidationState').default;
+
 /**
  * CRUDModal component handles the creation, update, and deletion of furniture data.
  * 
@@ -48,19 +52,8 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
         rotation_z: '',
     });
 
-    const [errors, setErrors] = useState({
-        type: '',
-        modelUrl: '',
-        length: '',
-        width: '',
-        height: '',
-        x_position: '',
-        y_position: '',
-        z_position: '',
-        rotation_x: '',
-        rotation_y: '',
-        rotation_z: '',
-    });
+    const {errors, setFormErrors } = useErrorState();
+    
 
     /**
      * Effect hook to initialize form data with existing furniture data.
@@ -102,9 +95,10 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
      * 
      * The function performs the following actions:
      * - Clears any previous error messages.
-     * - Validates the form fields (`type`, `modelUrl`, `length`, `width`, `height`, `rotation_x`, `rotation_y`, `rotation_z`).
+     * - Calls hook to validates the form fields (`type`, `modelUrl`, `length`, `width`, `height`, `rotation_x`, `rotation_y`, `rotation_z`).
      * - If validation fails, error messages are set and the form submission does not happen.
      * - If validation succeeds, it calls either `onUpdate` (if the furniture already exists) or `onCreate` (if it's a new piece of furniture).
+     * - After successful create/update, also clears error state again to confirm its new state for next validation errors
      * - Closes the form/modal via `onClose` after create/update is complete.
      * 
      * @param {Event} event - The form submit event. This is typically passed by the browser when the form is submitted.
@@ -114,7 +108,7 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        setErrors({
+        setFormErrors({
             type: '',
             modelUrl: '',
             length: '',
@@ -128,41 +122,10 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
             rotation_z: '',
         });
 
-        const newErrors = {};
-        if (formData.type.trim().length === 0 || typeof formData.type !== 'string') {
-            newErrors.type = 'Type is required (Example: Chair)';
-        };
-        const urlPattern = /^(https?:\/\/)?([a-z0-9]+([-\w]*[a-z0-9])*\.)+[a-z0-9]{2,}(:[0-9]+)?(\/[-\w]*)*(\?[;&a-z\%=]*)?(#[a-z]*)?$/i;
-        if (formData.modelUrl.trim().length === 0 || typeof formData.type !== 'string' || !urlPattern.test(formData.modelUrl)) {
-            newErrors.modelUrl = 'modelUrl is required (Example: https://example.com/chair-model)';
-        };
+        const validationErrors = useFormInputValidationState(formData);
 
-        if (!Number.isInteger(formData.length) || formData.length > 20 || formData.length <= 0) {
-            newErrors.length = 'Length is required and currently only supports up to a nonzero positive 20 measurements (Example: 15)';
-        };
-
-        if (!Number.isInteger(formData.width) || formData.width > 20 || formData.length <= 0) {
-            newErrors.width = 'Width is required and currently only supports up to a nonzero positive 20 measurements (Example: 12)';
-        };
-
-        if (!Number.isInteger(formData.height) || formData.height > 20 || formData.length <= 0) {
-            newErrors.height = 'Height is required and currently only supports up to a nonzero positive 20 measurements (Example: 1)';
-        };
-
-        if (!Number.isInteger(formData.rotation_x)) {
-            newErrors.rotation_x = 'Rotation X value is required (Example: 190)';
-        };
-
-        if (!Number.isInteger(formData.rotation_y)) {
-            newErrors.rotation_y = 'Rotation Y value is required (Example: 50)';
-        };
-
-        if (!Number.isInteger(formData.rotation_z)) {
-            newErrors.rotation_z = 'Rotation Z value is required (Example: 100)';
-        };
-
-        if(Object.keys(newErrors).length > 0) {
-            setErrors(newErrors);
+        if(Object.keys(validationErrors).length > 0) {
+            setFormErrors(validationErrors);
             return;
         };
 
@@ -171,6 +134,21 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
         } else {
             await onCreate(formData);
         };
+
+        setFormErrors({
+            type: '',
+            modelUrl: '',
+            length: '',
+            width: '',
+            height: '',
+            x_position: '',
+            y_position: '',
+            z_position: '',
+            rotation_x: '',
+            rotation_y: '',
+            rotation_z: '',
+        });
+
         onClose();
     };
 
