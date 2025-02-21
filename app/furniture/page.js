@@ -1,7 +1,6 @@
 "use client";
 
 const FurnitureCard = require('./_components/furnitureCard/FurnitureCard').default;
-const Modal = require('./_components/modals/Modal').default;
 const ConfirmDeleteModal = require('./_components/modals/ConfirmDeleteModal').default;
 const CRUDModal = require('./_components/modals/CRUDModal').default;
 const styles = require('./_components/furnitureCard/FurnitureCard.module.css');
