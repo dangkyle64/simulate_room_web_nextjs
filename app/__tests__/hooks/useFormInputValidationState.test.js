@@ -202,7 +202,7 @@ describe('useForInputValidationState', () => {
         const { result } = renderHook(() => useFormInputValidationState(validFormData));
 
         assert.deepStrictEqual(result.current, {});
-    })
+    });
 });
 
 
