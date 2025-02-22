@@ -6,7 +6,9 @@
 const useFormInputValidationState = (formData) => {
     const validate = () => {
         const newErrors = {};
-        if (typeof formData.type !== 'string' || formData.type.trim().length === 0 ) {
+        // Stop special characters with this pattern
+        const validTypePattern = /^[a-zA-Z0-9\s-']+$/;
+        if (typeof formData.type !== 'string' || !validTypePattern.test(formData.type) || formData.type.trim().length === 0 ) {
             newErrors.type = 'Type is required (Example: Chair)';
         };
         
