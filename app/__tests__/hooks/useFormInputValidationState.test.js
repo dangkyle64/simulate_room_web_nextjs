@@ -1,3 +1,9 @@
+/**
+ * @file Unit tests for the useFormInputValidationState hook.
+ * Tests various invalid input scenarios for form data and checks that the hook
+ * correctly handles errors for different edge cases, as well as valid data.
+ */
+
 const { renderHook } = require('@testing-library/react');
 const assert = require('assert');
 
@@ -9,7 +15,7 @@ describe('useForInputValidationState', () => {
             type: '', 
             modelUrl: 'not-a-url', 
             length: 0, 
-            width: 0,  
+            width: -100,  
             height: 0, 
             rotation_x: NaN, 
             rotation_y: NaN, 
@@ -113,6 +119,74 @@ describe('useForInputValidationState', () => {
         assert.ok(result.current.modelUrl);
     });
 
+    it('return errors for slightly over limit integer input', () => {
+        const invalidFormDataWithSlightlyOverValues = { 
+            type: 'Chair', 
+            modelUrl: 'www.example.com', 
+            length: 21, 
+            width: 21, 
+            height: 21, 
+            rotation_x: 191, 
+            rotation_y: 191, 
+            rotation_z: 191 
+        };
+
+        const { result } = renderHook(() => useFormInputValidationState(invalidFormDataWithSlightlyOverValues));
+
+        assert.ok(result.current.modelUrl);
+    });
+
+    it('return errors for extremely over limit integer input', () => {
+        const invalidFormDataWithExtremeOverValues = { 
+            type: 'Chair', 
+            modelUrl: 'www.example.com', 
+            length: 21000000000000, 
+            width: 21000000000000, 
+            height: 21000000000000, 
+            rotation_x: 191000000000000, 
+            rotation_y: 191000000000000, 
+            rotation_z: 191000000000000
+        };
+
+        const { result } = renderHook(() => useFormInputValidationState(invalidFormDataWithExtremeOverValues));
+
+        assert.ok(result.current.modelUrl);
+    });
+
+    it('returns errors for missing required fields', () => {
+        const formDataWithMissingFields = {
+            // Missing 'type' and 'modelUrl'
+            length: 10,
+            width: 10,
+            height: 10,
+            rotation_x: 0,
+            rotation_y: 0,
+            rotation_z: 0
+        };
+    
+        const { result } = renderHook(() => useFormInputValidationState(formDataWithMissingFields));
+    
+        assert.ok(result.current.type);
+        assert.ok(result.current.modelUrl);
+    });
+
+    it('returns errors for invalid characters in type', () => {
+        const invalidTypeWithSpecialChars = { 
+            type: 'Chair@!', 
+            modelUrl: 'https://example.com', 
+            length: 10, 
+            width: 10, 
+            height: 10, 
+            rotation_x: 0, 
+            rotation_y: 0, 
+            rotation_z: 0 
+        };
+    
+        const { result } = renderHook(() => useFormInputValidationState(invalidTypeWithSpecialChars));
+    
+        assert.ok(result.current.type);
+    });
+    
     it('returns no errors for valid data', () => {
         const validFormData = {
             type: 'Chair',
@@ -130,3 +204,5 @@ describe('useForInputValidationState', () => {
         assert.deepStrictEqual(result.current, {});
     })
 });
+
+
