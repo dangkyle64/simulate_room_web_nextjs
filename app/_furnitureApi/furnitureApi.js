@@ -100,7 +100,7 @@ async function createFurnitureData(newFurniture) {
 
     } catch(error) {
         console.log('There was an error creating new furniture data: ', error);
-        return;
+        return [];
     };
 };
 
@@ -152,7 +152,7 @@ async function updateFurnitureData(id, updateFurniture) {
         
     } catch(error) {
         console.log('There was an error updating the furniture data: ', error);
-        return;
+        return [];
     };
 };
 
@@ -181,9 +181,11 @@ async function deleteFurnitureData(id) {
             throw new Error('Failed to update data, response was not okay.');
         };
         
+        return []; 
+        
     } catch(error) {
         console.log('There was an error deleting the furniture data: ', error);
-        return;
+        return [];
     };
 };
 
