@@ -2,7 +2,7 @@
 
 const FurnitureCard = require('./_components/furnitureCard/FurnitureCard').default;
 const ConfirmDeleteModal = require('./_components/modals/ConfirmDeleteModal').default;
-const CRUDModal = require('./_components/modals/CRUDModal').default;
+const CRUDModal = require('./_components/modals/CRUDModal');
 const styles = require('./_components/furnitureCard/FurnitureCard.module.css');
 
 const { useFurnitureState } = require('./_hooks/furnitureState');

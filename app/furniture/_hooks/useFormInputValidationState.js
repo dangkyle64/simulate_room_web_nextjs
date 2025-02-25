@@ -17,27 +17,28 @@ const useFormInputValidationState = (formData) => {
             newErrors.modelUrl = 'modelUrl is required (Example: https://example.com/chair-model)';
         };
 
-        if (!Number.isInteger(formData.length) || formData.length > 20 || formData.length <= 0) {
+        console.log(typeof(formData.length))
+        if (!Number.isInteger(Number(formData.length)) || formData.length > 20 || formData.length <= 0) {
             newErrors.length = 'Length is required and currently only supports up to a nonzero positive 20 measurements (Example: 15)';
         };
 
-        if (!Number.isInteger(formData.width) || formData.width > 20 || formData.length <= 0) {
+        if (!Number.isInteger(Number(formData.width)) || formData.width > 20 || formData.length <= 0) {
             newErrors.width = 'Width is required and currently only supports up to a nonzero positive 20 measurements (Example: 12)';
         };
 
-        if (!Number.isInteger(formData.height) || formData.height > 20 || formData.length <= 0) {
+        if (!Number.isInteger(Number(formData.height)) || formData.height > 20 || formData.length <= 0) {
             newErrors.height = 'Height is required and currently only supports up to a nonzero positive 20 measurements (Example: 1)';
         };
 
-        if (!Number.isInteger(formData.rotation_x)) {
+        if (!Number.isInteger(Number(formData.rotation_x))) {
             newErrors.rotation_x = 'Rotation X value is required (Example: 190)';
         };
 
-        if (!Number.isInteger(formData.rotation_y)) {
+        if (!Number.isInteger(Number(formData.rotation_y))) {
             newErrors.rotation_y = 'Rotation Y value is required (Example: 50)';
         };
 
-        if (!Number.isInteger(formData.rotation_z)) {
+        if (!Number.isInteger(Number(formData.rotation_z))) {
             newErrors.rotation_z = 'Rotation Z value is required (Example: 100)';
         };
 

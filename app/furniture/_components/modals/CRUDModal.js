@@ -6,8 +6,8 @@ const { useState, useEffect } = require('react');
 const styles = require('./CRUDModal.module.css');
 
 // import hooks for validating form input
-const useErrorState = require('../../_hooks/useErrorState').default;
-const useFormInputValidationState = require ('../../_hooks/useFormInputValidationState').default;
+const useErrorState = require('../../_hooks/useErrorState');
+const useFormInputValidationState = require ('../../_hooks/useFormInputValidationState');
 
 /**
  * CRUDModal component handles the creation, update, and deletion of furniture data.
@@ -188,7 +188,7 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
 
                     <label>Length:</label>
                     <input
-                        type="text"
+                        type="number"
                         name="length"
                         value={formData.length}
                         onChange={handleChange}
@@ -197,7 +197,7 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
 
                     <label>Width:</label>
                     <input
-                        type="text"
+                        type="number"
                         name="width"
                         value={formData.width}
                         onChange={handleChange}
@@ -206,7 +206,7 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
 
                     <label>Height:</label>
                     <input
-                        type="text"
+                        type="number"
                         name="height"
                         value={formData.height}
                         onChange={handleChange}
