@@ -1,21 +1,17 @@
-'use client';
-
-import { BabylonScene } from './_components/BabylonScene/BabylonScene';
-import FurnitureMenuBase from './_components/FurnitureMenuBase/FurnitureMenuBase';
-
 const BABYLON = require('@babylonjs/core');
 const { OBJFileLoader } = require('@babylonjs/loaders');
 const { useEffect, useRef } = require('react');
 
-const { createBabylonScene }  = require('./_utils/loadBabylonScene');
-const { objectInfoWindow } = require('./_utils/objectInfoWindow');
-const { confirmPopupWindow } = require('./_utils/confirmationWindow');
-const { applyDragBehavior } = require('./_utils/dragBehavior');
-const { load3DFurniture } = require('./_utils/renderFurniture');
-const { switchCamera } = require('./_utils/switchCamera');
+const { createBabylonScene }  = require('../../_utils/loadBabylonScene');
+const { objectInfoWindow } = require('../../_utils/objectInfoWindow');
+const { confirmPopupWindow } = require('../../_utils/confirmationWindow');
+const { applyDragBehavior } = require('../../_utils/dragBehavior');
+const { load3DFurniture } = require('../../_utils/renderFurniture');
+const { switchCamera } = require('../../_utils/switchCamera');
 
-export default function RenderPage() {
-    
+import styles from './BabylonScene.module.css'; 
+
+const BabylonScene = () => {
     const canvasRef = useRef(null);
     const sceneRef = useRef(null);
     const camerasRef = useRef([]);
@@ -111,17 +107,76 @@ export default function RenderPage() {
     // -----------------------------------------------------------------------------------------------------------------------------
 
     return (
-        <div>
-            <h1>Babylon.js Cube Test</h1>    
-            {/* Rendering 3D Scene Here */}
-            <BabylonScene />
-            <button onClick={switchCameraHandle} style={{ marginTop: '20px' }}>SwitchCamera</button>
-            <button onClick={createTempFurnitureHandle} style={{ marginTop: '40px' }}>CreateTempShape</button>
-            <button onClick={confirmPopupWindow} style={{ marginTop: '60px' }}>PopupButton</button>
-            <FurnitureMenuBase />
+        <div className={styles['canvas-container']}> 
+            <canvas ref = {canvasRef} id="renderCanvas" className={styles['canvas']} />
         </div>
     );
 };
 
+const createFloor = (scene) => {
+    const floor = BABYLON.MeshBuilder.CreateBox('floor', { width: 50, height: 1, depth: 50 }, scene);
+    floor.position.set(0, -1, 0);
 
+    floor.material = new BABYLON.StandardMaterial("floorMaterial", scene);
+    floor.material.diffuseColor = BABYLON.Color3.White();
+    floor.checkCollisions = true; 
 
+    floor.physicsImpostor = new BABYLON.PhysicsImpostor(floor, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
+    floor.isPickable = false;
+};
+
+const loadCustomObj = async (scene) => {
+    try {
+        const path = '/assets/';
+        const fileName = 'sofa1.obj';
+
+        const result = await BABYLON.SceneLoader.ImportMeshAsync(
+            "",
+            path,
+            fileName,
+            scene,
+        );
+
+        const meshes = result.meshes;
+        console.log('Loaded meshes: ', meshes);
+
+        const sofa = meshes[0];
+
+        sofa.refreshBoundingInfo();
+
+        sofa.position.y = sofa.getBoundingInfo().boundingBox.maximum.y;
+
+        const dragBehaviorSofa = new BABYLON.PointerDragBehavior();
+        sofa.addBehavior(dragBehaviorSofa); 
+
+        dragBehaviorSofa.onDragStartObservable.add(() => {
+            sofa.material = new BABYLON.StandardMaterial("dragMaterial", scene);
+            sofa.material.diffuseColor = BABYLON.Color3.Green();
+
+            sofa.physicsImpostor.mass = 0;
+            sofa.physicsImpostor.isKinematic = true;
+            
+            sofa.checkCollisions = true;
+        });
+
+        dragBehaviorSofa.onDragEndObservable.add((event) => {
+            sofa.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
+            sofa.material.diffuseColor  = BABYLON.Color3.White();
+            
+            sofa.physicsImpostor.mass = 1;
+            sofa.physicsImpostor.isKinematic = false;
+
+            const finalPosition = sofa.position;
+            console.log('Final position of the object1:', finalPosition);
+
+            sofa.checkCollisions = true;
+        });
+
+        sofa.physicsImpostor = new BABYLON.PhysicsImpostor(sofa, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, friction: 0.5 }, scene);
+    
+    } catch(error) {
+        console.error("Error loading .obj file", error);
+    };
+};
+
+module.exports = { BabylonScene };

@@ -1,0 +1,9 @@
+.furniture-menu-base {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 10%;
+    height: 100%;
+    background-color: red;
+  }
+  
