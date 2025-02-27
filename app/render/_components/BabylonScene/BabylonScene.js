@@ -9,10 +9,13 @@ const { applyDragBehavior } = require('../../_utils/dragBehavior');
 const { load3DFurniture } = require('../../_utils/renderFurniture');
 const { switchCamera } = require('../../_utils/switchCamera');
 
+import { useCanvas } from '../../_hooks/useCanvas';
 import styles from './BabylonScene.module.css'; 
 
+
 const BabylonScene = () => {
-    const canvasRef = useRef(null);
+    const { canvasRef, setCanvas } = useCanvas();
+
     const sceneRef = useRef(null);
     const camerasRef = useRef([]);
 
@@ -26,12 +29,16 @@ const BabylonScene = () => {
     });
 
     useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) {
-            return;
+        const canvasElement = document.getElementById('renderCanvas');
+        if (canvasElement) {
+            setCanvas(canvasElement);
         };
 
-        const { engine, scene, camera1, camera2, light } = createBabylonScene(canvas)
+        if (canvasRef.current) {
+            console.log('Canvas element is ready: ', canvasRef.current);
+        };
+
+        const { engine, scene, camera1, camera2, light } = createBabylonScene(canvasRef.current)
 
         sceneRef.current = scene;
         camerasRef.current = [camera1, camera2];
@@ -90,7 +97,7 @@ const BabylonScene = () => {
     // -----------------------------------------------------------------------------------------------------------------------------
 
     const switchCameraHandle = () => {
-        switchCamera(sceneRef.current, canvasRef.current, camerasRef.current);
+        switchCamera(sceneRef.current, canvasRef, camerasRef.current);
     };
 
     // -----------------------------------------------------------------------------------------------------------------------------
