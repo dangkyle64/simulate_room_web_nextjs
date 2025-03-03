@@ -2,24 +2,28 @@ const BABYLON = require('@babylonjs/core');
 const { OBJFileLoader } = require('@babylonjs/loaders');
 const { useEffect, useRef } = require('react');
 
-const { createBabylonScene }  = require('../../_utils/loadBabylonScene');
+const { createBabylonScene }  = require('../../_utils/createBabylonScene');
 const { objectInfoWindow } = require('../../_utils/objectInfoWindow');
 const { confirmPopupWindow } = require('../../_utils/confirmationWindow');
 const { applyDragBehavior } = require('../../_utils/dragBehavior');
 const { load3DFurniture } = require('../../_utils/renderFurniture');
 const { switchCamera } = require('../../_utils/switchCamera');
 
-import { useCanvas } from '../../_hooks/useCanvas';
+import { useBabylonSceneState } from '../../_hooks/useBabylonSceneState';
 import styles from './BabylonScene.module.css'; 
 
 
 const BabylonScene = () => {
-    const { canvasRef, setCanvas } = useCanvas();
-
-    const sceneRef = useRef(null);
-    const camerasRef = useRef([]);
-
-    const selectedObjectRef = useRef(null);
+    const { 
+        canvasRef, 
+        sceneRef, 
+        camerasRef, 
+        selectedObjectRef, 
+        setCanvas, 
+        setScene, 
+        setCameras, 
+        setSelectedObject 
+    } = useBabylonSceneState();
 
     // Ensure the loader is activated
     BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (plugin) {
@@ -40,8 +44,10 @@ const BabylonScene = () => {
 
         const { engine, scene, camera1, camera2, light } = createBabylonScene(canvasRef.current)
 
-        sceneRef.current = scene;
-        camerasRef.current = [camera1, camera2];
+        setScene(scene);
+        
+        const cameraArray = [camera1, camera2]
+        setCameras(cameraArray);
 
         // Creating Objects ----------------------------------------------------------------------------------------------------------
 
@@ -56,7 +62,7 @@ const BabylonScene = () => {
 
         scene.onPointerDown = (event, pickResult) => {
             if(pickResult.hit) {
-                selectedObjectRef.current = pickResult.pickedMesh;
+                setSelectedObject(pickResult.pickedMesh);
 
                 objectInfoWindow(scene, selectedObjectRef.current);
                 console.log(`Selected object is now: ${selectedObjectRef.current.name}`);
