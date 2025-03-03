@@ -1,9 +1,3 @@
-/**
- * @file Unit tests for the useFormInputValidationState hook.
- * Tests various invalid input scenarios for form data and checks that the hook
- * correctly handles errors for different edge cases, as well as valid data.
- */
-
 const { renderHook } = require('@testing-library/react');
 const assert = require('assert');
 
