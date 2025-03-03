@@ -6,13 +6,20 @@
     "test": "jest"
   },
   "jest": {
-    "testEnvironment": "jest-environment-jsdom"
+    "testEnvironment": "jest-environment-jsdom",
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    },
+    "transformIgnorePatterns": [
+      "/node_modules/(?!@babylonjs/core|@babylonjs/gui|@babylonjs/loaders)/"
+    ]
   },
   "dependencies": {
     "@babylonjs/core": "^7.45.0",
     "@babylonjs/gui": "^7.45.0",
     "@babylonjs/loaders": "^7.45.0",
     "@testing-library/react": "^16.2.0",
+    "babel-jest": "^29.7.0",
     "cannon": "^0.6.2",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
@@ -20,5 +27,9 @@
     "next": "^15.1.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.26.3",
+    "@babel/preset-env": "^7.26.9"
   }
 }
