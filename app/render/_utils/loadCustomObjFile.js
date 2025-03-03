@@ -1,64 +1,94 @@
 const BABYLON = require('@babylonjs/core');
 const { OBJFileLoader } = require('@babylonjs/loaders');
 
-const loadCustomObjFile = async (scene, path, fileName) => {
+//Figure out testing for this
+const loadObjPlugin = async () => {
     BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (plugin) {
         if (plugin.name === "obj") {
             console.log("OBJ loader is now ready");
         };
     });
+};
 
+const getObjMeshes = async (path, scene) => {
     try {
-        path = path || '/assets/';
-        fileName = fileName || 'sofa1.obj';
-
+        
         const result = await BABYLON.SceneLoader.ImportMeshAsync(
             "",
             path,
-            fileName,
+            "",
             scene,
         );
 
         const meshes = result.meshes;
-        //console.log('Loaded meshes: ', meshes);
 
-        const sofa = meshes[0];
+        return meshes;
 
-        sofa.refreshBoundingInfo();
+    } catch(error) {
+        console.error("Error loading .obj file", error);
+        return [];
+    };
+};
 
-        sofa.position.y = sofa.getBoundingInfo().boundingBox.maximum.y;
+const selectMesh = (objMeshes, selectedMeshPosition) => {
+    selectedMeshPosition = selectedMeshPosition || 0;
+    const selectedMesh = objMeshes[selectedMeshPosition];
 
-        const dragBehaviorSofa = new BABYLON.PointerDragBehavior();
-        sofa.addBehavior(dragBehaviorSofa); 
+    return selectedMesh;
+};
 
-        dragBehaviorSofa.onDragStartObservable.add(() => {
-            sofa.material = new BABYLON.StandardMaterial("dragMaterial", scene);
-            sofa.material.diffuseColor = BABYLON.Color3.Green();
+const addPropertiesToMesh = (selectedMesh) => {
 
-            sofa.physicsImpostor.mass = 0;
-            sofa.physicsImpostor.isKinematic = true;
+    selectedMesh.refreshBoundingInfo();
+
+    selectedMesh.position.y = selectedMesh.getBoundingInfo().boundingBox.maximum.y;
+
+    const dragBehaviorSofa = new BABYLON.PointerDragBehavior();
+    selectedMesh.addBehavior(dragBehaviorSofa); 
+
+    dragBehaviorSofa.onDragStartObservable.add(() => {
+        selectedMesh.material = new BABYLON.StandardMaterial("dragMaterial", scene);
+        selectedMesh.material.diffuseColor = BABYLON.Color3.Green();
+
+        selectedMesh.physicsImpostor.mass = 0;
+        selectedMesh.physicsImpostor.isKinematic = true;
             
-            sofa.checkCollisions = true;
-        });
+        selectedMesh.checkCollisions = true;
+    });
 
-        dragBehaviorSofa.onDragEndObservable.add((event) => {
-            sofa.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
-            sofa.material.diffuseColor  = BABYLON.Color3.White();
+    dragBehaviorSofa.onDragEndObservable.add((event) => {
+        selectedMesh.material = new BABYLON.StandardMaterial("defaultMaterial", scene);
+        selectedMesh.material.diffuseColor  = BABYLON.Color3.White();
             
-            sofa.physicsImpostor.mass = 1;
-            sofa.physicsImpostor.isKinematic = false;
+        selectedMesh.physicsImpostor.mass = 1;
+        selectedMesh.physicsImpostor.isKinematic = false;
 
-            const finalPosition = sofa.position;
-            console.log('Final position of the object1:', finalPosition);
+        const finalPosition = selectedMesh.position;
+        console.log('Final position of the object1:', finalPosition);
 
-            sofa.checkCollisions = true;
-        });
+        selectedMesh.checkCollisions = true;
+    });
 
-        sofa.physicsImpostor = new BABYLON.PhysicsImpostor(sofa, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, friction: 0.5 }, scene);
+    selectedMesh.physicsImpostor = new BABYLON.PhysicsImpostor(selectedMesh, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 1, friction: 0.5 }, scene);
     
+};
+
+const loadCustomObjFile = async (path, scene) => {
+
+    try {
+
+        await loadObjPlugin();
+
+        path = path || '/assets/sofa1.obj';
+        const objMeshes = await getObjMeshes(path, scene);
+
+        const selectedMesh = selectMesh(objMeshes);
+
+        addPropertiesToMesh(selectedMesh);
+
     } catch(error) {
         console.error("Error loading .obj file", error);
     };
 };
 
-module.exports = { loadCustomObjFile };
+module.exports = { loadCustomObjFile, getObjMeshes, selectMesh };
