@@ -9,9 +9,12 @@ const createBabylonScene = (canvas) => {
                 antialias: false,
     });
 
+    // Creating Scene and properties 
     const scene = new BABYLON.Scene(engine);
+    scene.gravity = new BABYLON.Vector3(0, -0.1, 0);
+    scene.collisionsEnabled = true;
 
-    // Creating Cameras ----------------------------------------------------------------------------------------------------------
+    // Creating Cameras
 
     const camera1 = new BABYLON.ArcRotateCamera(
         'camera1',
