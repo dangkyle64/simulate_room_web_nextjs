@@ -1,27 +1,22 @@
 const GUI = require('@babylonjs/gui');
+const { InteractionMenu } = require('./InteractionMenu');
+const { FurnitureMenuButton } = require('./FurnitureMenuButton');
 
 const FurnitureMenu = (scene) => {
-    var button = GUI.Button.CreateImageOnlyButton("cornerButton", "textures/menu_icon2.png");
-    
-    // Set button dimensions
-    button.width = "50px"; 
-    button.height = "50px";
-    button.color = "transparent";
-    button.background = "transparent"
+    var testObjectArray = ['object1', 'object2'];
+    var interactionMenuVisible = false; 
+    var interactionMenu = InteractionMenu(scene, testObjectArray);
 
-    // Set the position of the button (top-right corner)
-    button.horizontalAlignment = GUI.Control.HORIZONTAL_ALIGNMENT_RIGHT;
-    button.verticalAlignment = GUI.Control.VERTICAL_ALIGNMENT_TOP;
+    const toggleInteractionMenu = () => {
+        if (interactionMenuVisible) {
+            interactionMenu.isVisible = false;
+        } else {
+            interactionMenu.isVisible = true;
+        };
+        interactionMenuVisible = !interactionMenuVisible;
+    };
 
-    button.left = "-10px"
-    // Add the button to the scene
-    var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene);
-    advancedTexture.addControl(button);
-
-    // Add a click event handler
-    button.onPointerUpObservable.add(() => {
-        alert("Button clicked!");
-    });
+    FurnitureMenuButton(scene, toggleInteractionMenu);
 };
 
 // Export the FurnitureMenu function
