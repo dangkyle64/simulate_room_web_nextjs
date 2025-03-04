@@ -1,10 +1,22 @@
 const BABYLON = require('@babylonjs/core');
 
 const applyDragBehavior = (object, scene) => {
+
+    if (object.isDragBehaviorApplied) {
+        return;
+    };
+
+    object.isDragBehaviorApplied = true;
+
     const dragBehavior = new BABYLON.PointerDragBehavior();
     object.addBehavior(dragBehavior);
 
     dragBehavior.onDragStartObservable.add(() => {
+
+        if (!object.isPickable) {
+            return;
+        };
+
         object.material = new BABYLON.StandardMaterial("dragMaterial", scene);
         object.material.diffuseColor = BABYLON.Color3.Green();
 
