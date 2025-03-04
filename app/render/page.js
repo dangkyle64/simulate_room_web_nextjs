@@ -9,7 +9,6 @@ export default function RenderPage() {
             <h1>Babylon.js Cube Test</h1>    
             {/* Rendering 3D Scene Here */}
             <BabylonScene />
-            <FurnitureMenuBase />
         </div>
     );
 };

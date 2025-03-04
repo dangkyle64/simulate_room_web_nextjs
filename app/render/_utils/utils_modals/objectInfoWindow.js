@@ -51,16 +51,3 @@ const objectInfoWindow = (scene, object) => {
 
 module.exports = { objectInfoWindow };
 
-/*
-   function adjustTextSize(objectInfo) {
-
-        var width = popUpObjectInfoWindow.widthInPixels;
-        var height = popUpObjectInfoWindow.heightInPixels;
-
-        var fontSize = Math.min(width, height) / 10;
-
-        console.log("Adjusting text size to:", fontSize); 
-        objectInfo.fontSize = fontSize;
-    };
-
-*/

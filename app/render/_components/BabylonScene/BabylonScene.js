@@ -10,6 +10,7 @@ const { switchCamera } = require('../../_utils/switchCamera');
 
 import { useBabylonSceneState } from '../../_hooks/useBabylonSceneState';
 import { loadCustomObjFile } from '../../_utils/loadCustomObjFile';
+const { FurnitureMenu } = require('../FurnitureMenu/FurnitureMenu');
 import styles from './BabylonScene.module.css'; 
 
 const BabylonScene = () => {
@@ -41,6 +42,7 @@ const BabylonScene = () => {
 
         createFloor(scene);
         loadCustomObjFile('', sceneRef.current);
+        FurnitureMenu(scene)
 
         // -----------------------------------------------------------------------------------------------------------------------------
 
