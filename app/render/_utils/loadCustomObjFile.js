@@ -12,7 +12,6 @@ const loadObjPlugin = async () => {
 
 const getObjMeshes = async (path, scene) => {
     try {
-        
         const result = await BABYLON.SceneLoader.ImportMeshAsync(
             "",
             path,
@@ -25,7 +24,7 @@ const getObjMeshes = async (path, scene) => {
         return meshes;
 
     } catch(error) {
-        console.error("Error loading .obj file", error);
+        console.error("Error loading .obj file inside of getObjMeshes", error);
         return [];
     };
 };
@@ -37,7 +36,7 @@ const selectMesh = (objMeshes, selectedMeshPosition) => {
     return selectedMesh;
 };
 
-const addPropertiesToMesh = (selectedMesh) => {
+const addPropertiesToMesh = (selectedMesh, scene) => {
 
     selectedMesh.refreshBoundingInfo();
 
@@ -64,7 +63,7 @@ const addPropertiesToMesh = (selectedMesh) => {
         selectedMesh.physicsImpostor.isKinematic = false;
 
         const finalPosition = selectedMesh.position;
-        console.log('Final position of the object1:', finalPosition);
+        //console.log('Final position of the object1:', finalPosition);
 
         selectedMesh.checkCollisions = true;
     });
@@ -84,7 +83,7 @@ const loadCustomObjFile = async (path, scene) => {
 
         const selectedMesh = selectMesh(objMeshes);
 
-        addPropertiesToMesh(selectedMesh);
+        addPropertiesToMesh(selectedMesh, scene);
 
     } catch(error) {
         console.error("Error loading .obj file", error);

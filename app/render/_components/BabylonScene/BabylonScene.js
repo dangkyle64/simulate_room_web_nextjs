@@ -12,7 +12,6 @@ import { useBabylonSceneState } from '../../_hooks/useBabylonSceneState';
 import { loadCustomObjFile } from '../../_utils/loadCustomObjFile';
 import styles from './BabylonScene.module.css'; 
 
-
 const BabylonScene = () => {
     const { 
         canvasRef, 
@@ -25,21 +24,10 @@ const BabylonScene = () => {
         setSelectedObject 
     } = useBabylonSceneState();
 
-    // Ensure the loader is activated
-    BABYLON.SceneLoader.OnPluginActivatedObservable.add(function (plugin) {
-        if (plugin.name === "obj") {
-            console.log("OBJ loader is now ready");
-        };
-    });
-
     useEffect(() => {
         const canvasElement = document.getElementById('renderCanvas');
         if (canvasElement) {
             setCanvas(canvasElement);
-        };
-
-        if (canvasRef.current) {
-            console.log('Canvas element is ready: ', canvasRef.current);
         };
 
         const { engine, scene, camera1, camera2, light } = createBabylonScene(canvasRef.current)
@@ -52,8 +40,7 @@ const BabylonScene = () => {
         // Creating Objects ----------------------------------------------------------------------------------------------------------
 
         createFloor(scene);
-        loadCustomObjFile('', scene);
-        //loadCustomObj(scene);
+        loadCustomObjFile('', sceneRef.current);
 
         // -----------------------------------------------------------------------------------------------------------------------------
 

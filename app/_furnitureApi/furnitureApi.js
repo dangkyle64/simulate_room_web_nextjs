@@ -23,7 +23,7 @@ async function fetchFurnitureData() {
         return data;
 
     } catch(error) {
-        console.log('There was an error getting the data: ', error);
+        //console.log('There was an error getting the data: ', error);
         return [];
     };
 };
@@ -53,7 +53,7 @@ async function fetchSpecificFurnitureData(id) {
         return data;
 
     } catch(error) {
-        console.log('There was an error getting the data: ', error);
+        //console.log('There was an error getting the data: ', error);
         return;
     };
 };
@@ -99,7 +99,7 @@ async function createFurnitureData(newFurniture) {
         return data;
 
     } catch(error) {
-        console.log('There was an error creating new furniture data: ', error);
+        //console.log('There was an error creating new furniture data: ', error);
         return [];
     };
 };
@@ -151,7 +151,7 @@ async function updateFurnitureData(id, updateFurniture) {
         return data;
         
     } catch(error) {
-        console.log('There was an error updating the furniture data: ', error);
+        //console.log('There was an error updating the furniture data: ', error);
         return [];
     };
 };
@@ -184,7 +184,7 @@ async function deleteFurnitureData(id) {
         return []; 
         
     } catch(error) {
-        console.log('There was an error deleting the furniture data: ', error);
+        //console.log('There was an error deleting the furniture data: ', error);
         return [];
     };
 };

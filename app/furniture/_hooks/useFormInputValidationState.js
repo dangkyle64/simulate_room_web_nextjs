@@ -17,7 +17,6 @@ const useFormInputValidationState = (formData) => {
             newErrors.modelUrl = 'modelUrl is required (Example: https://example.com/chair-model)';
         };
 
-        console.log(typeof(formData.length))
         if (!Number.isInteger(Number(formData.length)) || formData.length > 20 || formData.length <= 0) {
             newErrors.length = 'Length is required and currently only supports up to a nonzero positive 20 measurements (Example: 15)';
         };
