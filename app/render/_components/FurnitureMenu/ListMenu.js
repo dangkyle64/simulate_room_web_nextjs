@@ -1,6 +1,6 @@
 const GUI = require('@babylonjs/gui');
 
-const ListMenu = (scene, objectArray, popUpObjectInteractionMenu) => {
+const ListMenu = (scene, objectArray, popUpObjectInteractionMenu, onItemClick) => {
     var stackPanel = new GUI.StackPanel();
     stackPanel.isVertical = true; 
     stackPanel.width = "100%";
@@ -17,6 +17,20 @@ const ListMenu = (scene, objectArray, popUpObjectInteractionMenu) => {
 
         textBlock.height = "40px";
         textBlock.paddingTop = "5px"; 
+
+        textBlock.onPointerEnterObservable.add(() => {
+            textBlock.color = "yellow"; // Change color to yellow when hovered over
+            textBlock.fontSize = 20; // Increase font size for a more pronounced effect
+        });
+
+        textBlock.onPointerOutObservable.add(() => {
+            textBlock.color = "white"; // Revert color back to white when not hovered
+            textBlock.fontSize = 18; // Revert font size
+        });
+
+        textBlock.onPointerClickObservable.add(() => {
+            console.log('HERE');
+        });
 
         stackPanel.addControl(textBlock);
     });
