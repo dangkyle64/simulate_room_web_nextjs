@@ -1,7 +1,7 @@
-const GUI = require('@babylonjs/gui');
-const { ListItemBase } = require('./ListItem');
+import * as GUI from '@babylonjs/gui';
+import { ListItemBase } from './ListItem';
 
-const ListMenu = (scene, objectArray, popUpObjectInteractionMenu, onItemClick) => {
+export const ListMenu = (scene, objectArray, popUpObjectInteractionMenu, onItemClick) => {
     var stackPanel = new GUI.StackPanel();
     stackPanel.isVertical = true; 
     stackPanel.width = "100%";
@@ -13,4 +13,3 @@ const ListMenu = (scene, objectArray, popUpObjectInteractionMenu, onItemClick) =
     });
 };
 
-module.exports = { ListMenu };

@@ -189,7 +189,7 @@ async function deleteFurnitureData(id) {
     };
 };
 
-module.exports = { 
+export { 
     fetchFurnitureData,
     fetchSpecificFurnitureData,
     createFurnitureData,

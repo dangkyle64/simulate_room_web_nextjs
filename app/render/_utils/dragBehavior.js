@@ -1,6 +1,6 @@
-const BABYLON = require('@babylonjs/core');
+import * as BABYLON from '@babylonjs/core';
 
-const applyDragBehavior = (object, scene) => {
+export const applyDragBehavior = (object, scene) => {
 
     if (object.isDragBehaviorApplied) {
         return;
@@ -38,5 +38,3 @@ const applyDragBehavior = (object, scene) => {
 
     return dragBehavior;
 };
-
-module.exports = { applyDragBehavior };

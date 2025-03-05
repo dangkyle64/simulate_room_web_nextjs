@@ -1,5 +1,5 @@
-const BABYLON = require('@babylonjs/core');
-const { applyDragBehavior } = require('../../render/_utils/dragBehavior');
+import BABYLON from '@babylonjs/core';
+import { applyDragBehavior } from '../../render/_utils/dragBehavior';
 
 jest.mock('@babylonjs/core', () => ({
     PointerDragBehavior: jest.fn(),

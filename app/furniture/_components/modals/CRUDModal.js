@@ -1,13 +1,10 @@
-// import react package and required hooks
-const React = require('react');
-const { useState, useEffect } = require('react');
+import React from 'react';
+import { useState, useEffect } from 'react';
 
-// import styles file for the CRUDModal component
-const styles = require('./CRUDModal.module.css');
+import styles from './CRUDModal.module.css';
 
-// import hooks for validating form input
-const useErrorState = require('../../_hooks/useErrorState');
-const useFormInputValidationState = require ('../../_hooks/useFormInputValidationState');
+import useErrorState from '../../_hooks/useErrorState';
+import useFormInputValidationState from '../../_hooks/useFormInputValidationState';
 
 /**
  * CRUDModal component handles the creation, update, and deletion of furniture data.
@@ -255,5 +252,5 @@ const CRUDModal = ({ onClose, onCreate, onUpdate, onDeleteConfirm, existingFurni
     );
 };
 
-module.exports = CRUDModal;
+export default CRUDModal;
 

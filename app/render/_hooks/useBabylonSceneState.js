@@ -1,6 +1,6 @@
-const { useRef } = require('react');
+import { useRef } from 'react';
 
-function useBabylonSceneState() {
+export function useBabylonSceneState() {
     const canvasRef = useRef(null);
     const sceneRef = useRef(null);
     const camerasRef = useRef([]);
@@ -33,5 +33,3 @@ function useBabylonSceneState() {
         setSelectedObject,
     };
 };
-
-module.exports = { useBabylonSceneState };

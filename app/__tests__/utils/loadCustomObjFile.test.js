@@ -1,5 +1,5 @@
-const BABYLON = require('@babylonjs/core');
-const { getObjMeshes, selectMesh } = require('../../render/_utils/loadCustomObjFile');
+import BABYLON from '@babylonjs/core';
+import { getObjMeshes, selectMesh } from '../../render/_utils/loadCustomObjFile';
 
 jest.mock('@babylonjs/core', () => ({
     SceneLoader: {

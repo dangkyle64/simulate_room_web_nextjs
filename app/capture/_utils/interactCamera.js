@@ -1,4 +1,4 @@
-const { useEffect, useRef, useState } = require('react');
+import { useEffect, useRef, useState } from 'react';
 
 const InteractCamera = () => {
     const videoRef = useRef(null);
@@ -52,4 +52,4 @@ const InteractCamera = () => {
     );
 };
 
-module.exports = InteractCamera;
+export default InteractCamera;

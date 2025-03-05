@@ -47,4 +47,4 @@ const useFormInputValidationState = (formData) => {
     return validate();
 };
 
-module.exports = useFormInputValidationState;
+export default useFormInputValidationState;

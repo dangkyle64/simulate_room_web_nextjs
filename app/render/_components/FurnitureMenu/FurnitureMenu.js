@@ -1,8 +1,7 @@
-const GUI = require('@babylonjs/gui');
-const { InteractionMenu } = require('./InteractionMenu');
-const { FurnitureMenuButton } = require('./FurnitureMenuButton');
+import { InteractionMenu } from './InteractionMenu';
+import { FurnitureMenuButton } from'./FurnitureMenuButton';
 
-const FurnitureMenu = (scene) => {
+export const FurnitureMenu = (scene) => {
     const objectsArray = [
         { name: "obj1", property1: "Value 1", property2: "Detail 1" },
         { name: "obj2", property1: "Value 2", property2: "Detail 2" },
@@ -26,6 +25,3 @@ const FurnitureMenu = (scene) => {
 
     FurnitureMenuButton(scene, toggleInteractionMenu, onItemClick);
 };
-
-// Export the FurnitureMenu function
-module.exports = { FurnitureMenu };

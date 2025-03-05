@@ -1,6 +1,6 @@
-const GUI = require('@babylonjs/gui');
+import * as GUI from '@babylonjs/gui';
 
-const FurnitureMenuButton = (scene, toggleMenuCallback) => {
+export const FurnitureMenuButton = (scene, toggleMenuCallback) => {
     var button = GUI.Button.CreateImageOnlyButton("cornerButton", "textures/menu_icon2.png");
     
     button.width = "50px"; 
@@ -21,5 +21,3 @@ const FurnitureMenuButton = (scene, toggleMenuCallback) => {
         toggleMenuCallback();
     });
 };
-
-module.exports = { FurnitureMenuButton };

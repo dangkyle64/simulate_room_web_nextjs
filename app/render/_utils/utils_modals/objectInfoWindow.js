@@ -1,8 +1,8 @@
-const GUI = require('@babylonjs/gui');
+import * as GUI from '@babylonjs/gui';
 
 let currentPopUp = null;
 
-const objectInfoWindow = (scene, object) => {
+export const objectInfoWindow = (scene, object) => {
 
     if(currentPopUp) {
         currentPopUp.isVisible = false;
@@ -48,6 +48,4 @@ const objectInfoWindow = (scene, object) => {
 
     currentPopUp = popUpObjectInfoWindow;
 };
-
-module.exports = { objectInfoWindow };
 

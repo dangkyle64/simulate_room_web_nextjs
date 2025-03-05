@@ -1,6 +1,6 @@
-const BABYLON = require('@babylonjs/core');
+import * as BABYLON from '@babylonjs/core';
 
-const load3DFurniture = (scene, type = "box", size = 2, position = { x: 0, y: 55, z: 0 }) => {
+export const load3DFurniture = (scene, type = "box", size = 2, position = { x: 0, y: 55, z: 0 }) => {
     let object; 
     let uniqueName = `object_${Date.now()}`;
 
@@ -18,5 +18,3 @@ const load3DFurniture = (scene, type = "box", size = 2, position = { x: 0, y: 55
 
     return object;
 };
-
-module.exports = { load3DFurniture };

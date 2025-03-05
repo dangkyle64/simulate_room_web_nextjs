@@ -1,5 +1,5 @@
-const BABYLON = require('@babylonjs/core');
-const { OBJFileLoader } = require('@babylonjs/loaders');
+import * as BABYLON from '@babylonjs/core';
+import { OBJFileLoader } from '@babylonjs/loaders';
 
 //Figure out testing for this
 const loadObjPlugin = async () => {
@@ -90,4 +90,4 @@ const loadCustomObjFile = async (path, scene) => {
     };
 };
 
-module.exports = { loadCustomObjFile, getObjMeshes, selectMesh };
+export { loadCustomObjFile, getObjMeshes, selectMesh };

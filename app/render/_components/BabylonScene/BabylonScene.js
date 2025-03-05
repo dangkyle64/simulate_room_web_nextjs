@@ -1,19 +1,19 @@
-const BABYLON = require('@babylonjs/core');
-const { useEffect } = require('react');
+import * as BABYLON from '@babylonjs/core';
+import { useEffect } from 'react';
 
-const { createBabylonScene }  = require('../../_utils/createBabylonScene');
-const { objectInfoWindow } = require('../../_utils/utils_modals/objectInfoWindow');
-const { confirmPopupWindow } = require('../../_utils/utils_modals/confirmationWindow');
-const { applyDragBehavior } = require('../../_utils/dragBehavior');
-const { load3DFurniture } = require('../../_utils/renderFurniture');
-const { switchCamera } = require('../../_utils/switchCamera');
+import { createBabylonScene } from '../../_utils/createBabylonScene';
+import { objectInfoWindow } from '../../_utils/utils_modals/objectInfoWindow';
+import { confirmPopupWindow } from '../../_utils/utils_modals/confirmationWindow';
+import { applyDragBehavior } from '../../_utils/dragBehavior';
+import { load3DFurniture } from '../../_utils/renderFurniture';
+import { switchCamera } from '../../_utils/switchCamera';
 
 import { useBabylonSceneState } from '../../_hooks/useBabylonSceneState';
 import { loadCustomObjFile } from '../../_utils/loadCustomObjFile';
-const { FurnitureMenu } = require('../FurnitureMenu/FurnitureMenu');
+import { FurnitureMenu } from '../FurnitureMenu/FurnitureMenu';
 import styles from './BabylonScene.module.css'; 
 
-const BabylonScene = () => {
+export const BabylonScene = () => {
     const { 
         canvasRef, 
         sceneRef, 
@@ -123,5 +123,3 @@ const createFloor = (scene) => {
     floor.physicsImpostor = new BABYLON.PhysicsImpostor(floor, BABYLON.PhysicsImpostor.BoxImpostor, { mass: 0 }, scene);
     floor.isPickable = false;
 };
-
-module.exports = { BabylonScene };

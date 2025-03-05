@@ -1,7 +1,7 @@
 'use client';
 
-const React = require('react');
-const InteractCamera = require('./_utils/interactCamera');
+import React from 'react';
+import InteractCamera from './_utils/interactCamera';
 
 export default function Capture() {
     return (

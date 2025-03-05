@@ -1,5 +1,5 @@
-const React = require('react');
-const styles = require('./FurnitureCard.module.css')
+import React from 'react';
+import styles from './FurnitureCard.module.css';
 
 /**
  * FurnitureCard component displays an individual furniture item.

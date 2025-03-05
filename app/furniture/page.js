@@ -1,11 +1,11 @@
 "use client";
 
-const FurnitureCard = require('./_components/furnitureCard/FurnitureCard').default;
-const ConfirmDeleteModal = require('./_components/modals/ConfirmDeleteModal').default;
-const CRUDModal = require('./_components/modals/CRUDModal');
-const styles = require('./_components/furnitureCard/FurnitureCard.module.css');
+import FurnitureCard from './_components/furnitureCard/FurnitureCard';
+import ConfirmDeleteModal from'./_components/modals/ConfirmDeleteModal';
+import CRUDModal from'./_components/modals/CRUDModal';
+import styles from'./_components/furnitureCard/FurnitureCard.module.css';
 
-const { useFurnitureState } = require('./_hooks/furnitureState');
+import { useFurnitureState } from'./_hooks/furnitureState';
 
 export default function furnitureHome() {
 

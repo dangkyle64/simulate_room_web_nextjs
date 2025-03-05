@@ -1,7 +1,7 @@
-const BABYLON = require('@babylonjs/core');
-const CANNON = require('cannon');
+import * as BABYLON from '@babylonjs/core';
+import * as CANNON from 'cannon';
 
-const createBabylonScene = (canvas) => {
+export const createBabylonScene = (canvas) => {
 
     const engine = new BABYLON.Engine(canvas, true, {
                 preserveDrawingBuffer: true,
@@ -52,5 +52,3 @@ const createBabylonScene = (canvas) => {
 
     return { engine, scene, camera1, camera2, light };
 };
-
-module.exports = { createBabylonScene };

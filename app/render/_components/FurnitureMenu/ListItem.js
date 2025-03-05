@@ -1,4 +1,4 @@
-const GUI = require('@babylonjs/gui');
+import * as GUI from '@babylonjs/gui';
 
 const ListItemBase = (scene, obj, parentPanel) => {
     var listItemStack = new GUI.TextBlock();
@@ -62,4 +62,4 @@ const listItemDetails = (obj, listItemStack) => {
     return listItemStackDetails;
 };
 
-module.exports = { ListItemBase, listItem, listItemDetails };
+export { ListItemBase, listItem, listItemDetails };

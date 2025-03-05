@@ -1,6 +1,6 @@
-const BABYLON = require('@babylonjs/core');
-const { renderHook } = require('@testing-library/react');
-const { useBabylonSceneState } = require('../../render/_hooks/useBabylonSceneState');
+import BABYLON from '@babylonjs/core';
+import { renderHook } from '@testing-library/react';
+import { useBabylonSceneState } from '../../render/_hooks/useBabylonSceneState';
 
 jest.mock('@babylonjs/core', () => ({
     Engine: jest.fn(),

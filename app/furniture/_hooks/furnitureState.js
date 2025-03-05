@@ -1,5 +1,11 @@
-const { useEffect, useState } = require('react');
-const { fetchFurnitureData, fetchSpecificFurnitureData, createFurnitureData, updateFurnitureData, deleteFurnitureData } = require('../../_furnitureApi/furnitureApi');
+import { useEffect, useState } from 'react';
+import { 
+    fetchFurnitureData, 
+    fetchSpecificFurnitureData, 
+    createFurnitureData, 
+    updateFurnitureData, 
+    deleteFurnitureData 
+} from '../../_furnitureApi/furnitureApi';
 
 export function useFurnitureState() {
 

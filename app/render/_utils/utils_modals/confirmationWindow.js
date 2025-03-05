@@ -1,6 +1,6 @@
-const GUI = require('@babylonjs/gui');
+import * as GUI from '@babylonjs/gui';
 
-const confirmPopupWindow = (scene) => {
+export const confirmPopupWindow = (scene) => {
     var advancedTexture = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI", true, scene);
 
     var confirmPopUpWindow = new GUI.StackPanel();
@@ -51,5 +51,3 @@ const confirmPopupWindow = (scene) => {
 
     confirmPopUpWindow.addControl(submitButton);
 };
-
-module.exports = { confirmPopupWindow }

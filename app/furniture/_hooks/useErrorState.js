@@ -1,4 +1,4 @@
-const { useState } = require('react');
+import { useState } from 'react';
 
 /**
  * Custom hook to manage form errors and validation.
@@ -34,4 +34,4 @@ const useErrorState =  () => {
     };
 };
 
-module.exports = useErrorState;
+export default useErrorState;

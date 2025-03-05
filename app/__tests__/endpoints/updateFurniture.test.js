@@ -1,5 +1,5 @@
-const { updateFurnitureData } = require('../../_furnitureApi/furnitureApi');
-const assert = require('assert');
+import { updateFurnitureData } from '../../_furnitureApi/furnitureApi';
+import assert from 'assert';
 
 global.fetch = require('jest-fetch-mock');
 

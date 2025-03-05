@@ -1,6 +1,4 @@
-// importing the styles file for the ConfirmDeleteModal component
-const styles = require('./ConfirmDeleteModal.module.css');
-
+import styles from './ConfirmDeleteModal.module.css';
 
 /**
  * ConfirmDeleteModal component - A modal that asks the user to confirm if they want to delete a furniture item.

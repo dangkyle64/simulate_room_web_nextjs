@@ -1,6 +1,6 @@
-const BABYLON = require('@babylonjs/core');
+import * as BABYLON from '@babylonjs/core';
 
-const switchCamera = (scene, canvas, cameras) => {
+export const switchCamera = (scene, canvas, cameras) => {
 
         if (!scene || !canvas || !cameras) {
             console.log('One of the arguments is missing inside of the switchCamera util file.');
@@ -25,5 +25,3 @@ const switchCamera = (scene, canvas, cameras) => {
 
         canvas.focus();
 };
-
-module.exports = { switchCamera };

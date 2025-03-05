@@ -1,7 +1,7 @@
 'use client';
 
-const { BabylonScene } = require('./_components/BabylonScene/BabylonScene');
-const { FurnitureMenuBase } = require('./_components/FurnitureMenuBase/FurnitureMenuBase');
+import { BabylonScene } from './_components/BabylonScene/BabylonScene';
+import { FurnitureMenuBase } from './_components/FurnitureMenuBase/FurnitureMenuBase';
 
 export default function RenderPage() {
     return (
@@ -12,6 +12,3 @@ export default function RenderPage() {
         </div>
     );
 };
-
-
-

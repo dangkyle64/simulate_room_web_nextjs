@@ -1,7 +1,7 @@
-const { renderHook } = require('@testing-library/react');
-const assert = require('assert');
+import { renderHook } from '@testing-library/react';
+import assert from 'assert';
 
-const useFormInputValidationState = require('../../furniture/_hooks/useFormInputValidationState');
+import useFormInputValidationState from '../../furniture/_hooks/useFormInputValidationState';
 
 describe('useForInputValidationState', () => {
     it('return errors for invalid data', () => {
