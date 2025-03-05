@@ -6,7 +6,7 @@ const InteractionMenu = (scene, objectsArray, onItemClick) => {
     
     var popUpObjectInteractionMenu = new GUI.Rectangle();
     popUpObjectInteractionMenu.width = "400px";
-    popUpObjectInteractionMenu.height = "300px";
+    popUpObjectInteractionMenu.height = "900px";
     popUpObjectInteractionMenu.background = "rgba(0,0,0,0.7)";
     
     popUpObjectInteractionMenu.isVisible = false;
@@ -17,7 +17,6 @@ const InteractionMenu = (scene, objectsArray, onItemClick) => {
     advancedTextureInteractionMenu.addControl(popUpObjectInteractionMenu);
 
     ListMenu(scene, objectsArray, popUpObjectInteractionMenu, onItemClick);
-
     popUpObjectInteractionMenu.isPointerBlocker = true;
     return popUpObjectInteractionMenu;
 };
