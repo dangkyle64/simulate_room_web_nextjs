@@ -58,7 +58,36 @@ const listItemDetails = (obj, listItemStack) => {
 
     listItemStack.addControl(listItemStackDetails);
 
+    listItemDetailSlider(obj, listItemStack);
+
     return listItemStackDetails;
 };
 
+const listItemDetailSlider = (objProperty, listItemStack) => {
+    var listItemDetailSlider = new GUI.Slider();
+    
+    listItemDetailSlider.minimum = 1;
+    listItemDetailSlider.maximum = 20;
+    listItemDetailSlider.value = objProperty.length;
+
+    listItemDetailSlider.background = "red";
+
+    listItemDetailSlider.height = "20px";
+    listItemDetailSlider.width = "200px";
+    listItemDetailSlider.top = "200px";
+    listItemDetailSlider.left = "10px";
+    listItemDetailSlider.isVertical = false;
+
+    listItemStack.addControl(listItemDetailSlider);
+
+    listItemDetailSlider.onValueChangedObservable.add((value) => {
+        objProperty.length = value;
+        console.log(objProperty.length)
+    });
+
+    
+};
+
 export { ListItemBase, listItem, listItemDetails };
+
+
