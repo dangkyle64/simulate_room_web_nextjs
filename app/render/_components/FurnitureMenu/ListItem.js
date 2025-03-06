@@ -24,13 +24,12 @@ const ListItemBase = (scene, obj, parentPanel) => {
 };
 
 const listItem = (obj, listItemStack) => {
-    console.log(obj.name);
     var listItemHeader = new GUI.TextBlock();
     listItemHeader.width = "100%";
     listItemHeader.height = "40px";
     listItemHeader.marginBottom = "10px";
 
-    listItemHeader.text = `Item ${obj.name}`
+    listItemHeader.text = `Type ${obj.type}`
     listItemHeader.color = "white";
 
     listItemStack.addControl(listItemHeader);
@@ -54,7 +53,7 @@ const listItemDetails = (obj, listItemStack) => {
     listItemStackDetails.height = "40px";
     listItemStackDetails.marginBottom = "10px";
 
-    listItemStackDetails.text = `Details: ${obj.property1}, ${obj.property2}`;
+    listItemStackDetails.text = `Details: Length ${obj.length}, Width ${obj.width}`;
     listItemStackDetails.color = "white"; 
 
     listItemStack.addControl(listItemStackDetails);

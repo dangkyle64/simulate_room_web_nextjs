@@ -30,7 +30,6 @@ export default function furnitureHome() {
     } = useFurnitureState();
 
     const handleFurnitureCardClick = (furniture) => {
-        //console.log('Selected Furniture', furniture);
         openUpdateModal(furniture);
     };
 

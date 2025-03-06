@@ -1,7 +1,7 @@
 import * as GUI from '@babylonjs/gui';
 import { ListItemBase } from './ListItem';
 
-export const ListMenu = (scene, objectArray, popUpObjectInteractionMenu, onItemClick) => {
+export const ListMenu = (scene, objectArray, popUpObjectInteractionMenu) => {
     var stackPanel = new GUI.StackPanel();
     stackPanel.isVertical = true; 
     stackPanel.width = "100%";

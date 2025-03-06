@@ -1,7 +1,7 @@
 import * as GUI from '@babylonjs/gui';
 import { ListMenu } from './ListMenu';
 
-export const InteractionMenu = (scene, objectsArray, onItemClick) => {
+export const InteractionMenu = (scene, objectsArray) => {
     var advancedTextureInteractionMenu = GUI.AdvancedDynamicTexture.CreateFullscreenUI("UIInteractionMenu", true, scene);
     
     var popUpObjectInteractionMenu = new GUI.Rectangle();
@@ -16,7 +16,7 @@ export const InteractionMenu = (scene, objectsArray, onItemClick) => {
     
     advancedTextureInteractionMenu.addControl(popUpObjectInteractionMenu);
 
-    ListMenu(scene, objectsArray, popUpObjectInteractionMenu, onItemClick);
+    ListMenu(scene, objectsArray, popUpObjectInteractionMenu);
     popUpObjectInteractionMenu.isPointerBlocker = true;
     return popUpObjectInteractionMenu;
 };
