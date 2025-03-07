@@ -1,4 +1,4 @@
-import BABYLON from '@babylonjs/core';
+import * as BABYLON from '@babylonjs/core';
 import { renderHook } from '@testing-library/react';
 import { useBabylonSceneState } from '../../render/_hooks/useBabylonSceneState';
 

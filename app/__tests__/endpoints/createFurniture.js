@@ -1,21 +1,15 @@
 import { createFurnitureData } from '../../_furnitureApi/furnitureApi';
-import assert from 'assert';
+import { expect, vi } from 'vitest';
+import * as assert from 'assert';
 
-global.fetch = require('jest-fetch-mock');
+import fetchMock from 'vitest-fetch-mock';
+global.fetch = fetchMock;
 
-/**
- * Test suite for `POST /api/furniture/` - Create a new furniture item.
- * This suite tests edge cases, valid and invalid inputs, and various server response statuses.
- */
 describe('POST /api/furniture/', () => {
     beforeEach(() => {
         fetch.resetMocks();
     });
 
-    /**
-     * Test: Create a furniture item successfully.
-     * Verifies that a valid furniture object is created and the correct data is returned.
-     */
     it('should create a furniture item successfully', async () => {
         const newFurniture = { type: 'Sofa', modelUrl: 'http://example.com/sofa' };
         fetch.mockResponseOnce(JSON.stringify(newFurniture), { status: 201 });

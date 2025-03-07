@@ -1,4 +1,4 @@
-import BABYLON from '@babylonjs/core';
+import * as BABYLON from '@babylonjs/core';
 import { getObjMeshes, selectMesh } from '../../render/_utils/loadCustomObjFile';
 
 jest.mock('@babylonjs/core', () => ({

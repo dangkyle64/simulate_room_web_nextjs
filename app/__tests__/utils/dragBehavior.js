@@ -1,4 +1,4 @@
-import BABYLON from '@babylonjs/core';
+import * as BABYLON from '@babylonjs/core';
 import { applyDragBehavior } from '../../render/_utils/dragBehavior';
 
 jest.mock('@babylonjs/core', () => ({

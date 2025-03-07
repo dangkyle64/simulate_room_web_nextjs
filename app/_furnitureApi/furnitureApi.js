@@ -9,7 +9,7 @@
  * @returns {Promise<Object[]>} A promise that resolves to an array of furniture objects, or an empty array if there was an error.
  */
 
-async function fetchFurnitureData() {
+export async function fetchFurnitureData() {
     try {
         //const response = await fetch('https://simulate-room-nodejs.onrender.com/api/furniture/');
         const response = await fetch('http://localhost:5000/api/furniture/');
@@ -39,7 +39,7 @@ async function fetchFurnitureData() {
  * @param {string} id - The unique identifier of the furniture item.
  * @returns {Promise<Object|undefined>} A promise that resolves to the furniture object if successful, or `undefined` if there was an error.
  */
-async function fetchSpecificFurnitureData(id) {
+export async function fetchSpecificFurnitureData(id) {
     try {
         //const response = await fetch('https://simulate-room-nodejs.onrender.com/api/furniture/');
         const response = await fetch(`http://localhost:5000/api/furniture/${id}`);
@@ -80,7 +80,7 @@ async function fetchSpecificFurnitureData(id) {
  * @param {number} newFurniture.rotation_z - The rotation around the Z-axis.
  * @returns {Promise<Object|undefined>} A promise that resolves to the created furniture object, or `undefined` if there was an error.
  */
-async function createFurnitureData(newFurniture) {
+export async function createFurnitureData(newFurniture) {
     try {
         //const response = await fetch('https://simulate-room-nodejs.onrender.com/api/furniture/', {method: 'POST'});
         const response = await fetch('http://localhost:5000/api/furniture/', {
@@ -127,7 +127,7 @@ async function createFurnitureData(newFurniture) {
  * @param {number} updateFurniture.rotation_z - The rotation around the Z-axis.
  * @returns {Promise<Object|undefined>} A promise that resolves to the updated furniture object, or `undefined` if there was an error.
  */
-async function updateFurnitureData(id, updateFurniture) {
+export async function updateFurnitureData(id, updateFurniture) {
     try {
         
         //const url = `http://localhost:5000/api/furniture/${id}`;
@@ -167,7 +167,7 @@ async function updateFurnitureData(id, updateFurniture) {
  * @param {string} id - The unique identifier of the furniture to be deleted.
  * @returns {Promise<void>} A promise that resolves to `undefined` when the data is deleted.
  */
-async function deleteFurnitureData(id) {
+export async function deleteFurnitureData(id) {
     try {
         //const response = await fetch(`https://simulate-room-nodejs.onrender.com/api/furniture/${id}`, {method: 'DELETE'});
         const response = await fetch(`http://localhost:5000/api/furniture/${id}`, {
@@ -189,11 +189,3 @@ async function deleteFurnitureData(id) {
     };
 };
 
-export { 
-    fetchFurnitureData,
-    fetchSpecificFurnitureData,
-    createFurnitureData,
-    updateFurnitureData,
-    deleteFurnitureData
-};
-//fetchFurnitureData();

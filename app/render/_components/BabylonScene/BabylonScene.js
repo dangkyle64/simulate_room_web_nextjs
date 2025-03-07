@@ -12,6 +12,7 @@ import { useBabylonSceneState } from '../../_hooks/useBabylonSceneState';
 import { loadCustomObjFile } from '../../_utils/loadCustomObjFile';
 import { FurnitureMenu } from '../FurnitureMenu/FurnitureMenu';
 import styles from './BabylonScene.module.css'; 
+import { MainMenu } from '../MainMenu/MainMenu';
 
 export const BabylonScene = () => {
     const { 
@@ -42,8 +43,8 @@ export const BabylonScene = () => {
 
         createFloor(scene);
         loadCustomObjFile('', sceneRef.current);
-        FurnitureMenu(scene)
-
+        //FurnitureMenu(scene)
+        MainMenu(scene);
         // -----------------------------------------------------------------------------------------------------------------------------
 
         scene.onPointerDown = (event, pickResult) => {
