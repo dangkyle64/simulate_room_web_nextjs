@@ -80,7 +80,8 @@ export default function RoomCapture() {
             setScanning(false);
             return; // Return early if not initialized
         }
-        
+
+        console.log(rendererRef.current);
         try {
             await initWebXR((newScannedData) => {
                 setScannedData(newScannedData); // Update the state with new surface data
