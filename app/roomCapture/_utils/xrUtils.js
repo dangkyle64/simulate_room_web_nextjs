@@ -9,23 +9,10 @@ export const initWebXR = async (onSurfaceData) => {
         alert('AR is not supported on this device. :( ');
     };
 
-    const supportsDepthSensing = await navigator.xr.isFeatureSupported('depth-sensing');
-    const supportsHandTracking = await navigator.xr.isFeatureSupported('handtracking');
-
     const session = await navigator.xr.requestSession('immersive-ar', {
         requiredFeatures:  ['hit-test'],
     });
 
-    if (supportsDepthSensing) {
-        requiredFeatures.push('depth-sensing');
-    } else {
-        console.warn('Depth-sensing is not supported on this device.');
-    }
-
-    if (supportsHandTracking) {
-        requiredFeatures.push('handtracking');
-    }
-    
     const webGL = document.createElement('canvas').getContext('webgl');
     const xrReferenceSpace = await session.requestReferenceSpace('local');
 
