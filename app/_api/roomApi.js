@@ -1,4 +1,4 @@
-async function fetchRoomData() {
+export async function fetchRoomData() {
     try {
         const response = await fetch('https://simulate-room-nodejs.onrender.com/api/room/');
         //const response = await fetch('http://localhost:5000/api/room/');
@@ -16,5 +16,3 @@ async function fetchRoomData() {
     };
 };
 
-module.exports = { fetchRoomData };
-fetchRoomData();
