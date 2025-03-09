@@ -21,6 +21,8 @@ export default function RoomCapture() {
             const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
             const renderer = new THREE.WebGLRenderer({ antialias: true });
 
+            renderer.xr.enabled = true;
+
             renderer.setSize(window.innerWidth, window.innerHeight);
             document.body.appendChild(renderer.domElement);
             sceneRef.current = scene;
@@ -77,6 +79,7 @@ export default function RoomCapture() {
             await initWebXR((newScannedData) => {
                 setScannedData(newScannedData); // Update the state with new surface data
                 visualizeSurfaces(newScannedData.surfaces); // Visualize surfaces using Three.js
+                rendererRef;
             });
             setStatus("Scan complete");
         } catch(error) {

@@ -1,4 +1,4 @@
-export const initWebXR = async (onSurfaceData) => {
+export const initWebXR = async (onSurfaceData, rendererRef) => {
     if (!navigator.xr) {
         alert('WebXR is not supported on this device. :( ');
         return;
@@ -13,7 +13,13 @@ export const initWebXR = async (onSurfaceData) => {
         requiredFeatures:  ['hit-test'],
     });
 
-    const webGL = document.createElement('canvas').getContext('webgl');
+    const glContext = rendererRef.current.getContext();
+    const xrLayer = new XRWebGLLayer(session, glContext);
+
+    session.updateRenderState({
+        baseLayer: xrLayer
+    });
+    
     const xrReferenceSpace = await session.requestReferenceSpace('local');
 
     session.updateRenderState({
