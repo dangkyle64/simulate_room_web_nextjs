@@ -75,6 +75,12 @@ export default function RoomCapture() {
         setScanning(true);
         setError(null);
 
+        if (!rendererRef.current) {
+            setError("Renderer not initialized. Please wait a moment and try again.");
+            setScanning(false);
+            return; // Return early if not initialized
+        }
+        
         try {
             await initWebXR((newScannedData) => {
                 setScannedData(newScannedData); // Update the state with new surface data
