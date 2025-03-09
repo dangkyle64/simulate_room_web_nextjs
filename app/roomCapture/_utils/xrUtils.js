@@ -20,7 +20,7 @@ export const initWebXR = async () => {
         baseLayer: new XRWebGLLayer(session, webGL)
     });
 
-    session.requestAnimationFrame((time, frame) => onXRFrame(time, frame, session, xrReferenceSpace)); //XR Frame does not exist
+    session.requestAnimationFrame((time, frame) => onXRFrame(time, frame, session, xrReferenceSpace)); 
 
     const scannedData = { surfaces: [], depthPoints: [] };
 
