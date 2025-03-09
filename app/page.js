@@ -1,5 +1,4 @@
-const { fetchData } = require('./_api/getapi');
-
+import { fetchData } from './_api/getapi';
 export default async function Home() {
 
   const data = await fetchData();
