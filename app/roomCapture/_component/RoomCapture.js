@@ -71,6 +71,7 @@ export default function RoomCapture() {
                 ref={videoRef}
                 style={{
                     position: 'absolute',
+                    zIndex: -1,
                 }}
                 autoPlay
                 muted
