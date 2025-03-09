@@ -79,8 +79,7 @@ export default function RoomCapture() {
             await initWebXR((newScannedData) => {
                 setScannedData(newScannedData); // Update the state with new surface data
                 visualizeSurfaces(newScannedData.surfaces); // Visualize surfaces using Three.js
-                rendererRef;
-            });
+            }, rendererRef.current);
             setStatus("Scan complete");
         } catch(error) {
             console.error("Error during room scan: ", error);
