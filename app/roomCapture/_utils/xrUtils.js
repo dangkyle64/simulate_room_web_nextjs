@@ -13,13 +13,13 @@ export const initWebXR = async (onSurfaceData, rendererRef) => {
         requiredFeatures:  ['hit-test'],
     });
 
-    const glContext = rendererRef.current.getContext();
+    const glContext = rendererRef.getContext();
     const xrLayer = new XRWebGLLayer(session, glContext);
 
     session.updateRenderState({
         baseLayer: xrLayer
     });
-    
+
     const xrReferenceSpace = await session.requestReferenceSpace('local');
 
     session.updateRenderState({
