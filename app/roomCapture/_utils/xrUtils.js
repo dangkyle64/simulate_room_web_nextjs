@@ -1,4 +1,4 @@
-export const initWebXR = async () => {
+export const initWebXR = async (onSurfaceData) => {
     if (!navigator.xr) {
         alert('WebXR is not supported on this device. :( ');
         return;
@@ -20,11 +20,11 @@ export const initWebXR = async () => {
         baseLayer: new XRWebGLLayer(session, webGL)
     });
 
-    session.requestAnimationFrame((time, frame) => onXRFrame(time, frame, session, xrReferenceSpace)); 
+    session.requestAnimationFrame((time, frame) => onXRFrame(time, frame, session, xrReferenceSpace, onSurfaceData)); 
 
     const scannedData = { surfaces: [], depthPoints: [] };
 
-    async function onXRFrame(time, frame, session, referenceSpace) {
+    async function onXRFrame(time, frame, session, referenceSpace, onSurfaceData) {
         const pose = frame.getViewerPose(referenceSpace);
         if (pose) {
             const hitTestResults = await performHitTest(session, referenceSpace);
@@ -32,10 +32,12 @@ export const initWebXR = async () => {
 
             scannedData.depthPoints.push(pose.transform.position);
 
+            onSurfaceData(scannedData);
+
             //update UI or send data here 
         };
 
-        session.requestAnimationFrame((time, frame) => onXRFrame(time, frame, session, referenceSpace));
+        session.requestAnimationFrame((time, frame) => onXRFrame(time, frame, session, referenceSpace, onSurfaceData));
     };
 
     const performHitTest = async (session, referenceSpace) => {
