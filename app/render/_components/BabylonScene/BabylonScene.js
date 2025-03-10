@@ -7,12 +7,10 @@ import { confirmPopupWindow } from '../../_utils/utils_modals/confirmationWindow
 import { applyDragBehavior } from '../../_utils/dragBehavior';
 import { load3DFurniture } from '../../_utils/renderFurniture';
 import { switchCamera } from '../../_utils/switchCamera';
-
 import { useBabylonSceneState } from '../../_hooks/useBabylonSceneState';
 import { loadCustomObjFile } from '../../_utils/loadCustomObjFile';
 import { FurnitureMenu } from '../FurnitureMenu/FurnitureMenu';
 import styles from './BabylonScene.module.css'; 
-import { MainMenu } from '../MainMenu/MainMenu';
 
 export const BabylonScene = () => {
     const { 
@@ -43,8 +41,7 @@ export const BabylonScene = () => {
 
         createFloor(scene);
         loadCustomObjFile('', sceneRef.current);
-        //FurnitureMenu(scene)
-        MainMenu(scene);
+        FurnitureMenu(scene)
         // -----------------------------------------------------------------------------------------------------------------------------
 
         scene.onPointerDown = (event, pickResult) => {

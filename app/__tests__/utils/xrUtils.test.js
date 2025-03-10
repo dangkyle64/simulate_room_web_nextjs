@@ -1,5 +1,6 @@
 import { describe, it, vi, expect, beforeEach } from 'vitest';
-import { initialLoadingChecks, performHitTest } from '../../roomCapture/_utils/xrUtils';
+import * as xrUtils from '../../roomCapture/_utils/xrUtils';
+
 
 global.alert = vi.fn();
 
@@ -12,7 +13,7 @@ describe('xrUtils', () => {
     it('should return false if WebXR is not supported', async () => {
         global.navigator = { xr: undefined };
 
-        const result = await initialLoadingChecks();
+        const result = await xrUtils.initialLoadingChecks();
 
         expect(alert).toHaveBeenCalledWith('WebXR is not supported on this device. :( ');
         expect(result).toBe(false);
@@ -25,7 +26,7 @@ describe('xrUtils', () => {
             },
         };
 
-        const result = await initialLoadingChecks();
+        const result = await xrUtils.initialLoadingChecks();
 
         expect(alert).toHaveBeenCalledWith('AR is not supported on this device. :( ');
         expect(result).toBe(false);
@@ -38,7 +39,7 @@ describe('xrUtils', () => {
             },
         };
 
-        const result = await initialLoadingChecks();
+        const result = await xrUtils.initialLoadingChecks();
 
         expect(result).toBe(true);
     });
@@ -46,7 +47,7 @@ describe('xrUtils', () => {
     it('should handle an undefined navigator gracefully', async () => {
         global.navigator = undefined;
 
-        const result  = await initialLoadingChecks();
+        const result  = await xrUtils.initialLoadingChecks();
 
         expect(alert).toHaveBeenCalledWith('Navigator object is undefined.');
         expect(result).toBe(false);
@@ -72,7 +73,7 @@ describe('performHitTest', () => {
 
         const mockReferenceSpace = {};
 
-        const hitTestResult = await performHitTest(mockSession, mockReferenceSpace);
+        const hitTestResult = await xrUtils.performHitTest(mockSession, mockReferenceSpace);
 
         expect(hitTestResult).toEqual([
             {
@@ -91,8 +92,9 @@ describe('performHitTest', () => {
 
         const mockReferenceSpace = {};
 
-        const hitTestResult = await performHitTest(mockSession, mockReferenceSpace);
+        const hitTestResult = await xrUtils.performHitTest(mockSession, mockReferenceSpace);
 
         expect(hitTestResult).toEqual([]);
     });
 });
+
