@@ -3,10 +3,12 @@
 import { useEffect, useRef, useState } from 'react';
 import { initWebXR } from '../_utils/xrUtils';
 import * as THREE from 'three';
+import RoomCameraControl from './RoomCameraControl';
 
 export default function RoomCapture() {
     const [scanning, setScanning] = useState(false);
     const [scannedData, setScannedData] = useState(null);
+    const [isCameraStarted, setIsCameraStarted] = useState(false);
 
     const [status, setStatus] = useState("Ready to scan");
     const [error, setError] = useState(null);
@@ -39,37 +41,6 @@ export default function RoomCapture() {
         initThreeJS();
     }, []);
     */
-    useEffect(() => {
-
-        const startCameraFeed = async () => {
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: 'environment',
-                        width: { ideal: 1280 },
-                        height: {ideal: 720 },
-                    }
-                });
-
-                if (videoRef.current) {
-                    videoRef.current.srcObject = stream;
-                    videoRef.current.play();
-                }
-            } catch(error) {
-                console.error("Error accessing the camera: ", error);
-                setError("Failed to access the camera. Please check your device settings.")
-            }
-        };
-
-        startCameraFeed();
-
-        return () => {
-            if (videoRef.current && videoRef.current.srcObject) {
-                const tracks = videoRef.current.srcObject.getTracks();
-                tracks.forEach(track => track.stop());
-            }
-        };
-    }, []);
 
     const startScan = async () => {
         setScanning(true);
@@ -78,13 +49,13 @@ export default function RoomCapture() {
         if (!rendererRef.current) {
             setError("Renderer not initialized. Please wait a moment and try again.");
             setScanning(false);
-            return; // Return early if not initialized
+            return; 
         }
 
         console.log(rendererRef.current);
         try {
             await initWebXR((newScannedData) => {
-                setScannedData(newScannedData); // Update the state with new surface data
+                setScannedData(newScannedData); 
             });
             setStatus("Scan complete");
         } catch(error) {
@@ -111,18 +82,13 @@ export default function RoomCapture() {
 
     return (
         <div>
-            <video
-                ref={videoRef}
-                style={{
-                    position: 'absolute',
-                    zIndex: -1,
-                }}
-                autoPlay
-                muted
-                playsInline
-            />
+            <RoomCameraControl />
+        </div>
+    )
+}
 
-            <button onClick={startScan} disabled={scanning}>
+/**
+ *             <button onClick={startScan} disabled={scanning}>
                 {scanning ? 'Scanning...' : 'Start Room Scan'}
             </button>
 
@@ -131,7 +97,4 @@ export default function RoomCapture() {
                     {error && <p style={{ color: 'red' }}>{error}</p>}
                     {scannedData && <pre>{JSON.stringify(scannedData, null, 2)}</pre>}
             </div>
-        </div>
-    )
-}
-
+ */
