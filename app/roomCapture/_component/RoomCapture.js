@@ -15,6 +15,7 @@ export default function RoomCapture() {
     const sceneRef = useRef(null);
     const rendererRef = useRef(null);
 
+    /*
     useEffect(() => {
         const initThreeJS = () => {
             const scene = new THREE.Scene();
@@ -37,6 +38,7 @@ export default function RoomCapture() {
 
         initThreeJS();
     }, []);
+    */
     useEffect(() => {
 
         const startCameraFeed = async () => {
