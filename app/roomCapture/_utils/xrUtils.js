@@ -40,6 +40,7 @@ export const initWebXR = async (onSurfaceData) => {
     return scannedData;
 };
 
+// centralizing the initialChecks to make it easier to add in the future / refactor to  different file
 export const initialLoadingChecks = async () => {
 
     if (typeof navigator === 'undefined') {
@@ -61,11 +62,13 @@ export const initialLoadingChecks = async () => {
     return true;
 };
 
-const performHitTest = async (session, referenceSpace) => {
+export const performHitTest = async (session, referenceSpace) => {
     const hitTestSource = await session.requestHitTestSource({
         space: referenceSpace
     });
 
+    // return the position and normal in an array format to better handle multiple hits in future
+    // if no hits, returns an empty array [] rather than null to stay with arrays
     const hitTestResults = await hitTestSource.getResults();
     return hitTestResults.map(hit => ({
         position: hit.pose.transform.position,
