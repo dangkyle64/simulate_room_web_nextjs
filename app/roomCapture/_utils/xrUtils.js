@@ -1,25 +1,16 @@
-export const initWebXR = async (onSurfaceData, rendererRef) => {
-    if (!navigator.xr) {
-        alert('WebXR is not supported on this device. :( ');
-        return;
-    };
+export const initWebXR = async (onSurfaceData) => {
+    
+    const initialAREnvironmentChecks = await initialLoadingChecks();
 
-    const isARSupported = await navigator.xr.isSessionSupported('immersive-ar');
-    if (!isARSupported) {
-        alert('AR is not supported on this device. :( ');
+    if (!initialAREnvironmentChecks) {
+        return;
     };
 
     const session = await navigator.xr.requestSession('immersive-ar', {
         requiredFeatures:  ['hit-test'],
     });
 
-    const glContext = rendererRef.current.getContext();
-    const xrLayer = new XRWebGLLayer(session, glContext);
-
-    session.updateRenderState({
-        baseLayer: xrLayer
-    });
-
+    const webGL = document.createElement('canvas').getContext('webgl');
     const xrReferenceSpace = await session.requestReferenceSpace('local');
 
     session.updateRenderState({
@@ -46,17 +37,38 @@ export const initWebXR = async (onSurfaceData, rendererRef) => {
         session.requestAnimationFrame((time, frame) => onXRFrame(time, frame, session, referenceSpace, onSurfaceData));
     };
 
-    const performHitTest = async (session, referenceSpace) => {
-        const hitTestSource = await session.requestHitTestSource({
-            space: referenceSpace
-        });
+    return scannedData;
+};
 
-        const hitTestResults = await hitTestSource.getResults();
-        return hitTestResults.map(hit => ({
-            position: hit.pose.transform.position,
-            normal: hit.pose.transform.orientation,
-        }));
+export const initialLoadingChecks = async () => {
+
+    if (typeof navigator === 'undefined') {
+        alert('Navigator object is undefined.');
+        return false;
+    };
+    
+    if (!navigator.xr) {
+        alert('WebXR is not supported on this device. :( ');
+        return false;
     };
 
-    return scannedData;
+    const isARSupported = await navigator.xr.isSessionSupported('immersive-ar');
+    if (!isARSupported) {
+        alert('AR is not supported on this device. :( ');
+        return false;
+    };
+
+    return true;
+};
+
+const performHitTest = async (session, referenceSpace) => {
+    const hitTestSource = await session.requestHitTestSource({
+        space: referenceSpace
+    });
+
+    const hitTestResults = await hitTestSource.getResults();
+    return hitTestResults.map(hit => ({
+        position: hit.pose.transform.position,
+        normal: hit.pose.transform.orientation,
+    }));
 };
