@@ -1,4 +1,4 @@
-'use client'; //WHY 
+'use client'; 
 
 import { useEffect, useRef, useState } from 'react';
 import { initWebXR } from '../_utils/xrUtils';
@@ -8,12 +8,10 @@ import RoomCameraControl from './RoomCameraControl';
 export default function RoomCapture() {
     const [scanning, setScanning] = useState(false);
     const [scannedData, setScannedData] = useState(null);
-    const [isCameraStarted, setIsCameraStarted] = useState(false);
 
     const [status, setStatus] = useState("Ready to scan");
     const [error, setError] = useState(null);
 
-    const videoRef = useRef(null);
     const sceneRef = useRef(null);
     const rendererRef = useRef(null);
 

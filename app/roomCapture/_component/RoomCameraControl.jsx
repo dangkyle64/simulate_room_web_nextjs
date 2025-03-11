@@ -1,16 +1,16 @@
 import { useState, useRef } from 'react';
+import useRoomCaptureState from '../_hooks/useRoomCaptureState';
 
 const RoomCameraControl = () => {
-    const [isCameraStarted, setIsCameraStarted] = useState(false);
-    const videoRef = useRef(null);
 
+    const { isCameraStarted, videoRef, startRoomCamera, stopRoomCamera } = useRoomCaptureState();
     return (
         <div>
             <button onClick={() => {
                 if (isCameraStarted) {
-                    stopCameraFeed(videoRef, setIsCameraStarted); 
+                    stopCameraFeed(videoRef, startRoomCamera); 
                 } else {
-                    startCameraFeed(videoRef, setIsCameraStarted); 
+                    startCameraFeed(videoRef, stopRoomCamera); 
                 }
             }}>
                 {isCameraStarted ? 'Stop Camera' : 'Start Camera'}
@@ -23,7 +23,7 @@ const RoomCameraControl = () => {
 
 export default RoomCameraControl;
 
-export const startCameraFeed = async (videoRef, setIsCameraStarted) => {
+export const startCameraFeed = async (videoRef, startRoomCameraFunction) => {
     try {
         const stream = await navigator.mediaDevices.getUserMedia({
             video: {
@@ -38,17 +38,17 @@ export const startCameraFeed = async (videoRef, setIsCameraStarted) => {
             videoRef.current.play();
         }
 
-        setIsCameraStarted(true);
+        startRoomCameraFunction();
     } catch(error) {
         console.error("Error accessing the camera: ", error);
     };
 };
 
-export const stopCameraFeed = async (videoRef, setIsCameraStarted) => {
+export const stopCameraFeed = async (videoRef, stopRoomCameraFunction) => {
     if (videoRef.current && videoRef.current.srcObject) {
         const tracks = videoRef.current.srcObject.getTracks();
         tracks.forEach(track => track.stop())
     };
 
-    setIsCameraStarted(false);
+    stopRoomCameraFunction();
 };

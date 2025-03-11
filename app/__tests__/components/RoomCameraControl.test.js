@@ -38,7 +38,7 @@ describe('startCameraFeed and stopCameraFeed', () => {
 
         expect(mockVideoRef.current.srcObject).toBe(mockStream);
         expect(mockVideoRef.current.play).toHaveBeenCalled();
-        expect(mockSetIsCameraStarted).toHaveBeenCalledWith(true);
+        expect(mockSetIsCameraStarted).toHaveBeenCalled();
     });
 
     it('should handle errors gracefully', async () => {
@@ -62,6 +62,6 @@ describe('startCameraFeed and stopCameraFeed', () => {
         stopCameraFeed(mockVideoRef, mockSetIsCameraStarted);
 
         expect(mockStream.getTracks()[0].stop).toHaveBeenCalled();
-        expect(mockSetIsCameraStarted).toHaveBeenCalledWith(false);
+        expect(mockSetIsCameraStarted).toHaveBeenCalled();
     });
 });
