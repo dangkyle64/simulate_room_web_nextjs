@@ -32,14 +32,21 @@ export const startCameraFeed = async (videoRef, startRoomCameraFunction) => {
                 height: {ideal: 720 },
             },
         });
-
+        
         if (videoRef.current) {
             videoRef.current.srcObject = stream;
-            videoRef.current.play();
-        }
+            videoRef.current.muted = true;
+
+            try {
+                await videoRef.current.play();
+            } catch(error) {
+                console.error('Error starting video playback: ', error);
+            };
+        };
 
         startRoomCameraFunction();
     } catch(error) {
+        alert('Error accessing the camera.')
         console.error("Error accessing the camera: ", error);
     };
 };
