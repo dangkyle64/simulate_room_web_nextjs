@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import useRoomCaptureState from '../_hooks/useRoomCaptureState';
+import { useRoomCaptureState } from '../_hooks/useRoomCaptureState';
 
 const RoomCameraControl = () => {
 
