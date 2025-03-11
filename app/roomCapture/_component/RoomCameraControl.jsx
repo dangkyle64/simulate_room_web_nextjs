@@ -1,12 +1,12 @@
-import { useState, useRef } from 'react';
 import { useRoomCaptureState } from '../_hooks/useRoomCaptureState';
+import styles from './RoomCameraControl.module.css';
 
 const RoomCameraControl = () => {
 
     const { isCameraStarted, videoRef, startRoomCamera, stopRoomCamera } = useRoomCaptureState();
     return (
-        <div>
-            <button onClick={() => {
+        <div className={styles.container}>
+            <button className={styles.button} onClick={() => {
                 if (isCameraStarted) {
                     stopCameraFeed(videoRef, startRoomCamera); 
                 } else {
@@ -16,7 +16,7 @@ const RoomCameraControl = () => {
                 {isCameraStarted ? 'Stop Camera' : 'Start Camera'}
             </button>
 
-            <video ref={videoRef} width="1280" height="720" style={{ marginTop: '20px', border: '1px solid #ccc' }} />
+            <video ref={videoRef} className={styles.video} />
         </div>
     );
 };
