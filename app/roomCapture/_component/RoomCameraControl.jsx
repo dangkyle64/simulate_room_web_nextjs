@@ -7,6 +7,7 @@ const RoomCameraControl = () => {
     const { isCameraStarted, videoRef, startRoomCamera, stopRoomCamera } = useRoomCaptureState();
     const { session, xrError } = useWebXR();
 
+    console.log(session);
     return (
         <div className={styles.container}>
             <button className={styles.button} onClick={() => {

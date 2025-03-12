@@ -1,6 +1,4 @@
-import { useErrorState } from "../_hooks/useErrorState";
-
-export const initWebXR = async () => {
+export const initWebXR = async (onSurfaceData) => {
     
     const initialAREnvironmentChecks = await initialLoadingChecks();
 
@@ -9,15 +7,15 @@ export const initWebXR = async () => {
     };
 
     const session = await navigator.xr.requestSession('immersive-ar', {
-        requiredFeatures:  ['local', 'hit-test'],
+        requiredFeatures:  ['hit-test'],
     });
 
     const webGL = document.createElement('canvas').getContext('webgl');
-    session.updateRenderState({ baseLayer: new XRWebGLLayer(session, webGL) });
-    
     const xrReferenceSpace = await session.requestReferenceSpace('local');
 
-   
+    session.updateRenderState({
+        baseLayer: new XRWebGLLayer(session, webGL)
+    });
 
     const scannedData = { surfaces: [], depthPoints: [] };
 
@@ -29,21 +27,19 @@ export const initWebXR = async () => {
 // centralizing the initialChecks to make it easier to add in the future / refactor to  different file
 export const initialLoadingChecks = async () => {
 
-    const { xrError, populateSetXRError } = useErrorState();
-
     if (typeof navigator === 'undefined') {
-        populateSetXRError('Navigator object is undefined.');
+        alert('Navigator object is undefined.');
         return false;
     };
     
     if (!navigator.xr) {
-        populateSetXRError('WebXR is not supported on this device. :( ');
+        alert('WebXR is not supported on this device. :( ');
         return false;
     };
 
     const isARSupported = await navigator.xr.isSessionSupported('immersive-ar');
     if (!isARSupported) {
-        populateSetXRError('AR is not supported on this device. :( ');
+        alert('AR is not supported on this device. :( ');
         return false;
     };
 
