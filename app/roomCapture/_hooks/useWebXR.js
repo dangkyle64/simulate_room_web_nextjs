@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { initialLoadingChecks } from '../_utils/xrUtils';
 import { useRoomCaptureState } from './useRoomCaptureState';
 
 export const useWebXR = () => {
@@ -12,18 +11,18 @@ export const useWebXR = () => {
             if (typeof navigator === 'undefined') {
                 setXRError('Navigator object is undefined.');
                 return;
-            }
+            };
 
             if (!navigator.xr) {
                 setXRError('WebXR is not supported on this device.');
                 return;
-            }
+            };
 
             const isARSupported = await navigator.xr.isSessionSupported('immersive-ar');
             if (!isARSupported) {
                 setXRError('AR is not supported on this device.');
                 return;
-            }
+            };
         };
 
         checkWebXR();
@@ -44,8 +43,14 @@ export const useWebXR = () => {
                 requiredFeatures: ['local', 'hit-test'],
             });
 
-            const webGL = document.createElement('canvas').getContext('webgl');
-            session.updateRenderState({ baseLayer: new XRWebGLLayer(session, webGL) });
+            const webGL = document.createElement('canvas').getContext('webgl2');
+
+            if (!webGL) {
+                throw new Error('WebGL context not available.');
+            };
+
+            const xrLayer = new XRWebGLLayer(session, gl);
+            session.updateRenderState({ baseLayer: xrLayer });
 
             session.requestReferenceSpace('local').then((referenceSpace) => {
                 setSessionState(session);
@@ -66,7 +71,7 @@ export const useWebXR = () => {
         session,
         referenceSpace,
         xrError,
-        handleStartARSession
+        handleStartARSession,
     };
 };
 
