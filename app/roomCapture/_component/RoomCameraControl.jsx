@@ -1,9 +1,12 @@
 import { useRoomCaptureState } from '../_hooks/useRoomCaptureState';
+import { useWebXR } from '../_hooks/useWebXR';
 import styles from './RoomCameraControl.module.css';
 
 const RoomCameraControl = () => {
 
     const { isCameraStarted, videoRef, startRoomCamera, stopRoomCamera } = useRoomCaptureState();
+    const { session, xrError } = useWebXR();
+
     return (
         <div className={styles.container}>
             <button className={styles.button} onClick={() => {
@@ -16,7 +19,13 @@ const RoomCameraControl = () => {
                 {isCameraStarted ? 'Stop Camera' : 'Start Camera'}
             </button>
 
+            {/* Display WebXR session error, if any */}
+            {xrError && <div className={styles.error}>{xrError}</div>}
+
             <video ref={videoRef} className={styles.video} />
+
+            {/* Display AR session info if it's active */}
+            {session && <div className={styles.arStatus}>AR Session Active!</div>}
         </div>
     );
 };

@@ -1,13 +1,23 @@
 import { describe, it, vi, expect, beforeEach } from 'vitest';
 import * as xrUtils from '../../roomCapture/_utils/xrUtils';
+import { useErrorState } from '../../roomCapture/_hooks/useErrorState';
 
-
-global.alert = vi.fn();
+vi.mock('../../roomCapture/_hooks/useErrorState', () => ({
+    useErrorState: vi.fn(),
+}));
 
 describe('xrUtils', () => {
 
+    let mockPopulateSetXRError;
+
     beforeEach(() => {
         vi.clearAllMocks();
+        mockPopulateSetXRError = vi.fn();
+
+        useErrorState.mockReturnValue({
+            xrError: null,
+            populateSetXRError: mockPopulateSetXRError,
+        });
     });
 
     it('should return false if WebXR is not supported', async () => {
@@ -15,7 +25,7 @@ describe('xrUtils', () => {
 
         const result = await xrUtils.initialLoadingChecks();
 
-        expect(alert).toHaveBeenCalledWith('WebXR is not supported on this device. :( ');
+        expect(mockPopulateSetXRError).toHaveBeenCalledWith('WebXR is not supported on this device. :( ');
         expect(result).toBe(false);
     });
 
@@ -28,7 +38,7 @@ describe('xrUtils', () => {
 
         const result = await xrUtils.initialLoadingChecks();
 
-        expect(alert).toHaveBeenCalledWith('AR is not supported on this device. :( ');
+        expect(mockPopulateSetXRError).toHaveBeenCalledWith('AR is not supported on this device. :( ');
         expect(result).toBe(false);
     });
 
@@ -49,7 +59,7 @@ describe('xrUtils', () => {
 
         const result  = await xrUtils.initialLoadingChecks();
 
-        expect(alert).toHaveBeenCalledWith('Navigator object is undefined.');
+        expect(mockPopulateSetXRError).toHaveBeenCalledWith('Navigator object is undefined.');
         expect(result).toBe(false);
     });
 });
