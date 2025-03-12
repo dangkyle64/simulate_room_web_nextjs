@@ -5,7 +5,7 @@ import styles from './RoomCameraControl.module.css';
 const RoomCameraControl = () => {
 
     const { isCameraStarted, videoRef, startRoomCamera, stopRoomCamera } = useRoomCaptureState();
-    const { session, xrError } = useWebXR();
+    const { session, xrError, handleStartARSession } = useWebXR();
 
     console.log(session);
     return (
@@ -18,6 +18,11 @@ const RoomCameraControl = () => {
                 }
             }}>
                 {isCameraStarted ? 'Stop Camera' : 'Start Camera'}
+            </button>
+
+             {/* Start AR session on button click */}
+             <button className={styles.buttonAR} onClick={handleStartARSession}>
+                Start AR Session
             </button>
 
             {/* Display WebXR session error, if any */}

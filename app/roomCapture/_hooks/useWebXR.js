@@ -24,18 +24,9 @@ export const useWebXR = () => {
                 setXRError('AR is not supported on this device.');
                 return;
             }
-        }
-
-        const startSession = async () => {
-            try {
-                await startARSession();
-            } catch (error) {
-                console.error(error);
-                setXRError(`Error starting AR session: ${error.message}`);
-            }
         };
 
-        startSession();
+        checkWebXR();
 
         return () => {
             if (session) {
@@ -46,7 +37,7 @@ export const useWebXR = () => {
         };
     }, [session, setSessionState, setReferenceSpaceState]);
 
-    const startARSession = async () => {
+    const handleStartARSession = async () => {
 
         try {
             const session = await navigator.xr.requestSession('immersive-ar', {
@@ -75,6 +66,7 @@ export const useWebXR = () => {
         session,
         referenceSpace,
         xrError,
+        handleStartARSession
     };
 };
 
