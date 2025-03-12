@@ -49,7 +49,7 @@ export const useWebXR = () => {
                 throw new Error('WebGL context not available.');
             };
 
-            const xrLayer = new XRWebGLLayer(session, gl);
+            const xrLayer = new XRWebGLLayer(session, webGL);
             session.updateRenderState({ baseLayer: xrLayer });
 
             session.requestReferenceSpace('local').then((referenceSpace) => {
