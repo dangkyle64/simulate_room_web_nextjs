@@ -43,7 +43,8 @@ export const useWebXR = () => {
                 requiredFeatures: ['local', 'hit-test'],
             });
 
-            const webGL = document.createElement('canvas').getContext('webgl2');
+            const canvas = document.createElement('canvas');
+            const webGL = canvas.getContext('webgl2', { xrCompatible: true });
 
             if (!webGL) {
                 throw new Error('WebGL context not available.');
