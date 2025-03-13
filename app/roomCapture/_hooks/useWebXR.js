@@ -60,29 +60,9 @@ export const useWebXR = () => {
             session.addEventListener('end', () => {
                 setSessionState(null);
             });
-
-            let hitTestSource = null;
-            let hitTestSourceInitialized = false;
-
-            const createHitTestSource = async () => {
-                if (hitTestSourceInitialized) return;
-                
-                try {
-                    const referenceSpace = await session.requestReferenceSpace('viewer');
-                    hitTestSource = await session.requestHitTestSource({
-                        space: referenceSpace,
-                        // Optionally, add other parameters for hit testing, such as ray origin or direction
-                    });
-                    hitTestSourceInitialized = true;
-                    console.log('Hit test source initialized.');
-                } catch (error) {
-                    console.error('Error creating hit test source:', error);
-                }
-            };
-
             console.log('onXRFRame started. referenceSpace: ', referenceSpace);
-            const onXRFrame = async (time, frame) => {
-                if (!referenceSpace || !hitTestSource) {
+            const onXRFrame = (time, frame) => {
+                if (!referenceSpace) {
                     session.requestAnimationFrame(onXRFrame);
                     return;
                 };
@@ -95,25 +75,8 @@ export const useWebXR = () => {
                     const cameraPosition = transform.position;
                     const cameraRotation = transform.orientation;
 
-                    //console.log('Camera Position:', cameraPosition);
-                    //console.log('Camera Rotation (Quaternion):', cameraRotation);
-
-                    const hitTestResults = await session.getHitTestResults(hitTestSource);
-                    if (hitTestResults.length > 0) {
-                        const hitTestResult = hitTestResults[0]; // Get the first hit (if any)
-                        const hitPose = hitTestResult.getPose(referenceSpace); // Get the pose of the hit object
-                        
-                        if (hitPose) {
-                            const hitPosition = hitPose.transform.position;
-                            const hitRotation = hitPose.transform.orientation;
-
-                            console.log('Hit Position:', hitPosition);
-                            console.log('Hit Rotation:', hitRotation);
-
-                            // Place a virtual object at the hit position (e.g., a sphere or model)
-                            placeARObject(hitPosition, hitRotation);
-                        };
-                    };
+                    console.log('Camera Position:', cameraPosition);
+                    console.log('Camera Rotation (Quaternion):', cameraRotation);
                 };
 
                 session.requestAnimationFrame(onXRFrame);
@@ -135,7 +98,3 @@ export const useWebXR = () => {
     };
 };
 
-const placeARObject = (hitPosition, hitRotation) => {
-    // Replace with your AR object logic (e.g., add a 3D model or sphere)
-    console.log('Placing object at:', hitPosition, 'Rotation:', hitRotation);
-};
