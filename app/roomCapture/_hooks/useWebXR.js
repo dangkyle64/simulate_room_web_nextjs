@@ -53,17 +53,20 @@ export const useWebXR = () => {
             const xrLayer = new XRWebGLLayer(session, webGL);
             session.updateRenderState({ baseLayer: xrLayer });
 
-            session.requestReferenceSpace('local').then((referenceSpace) => {
-                setSessionState(session);
-                setReferenceSpaceState(referenceSpace);
-            });
+            const referenceSpace = await session.requestReferenceSpace('local');
+            setSessionState(session);
+            setReferenceSpaceState(referenceSpace);
 
             session.addEventListener('end', () => {
                 setSessionState(null);
             });
-
+            console.log('onXRFRame started. referenceSpace: ', referenceSpace);
             const onXRFrame = (time, frame) => {
-                const referenceSpace = referenceSpace;
+                if (!referenceSpace) {
+                    session.requestAnimationFrame(onXRFrame);
+                    return;
+                };
+                
                 const xrPose = frame.getViewerPose(referenceSpace);
 
                 if(xrPose) {
