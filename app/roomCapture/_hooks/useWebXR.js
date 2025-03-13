@@ -62,6 +62,25 @@ export const useWebXR = () => {
                 setSessionState(null);
             });
 
+            const onXRFrame = (time, frame) => {
+                const referenceSpace = referenceSpace;
+                const xrPose = frame.getViewerPose(referenceSpace);
+
+                if(xrPose) {
+                    const pose = xrPose.views[0];
+                    const transform = pose.transform;
+                    const cameraPosition = transform.position;
+                    const cameraRotation = transform.orientation;
+
+                    console.log('Camera Position:', cameraPosition);
+                    console.log('Camera Rotation (Quaternion):', cameraRotation);
+                };
+
+                session.requestAnimationFrame(onXRFrame);
+            };
+
+            session.requestAnimationFrame(onXRFrame);
+
         } catch (error) {
             console.log('Error: ', error);
             setXRError('Error starting AR session: ' + error.message);
