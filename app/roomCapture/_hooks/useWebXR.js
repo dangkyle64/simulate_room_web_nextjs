@@ -45,28 +45,8 @@ export const useWebXR = () => {
                 setSessionState(null);
             });
             console.log('onXRFRame started. referenceSpace: ', referenceSpace);
-            const onXRFrame = (time, frame) => {
-                if (!referenceSpace) {
-                    session.requestAnimationFrame(onXRFrame);
-                    return;
-                };
-                
-                const xrPose = frame.getViewerPose(referenceSpace);
 
-                if(xrPose) {
-                    const pose = xrPose.views[0];
-                    const transform = pose.transform;
-                    const cameraPosition = transform.position;
-                    const cameraRotation = transform.orientation;
-
-                    console.log('Camera Position:', cameraPosition);
-                    console.log('Camera Rotation (Quaternion):', cameraRotation);
-                };
-
-                session.requestAnimationFrame(onXRFrame);
-            };
-
-            session.requestAnimationFrame(onXRFrame);
+            session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame));
 
         } catch (error) {
             console.log('Error: ', error);
@@ -99,3 +79,47 @@ export const checkWebXRPossible = async (populateSetXRError) => {
         return;
     };
 };
+
+const onXRFrame = (session, referenceSpace, time, frame) => {
+    if (!referenceSpace) {
+        session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame));
+        return;
+    };
+    
+    const xrPose = frame.getViewerPose(referenceSpace);
+
+    if(xrPose) {
+        const pose = xrPose.views[0];
+        const transform = pose.transform;
+        const cameraPosition = transform.position;
+        const cameraRotation = transform.orientation;
+
+        console.log('Camera Position:', cameraPosition);
+        console.log('Camera Rotation (Quaternion):', cameraRotation);
+    };
+
+    session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame));
+};
+
+/**
+ *             const onXRFrame = (time, frame) => {
+                if (!referenceSpace) {
+                    session.requestAnimationFrame(onXRFrame);
+                    return;
+                };
+                
+                const xrPose = frame.getViewerPose(referenceSpace);
+
+                if(xrPose) {
+                    const pose = xrPose.views[0];
+                    const transform = pose.transform;
+                    const cameraPosition = transform.position;
+                    const cameraRotation = transform.orientation;
+
+                    console.log('Camera Position:', cameraPosition);
+                    console.log('Camera Rotation (Quaternion):', cameraRotation);
+                };
+
+                session.requestAnimationFrame(onXRFrame);
+            };
+ */
