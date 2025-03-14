@@ -1,31 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useRoomCaptureState } from './useRoomCaptureState';
+import { useErrorState } from './useErrorState';
 
 export const useWebXR = () => {
     const { session, referenceSpace, setSessionState, setReferenceSpaceState } = useRoomCaptureState();
-    const [xrError, setXRError] = useState(null);
+    const { xrError, populateSetXRError } = useErrorState();
 
     useEffect(() => {
 
-        const checkWebXR = async () => {
-            if (typeof navigator === 'undefined') {
-                setXRError('Navigator object is undefined.');
-                return;
-            };
-
-            if (!navigator.xr) {
-                setXRError('WebXR is not supported on this device.');
-                return;
-            };
-
-            const isARSupported = await navigator.xr.isSessionSupported('immersive-ar');
-            if (!isARSupported) {
-                setXRError('AR is not supported on this device.');
-                return;
-            };
-        };
-
-        checkWebXR();
+        checkWebXRPossible(populateSetXRError);
 
         return () => {
             if (session) {
@@ -98,3 +81,20 @@ export const useWebXR = () => {
     };
 };
 
+export const checkWebXRPossible = async (populateSetXRError) => {
+    if (typeof navigator === 'undefined') {
+        populateSetXRError('Navigator object is undefined.');
+        return;
+    };
+
+    if (!navigator.xr) {
+        populateSetXRError('WebXR is not supported on this device.');
+        return;
+    };
+
+    const isARSupported = await navigator.xr.isSessionSupported('immersive-ar');
+    if (!isARSupported) {
+        populateSetXRError('AR is not supported on this device.');
+        return;
+    };
+};
