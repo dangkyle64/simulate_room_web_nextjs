@@ -24,28 +24,6 @@ export const initWebXR = async (onSurfaceData) => {
     return scannedData;
 };
 
-// centralizing the initialChecks to make it easier to add in the future / refactor to  different file
-export const initialLoadingChecks = async () => {
-
-    if (typeof navigator === 'undefined') {
-        alert('Navigator object is undefined.');
-        return false;
-    };
-    
-    if (!navigator.xr) {
-        alert('WebXR is not supported on this device. :( ');
-        return false;
-    };
-
-    const isARSupported = await navigator.xr.isSessionSupported('immersive-ar');
-    if (!isARSupported) {
-        alert('AR is not supported on this device. :( ');
-        return false;
-    };
-
-    return true;
-};
-
 export const performHitTest = async (session, referenceSpace) => {
     const hitTestSource = await session.requestHitTestSource({
         space: referenceSpace

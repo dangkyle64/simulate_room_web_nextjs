@@ -3,7 +3,7 @@ import { useRoomCaptureState } from './useRoomCaptureState';
 import { useErrorState } from './useErrorState';
 
 export const useWebXR = () => {
-    const { session, referenceSpace, setSessionState, setReferenceSpaceState } = useRoomCaptureState();
+    const { session, referenceSpace, isSessionEnded, setSessionState, setReferenceSpaceState, toggleIsSessionEnded } = useRoomCaptureState();
     const { xrError, populateSetXRError } = useErrorState();
 
     useEffect(() => {
@@ -11,11 +11,12 @@ export const useWebXR = () => {
         checkWebXRPossible(populateSetXRError);
 
         return () => {
-            if (session) {
+            if (session && !isSessionEnded) {
                 session.end();
                 setSessionState(null);
                 setReferenceSpaceState(null);
-            }
+                toggleIsSessionEnded();
+            };
         };
     }, [session, setSessionState, setReferenceSpaceState]);
 
@@ -69,7 +70,7 @@ export const useWebXR = () => {
 
         } catch (error) {
             console.log('Error: ', error);
-            setXRError('Error starting AR session: ' + error.message);
+            populateSetXRError('Error starting AR session: ' + error.message);
         };
     };
 

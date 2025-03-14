@@ -1,4 +1,4 @@
-import { vi, beforeEach, describe, expect, afterEach } from 'vitest';
+import { vi, beforeEach, describe, expect } from 'vitest';
 import { useWebXR, checkWebXRPossible } from '../../roomCapture/_hooks/useWebXR';
 
 describe('useWebXR', () => {
