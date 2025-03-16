@@ -5,6 +5,7 @@ export const useRoomCaptureState = () => {
     const [session, setSession] = useState(null);
     const [isSessionEnded, setIsSessionEnded] = useState(false);
     const [referenceSpace, setReferenceSpace] = useState(null);
+    const [hitTestSource, setHitTestSource] = useState(null);
 
     const videoRef = useRef(null);
 
@@ -28,16 +29,22 @@ export const useRoomCaptureState = () => {
         setIsSessionEnded(!isSessionEnded);
     };
 
+    const setHitTestSourceState = (hitTestSource) => {
+        setHitTestSource(hitTestSource);
+    };
+
     return {
         isCameraStarted,
         videoRef,
         session,
         referenceSpace,
         isSessionEnded,
+        hitTestSource,
         startRoomCamera,
         stopRoomCamera,
         setSessionState,
         setReferenceSpaceState,
         toggleIsSessionEnded,
+        setHitTestSourceState,
     };
 };

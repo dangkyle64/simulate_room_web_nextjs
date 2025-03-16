@@ -3,7 +3,7 @@ import { useRoomCaptureState } from './useRoomCaptureState';
 import { useErrorState } from './useErrorState';
 
 export const useWebXR = () => {
-    const { session, referenceSpace, isSessionEnded, setSessionState, setReferenceSpaceState, toggleIsSessionEnded } = useRoomCaptureState();
+    const { session, referenceSpace, isSessionEnded, hitTestSource, setSessionState, setReferenceSpaceState, toggleIsSessionEnded, setHitTestSourceState } = useRoomCaptureState();
     const { xrError, populateSetXRError } = useErrorState();
 
     useEffect(() => {
@@ -19,8 +19,6 @@ export const useWebXR = () => {
             };
         };
     }, [session, setSessionState, setReferenceSpaceState]);
-
-    let hitTestSource = null; 
 
     const handleStartARSession = async () => {
 
@@ -43,7 +41,8 @@ export const useWebXR = () => {
             setSessionState(session);
             setReferenceSpaceState(referenceSpace);
 
-            hitTestSource = await session.requestHitTestSource({ space: referenceSpace });
+            const initializeHitTestSource = await session.requestHitTestSource({ space: referenceSpace });
+            setHitTestSourceState(initializeHitTestSource);
 
             session.addEventListener('end', () => {
                 setSessionState(null);
