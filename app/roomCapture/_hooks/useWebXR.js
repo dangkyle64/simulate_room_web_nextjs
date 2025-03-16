@@ -49,7 +49,7 @@ export const useWebXR = () => {
             });
             console.log('onXRFRame started. referenceSpace: ', referenceSpace);
 
-            session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame));
+            session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame, hitTestSource));
 
         } catch (error) {
             console.log('Error: ', error);
@@ -105,14 +105,14 @@ export const checkWebXRPossible = async (populateSetXRError) => {
     };
 };
 
-export const onXRFrame = (session, referenceSpace, time, frame) => {
+export const onXRFrame = (session, referenceSpace, time, frame, hitTestSource) => {
     if (!referenceSpace) {
         session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame));
         return;
     };
     
     const xrPose = frame.getViewerPose(referenceSpace);
-    performHitTest(time, frame, referenceSpace);
+    performHitTest(time, frame, referenceSpace, hitTestSource);
 
     if(xrPose) {
         const pose = xrPose.views[0];
@@ -124,10 +124,10 @@ export const onXRFrame = (session, referenceSpace, time, frame) => {
         console.log('Camera Rotation (Quaternion):', cameraRotation);
     };
 
-    session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame));
+    session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame, hitTestSource));
 };
 
-const performHitTest = (time, frame, referenceSpace) => {
+const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
     if (!hitTestSource) {
         console.log('hitTestSource false');
         return;
@@ -136,6 +136,6 @@ const performHitTest = (time, frame, referenceSpace) => {
     const hitTestResults = frame.getHitTestResults(hitTestSource);
     if  (hitTestResults.length > 0) {
         const hitPose = hitTestResults[0].getPose(referenceSpace);
-        console.log(hitPose);
+        console.log("The hitpose: ", hitPose);
     };
 };
