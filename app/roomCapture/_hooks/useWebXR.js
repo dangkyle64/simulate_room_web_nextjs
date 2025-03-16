@@ -37,7 +37,7 @@ export const useWebXR = () => {
             const xrLayer = new XRWebGLLayer(session, webGL);
             session.updateRenderState({ baseLayer: xrLayer });
 
-            const referenceSpace = await session.requestReferenceSpace('local');
+            const referenceSpace = await session.requestReferenceSpace('viewer');
             setSessionState(session);
             setReferenceSpaceState(referenceSpace);
 
