@@ -1,10 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRoomCaptureState } from './useRoomCaptureState';
 import { useErrorState } from './useErrorState';
 
 export const useWebXR = () => {
-    const { session, referenceSpace, isSessionEnded, hitTestSource, setSessionState, setReferenceSpaceState, toggleIsSessionEnded, setHitTestSourceState } = useRoomCaptureState();
+    const { session, referenceSpace, isSessionEnded, setSessionState, setReferenceSpaceState, toggleIsSessionEnded } = useRoomCaptureState();
     const { xrError, populateSetXRError } = useErrorState();
+
+    const [hitTestSource, setHitTestSource] = useState(null);
 
     useEffect(() => {
 
@@ -41,16 +43,16 @@ export const useWebXR = () => {
             setSessionState(session);
             setReferenceSpaceState(referenceSpace);
 
-            const initializeHitTestSource = await session.requestHitTestSource({ space: referenceSpace });
-            console.log('set hit test source state: ',initializeHitTestSource)
-            setHitTestSourceState(initializeHitTestSource);
+            const initializedHitTestSource = await newSession.requestHitTestSource({ space: referenceSpace });
+            console.log('HitTestSource initialized:', initializedHitTestSource);
+            setHitTestSource(initializedHitTestSource);
 
             session.addEventListener('end', () => {
                 setSessionState(null);
             });
             console.log('onXRFRame started. referenceSpace: ', referenceSpace);
 
-            session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame, hitTestSource));
+            session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame, initializedHitTestSource));
 
         } catch (error) {
             console.log('Error: ', error);
@@ -113,7 +115,6 @@ export const onXRFrame = (session, referenceSpace, time, frame, hitTestSource) =
     };
     
     const xrPose = frame.getViewerPose(referenceSpace);
-    performHitTest(time, frame, referenceSpace, hitTestSource);
 
     if(xrPose) {
         const pose = xrPose.views[0];
@@ -125,21 +126,24 @@ export const onXRFrame = (session, referenceSpace, time, frame, hitTestSource) =
         console.log('Camera Rotation (Quaternion):', cameraRotation);
     };
 
+    if (hitTestSource) {
+        performHitTest(time, frame, referenceSpace, hitTestSource);
+    };
+
     session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame, hitTestSource));
 };
 
 const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
-    if (!hitTestSource) {
-        console.log('hitTestSource false');
-        return;
-    };
-
-    console.log(hitTestSource);
-
     const hitTestResults = frame.getHitTestResults(hitTestSource);
+
     console.log('Hit Test Results: ', hitTestResults);
-    if  (hitTestResults.length > 0) {
+
+    if (hitTestResults.length > 0) {
         const hitPose = hitTestResults[0].getPose(referenceSpace);
-        console.log("The hitpose: ", hitPose);
-    };
+        if (hitPose) {
+            console.log('Hit Pose:', hitPose);
+        }
+    } else {
+        console.log('No hit test results found');
+    }
 };
