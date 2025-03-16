@@ -43,7 +43,7 @@ export const useWebXR = () => {
             setSessionState(session);
             setReferenceSpaceState(referenceSpace);
 
-            const initializedHitTestSource = await newSession.requestHitTestSource({ space: referenceSpace });
+            const initializedHitTestSource = await session.requestHitTestSource({ space: referenceSpace });
             console.log('HitTestSource initialized:', initializedHitTestSource);
             setHitTestSource(initializedHitTestSource);
 
