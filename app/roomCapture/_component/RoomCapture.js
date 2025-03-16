@@ -83,16 +83,4 @@ export default function RoomCapture() {
             <RoomCameraControl />
         </div>
     )
-}
-
-/**
- *             <button onClick={startScan} disabled={scanning}>
-                {scanning ? 'Scanning...' : 'Start Room Scan'}
-            </button>
-
-            <div style={{ marginTop: '20px' }}>
-                    <h3>Status: {status}</h3>
-                    {error && <p style={{ color: 'red' }}>{error}</p>}
-                    {scannedData && <pre>{JSON.stringify(scannedData, null, 2)}</pre>}
-            </div>
- */
+};

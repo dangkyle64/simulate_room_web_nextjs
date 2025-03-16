@@ -80,7 +80,7 @@ export const checkWebXRPossible = async (populateSetXRError) => {
     };
 };
 
-const onXRFrame = (session, referenceSpace, time, frame) => {
+export const onXRFrame = (session, referenceSpace, time, frame) => {
     if (!referenceSpace) {
         session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame));
         return;
@@ -100,26 +100,3 @@ const onXRFrame = (session, referenceSpace, time, frame) => {
 
     session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame));
 };
-
-/**
- *             const onXRFrame = (time, frame) => {
-                if (!referenceSpace) {
-                    session.requestAnimationFrame(onXRFrame);
-                    return;
-                };
-                
-                const xrPose = frame.getViewerPose(referenceSpace);
-
-                if(xrPose) {
-                    const pose = xrPose.views[0];
-                    const transform = pose.transform;
-                    const cameraPosition = transform.position;
-                    const cameraRotation = transform.orientation;
-
-                    console.log('Camera Position:', cameraPosition);
-                    console.log('Camera Rotation (Quaternion):', cameraRotation);
-                };
-
-                session.requestAnimationFrame(onXRFrame);
-            };
- */

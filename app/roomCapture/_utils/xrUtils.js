@@ -19,8 +19,6 @@ export const initWebXR = async (onSurfaceData) => {
 
     const scannedData = { surfaces: [], depthPoints: [] };
 
-    session.requestAnimationFrame((time, frame) => onXRFrame(scannedData, time, frame, session, xrReferenceSpace)); 
-
     return scannedData;
 };
 
@@ -36,17 +34,4 @@ export const performHitTest = async (session, referenceSpace) => {
         position: hit.pose.transform.position,
         normal: hit.pose.transform.orientation,
     }));
-};
-
-export async function onXRFrame(scannedData, time, frame, session, referenceSpace) {
-
-    const pose = frame.getViewerPose(referenceSpace);
-    if (pose) {
-        const hitTestResults = await performHitTest(session, referenceSpace);
-        scannedData.surfaces = hitTestResults;
-
-        scannedData.depthPoints.push(pose.transform.position);
-    };
-
-    session.requestAnimationFrame((time, frame) => onXRFrame(time, frame, session, referenceSpace, onSurfaceData));
 };
