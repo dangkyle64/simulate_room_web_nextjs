@@ -20,6 +20,8 @@ export const useWebXR = () => {
         };
     }, [session, setSessionState, setReferenceSpaceState]);
 
+    let hitTestSource = null; 
+
     const handleStartARSession = async () => {
 
         try {
@@ -41,6 +43,8 @@ export const useWebXR = () => {
             setSessionState(session);
             setReferenceSpaceState(referenceSpace);
 
+            hitTestSource = await session.requestHitTestSource({ space: referenceSpace });
+
             session.addEventListener('end', () => {
                 setSessionState(null);
             });
@@ -61,6 +65,12 @@ export const useWebXR = () => {
                 setSessionState(null);
                 setReferenceSpaceState(null);
                 toggleIsSessionEnded();
+
+                if (hitTestSource) {
+                    hitTestSource.cancel();
+                    hitTestSource = null;
+                };
+
             } catch(error) {
                 populateSetXRError('Error ending AR session: ' + error.message);
             };
@@ -103,6 +113,7 @@ export const onXRFrame = (session, referenceSpace, time, frame) => {
     };
     
     const xrPose = frame.getViewerPose(referenceSpace);
+    performHitTest(time, frame, referenceSpace);
 
     if(xrPose) {
         const pose = xrPose.views[0];
@@ -115,4 +126,17 @@ export const onXRFrame = (session, referenceSpace, time, frame) => {
     };
 
     session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame));
+};
+
+const performHitTest = (time, frame, referenceSpace) => {
+    if (!hitTestSource) {
+        console.log('hitTestSource false');
+        return;
+    };
+
+    const hitTestResults = frame.getHitTestResults(hitTestSource);
+    if  (hitTestResults.length > 0) {
+        const hitPose = hitTestResults[0].getPose(referenceSpace);
+        console.log(hitPose);
+    };
 };
