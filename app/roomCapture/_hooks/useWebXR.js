@@ -54,11 +54,27 @@ export const useWebXR = () => {
         };
     };
 
+    const handleEndARSession = async () => {
+        if (session) {
+            try {
+                await session.end();
+                setSessionState(null);
+                setReferenceSpaceState(null);
+                toggleIsSessionEnded();
+            } catch(error) {
+                populateSetXRError('Error ending AR session: ' + error.message);
+            };
+        } else {
+            console.log('No active AR session to end');
+        };
+    };
+
     return {
         session,
         referenceSpace,
         xrError,
         handleStartARSession,
+        handleEndARSession,
     };
 };
 
