@@ -42,6 +42,7 @@ export const useWebXR = () => {
             setReferenceSpaceState(referenceSpace);
 
             const initializeHitTestSource = await session.requestHitTestSource({ space: referenceSpace });
+            console.log('set hit test source state: ',initializeHitTestSource)
             setHitTestSourceState(initializeHitTestSource);
 
             session.addEventListener('end', () => {
