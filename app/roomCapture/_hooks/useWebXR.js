@@ -133,7 +133,10 @@ const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
         return;
     };
 
+    console.log(hitTestSource);
+
     const hitTestResults = frame.getHitTestResults(hitTestSource);
+    console.log('Hit Test Results: ', hitTestResults);
     if  (hitTestResults.length > 0) {
         const hitPose = hitTestResults[0].getPose(referenceSpace);
         console.log("The hitpose: ", hitPose);
