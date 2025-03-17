@@ -8,6 +8,13 @@ const RoomCameraControl = () => {
     const { session, xrError, handleStartARSession, handleEndARSession } = useWebXR();
 
     console.log(session);
+
+    window.onbeforeunload = () => {
+        if (session && isValidSession(session)) {
+            handleEndARSession();
+        };
+    };
+    
     return (
         <div className={styles.container}>
             <button className={styles.buttonAR} onClick={() => {

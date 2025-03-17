@@ -22,9 +22,21 @@ export const useWebXR = () => {
         };
     }, [session, setSessionState, setReferenceSpaceState]);
 
+    const isValidSession = (session) => {
+        return session && typeof session === 'object' && 
+            typeof session.requestAnimationFrame === 'function' &&
+            typeof session.end === 'function';
+    };
+
     const handleStartARSession = async () => {
 
         try {
+
+            if (isValidSession(session)) {
+                console.log("AR session is already active");
+                return;
+            };
+
             const session = await navigator.xr.requestSession('immersive-ar', {
                 requiredFeatures: ['local', 'hit-test'],
             });
