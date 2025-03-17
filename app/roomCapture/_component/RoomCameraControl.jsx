@@ -8,12 +8,6 @@ const RoomCameraControl = () => {
     const { session, xrError, handleStartARSession, handleEndARSession } = useWebXR();
 
     console.log(session);
-
-    window.onbeforeunload = () => {
-        if (session && isValidSession(session)) {
-            handleEndARSession();
-        };
-    };
     
     return (
         <div className={styles.container}>
@@ -39,7 +33,8 @@ export default RoomCameraControl;
 
 export const handleARSession = async (session, handleEndARSession, handleStartARSession) => {
     try {
-        if (session && typeof session === 'object' && typeof session.requestAnimationFrame === 'function') {
+        if (session && typeof session === 'object' && typeof session.requestAnimationFrame === 'function' && session.end && typeof session.end === 'function') {
+            console.log('IT CALLED END');
             await handleEndARSession();
         } else {
             await handleStartARSession();
