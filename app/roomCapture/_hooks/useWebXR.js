@@ -26,7 +26,7 @@ export const useWebXR = () => {
 
         try {
 
-            if (session) {
+            if (session && typeof session.requestAnimationFrame === 'function') {
                 console.log("AR session is already active");
                 return; 
             };
