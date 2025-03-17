@@ -15,18 +15,19 @@ const RoomCameraControl = () => {
                     stopCameraFeed(videoRef, startRoomCamera); 
                 } else {
                     startCameraFeed(videoRef, stopRoomCamera); 
-                }
+                };
             }}>
                 {isCameraStarted ? 'Stop Camera' : 'Start Camera'}
             </button>
 
              {/* Toggle between start and end AR session */}
             <button className={styles.buttonAR} onClick={() => {
+                handleCameraFeed(isCameraStarted, videoRef, startRoomCamera, stopRoomCamera);
                 if (session) {
                     handleEndARSession();
                 } else {
                     handleStartARSession();
-                }
+                };
             }}>
                 {session ? 'End AR Session' : 'Start AR Session'}
             </button>
@@ -79,4 +80,12 @@ export const stopCameraFeed = async (videoRef, stopRoomCameraFunction) => {
     };
 
     stopRoomCameraFunction();
+};
+
+const handleCameraFeed = async (isCameraStarted, videoRef, startRoomCamera, stopRoomCamera) => {
+    if (isCameraStarted) {
+        stopCameraFeed(videoRef, startRoomCamera); 
+    } else {
+        startCameraFeed(videoRef, stopRoomCamera); 
+    };
 };
