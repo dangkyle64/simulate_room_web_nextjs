@@ -10,24 +10,9 @@ const RoomCameraControl = () => {
     console.log(session);
     return (
         <div className={styles.container}>
-            <button className={styles.button} onClick={() => {
-                if (isCameraStarted) {
-                    stopCameraFeed(videoRef, startRoomCamera); 
-                } else {
-                    startCameraFeed(videoRef, stopRoomCamera); 
-                };
-            }}>
-                {isCameraStarted ? 'Stop Camera' : 'Start Camera'}
-            </button>
-
-             {/* Toggle between start and end AR session */}
             <button className={styles.buttonAR} onClick={() => {
-                handleCameraFeed(isCameraStarted, videoRef, startRoomCamera, stopRoomCamera);
-                if (session) {
-                    handleEndARSession();
-                } else {
-                    handleStartARSession();
-                };
+                //handleCameraFeed(isCameraStarted, videoRef, startRoomCamera, stopRoomCamera);
+                handleARSession(session, handleEndARSession, handleStartARSession);
             }}>
                 {session ? 'End AR Session' : 'Start AR Session'}
             </button>
@@ -87,5 +72,13 @@ const handleCameraFeed = async (isCameraStarted, videoRef, startRoomCamera, stop
         stopCameraFeed(videoRef, startRoomCamera); 
     } else {
         startCameraFeed(videoRef, stopRoomCamera); 
+    };
+};
+
+const handleARSession = async (session, handleEndARSession, handleStartARSession) => {
+    if (session) {
+        handleEndARSession();
+    } else {
+        handleStartARSession();
     };
 };
