@@ -25,7 +25,7 @@ export const useWebXR = () => {
     const handleStartARSession = async () => {
 
         try {
-
+            console.log('before start: ', session);
             if (session && typeof session.requestAnimationFrame === 'function') {
                 console.log("AR session is already active");
                 return; 
@@ -67,6 +67,7 @@ export const useWebXR = () => {
     };
 
     const handleEndARSession = async () => {
+        console.log(session);
         if (session && typeof session.requestAnimationFrame === 'function') {
             try {
                 await session.end();
