@@ -1,7 +1,62 @@
 import { beforeEach, describe, vi, expect, it } from "vitest";
-import { startCameraFeed, stopCameraFeed } from "../../roomCapture/_component/RoomCameraControl";
+import { handleARSession } from "../../roomCapture/_component/RoomCameraControl";
 
-describe('startCameraFeed and stopCameraFeed', () => {
+describe('handleARSession', () => {
+
+    let handleStartARSession;
+    let handleEndARSession;
+    let session;
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+
+        handleStartARSession = vi.fn();
+        handleEndARSession = vi.fn();
+
+        session = { requestAnimationFrame: () => {} };
+    });
+
+    it('should call handleEndARSession when session is truthy', async () => {
+
+        await handleARSession(session, handleEndARSession, handleStartARSession);
+
+        expect(handleEndARSession).toHaveBeenCalledTimes(1);
+        expect(handleStartARSession).toHaveBeenCalledTimes(0);
+    });
+
+    it('should call handleStartARSession when session is null', async () => {
+        
+        session = null;
+        
+        await handleARSession(session, handleEndARSession, handleStartARSession);
+
+        expect(handleEndARSession).toHaveBeenCalledTimes(0);
+        expect(handleStartARSession).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call handleStartARSession when session is undefined', async () => {
+        
+        session = undefined;
+        
+        await handleARSession(session, handleEndARSession, handleStartARSession);
+
+        expect(handleEndARSession).toHaveBeenCalledTimes(0);
+        expect(handleStartARSession).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call handleStartARSession when session is false', async () => {
+        
+        session = false;
+        
+        await handleARSession(session, handleEndARSession, handleStartARSession);
+
+        expect(handleEndARSession).toHaveBeenCalledTimes(0);
+        expect(handleStartARSession).toHaveBeenCalledTimes(1);
+    });
+});
+
+/**
+ * describe('startCameraFeed and stopCameraFeed', () => {
     let mockVideoRef;
     let mockSetIsCameraStarted;
 
@@ -108,3 +163,4 @@ describe('startCameraFeed and stopCameraFeed', () => {
         expect(mockSetIsCameraStarted).toHaveBeenCalled();
     });
 });
+ */

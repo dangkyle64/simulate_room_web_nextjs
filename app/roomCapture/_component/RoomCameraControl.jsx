@@ -4,14 +4,13 @@ import styles from './RoomCameraControl.module.css';
 
 const RoomCameraControl = () => {
 
-    const { isCameraStarted, videoRef, startRoomCamera, stopRoomCamera } = useRoomCaptureState();
+    const { videoRef } = useRoomCaptureState();
     const { session, xrError, handleStartARSession, handleEndARSession } = useWebXR();
 
     console.log(session);
     return (
         <div className={styles.container}>
             <button className={styles.buttonAR} onClick={() => {
-                //handleCameraFeed(isCameraStarted, videoRef, startRoomCamera, stopRoomCamera);
                 handleARSession(session, handleEndARSession, handleStartARSession);
             }}>
                 {session ? 'End AR Session' : 'Start AR Session'}
@@ -30,55 +29,16 @@ const RoomCameraControl = () => {
 
 export default RoomCameraControl;
 
-export const startCameraFeed = async (videoRef, startRoomCameraFunction) => {
+
+export const handleARSession = async (session, handleEndARSession, handleStartARSession) => {
     try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: 'environment',
-                width: { ideal: 1280 },
-                height: {ideal: 720 },
-            },
-        });
-        
-        if (videoRef.current) {
-            videoRef.current.srcObject = stream;
-            videoRef.current.muted = true;
-
-            try {
-                await videoRef.current.play();
-            } catch(error) {
-                console.error('Error starting video playback: ', error);
-            };
-        };
-
-        startRoomCameraFunction();
-    } catch(error) {
-        alert('Error accessing the camera.')
-        console.error("Error accessing the camera: ", error);
-    };
-};
-
-export const stopCameraFeed = async (videoRef, stopRoomCameraFunction) => {
-    if (videoRef.current && videoRef.current.srcObject) {
-        const tracks = videoRef.current.srcObject.getTracks();
-        tracks.forEach(track => track.stop())
-    };
-
-    stopRoomCameraFunction();
-};
-
-const handleCameraFeed = async (isCameraStarted, videoRef, startRoomCamera, stopRoomCamera) => {
-    if (isCameraStarted) {
-        stopCameraFeed(videoRef, startRoomCamera); 
-    } else {
-        startCameraFeed(videoRef, stopRoomCamera); 
-    };
-};
-
-const handleARSession = async (session, handleEndARSession, handleStartARSession) => {
-    if (session) {
-        handleEndARSession();
-    } else {
-        handleStartARSession();
+        if (session && typeof session === 'object' && typeof session.requestAnimationFrame === 'function') {
+            await handleEndARSession();
+        } else {
+            await handleStartARSession();
+        }
+    } catch (error) {
+        console.error('Error handling AR session:', error);
+        throw error;
     };
 };
