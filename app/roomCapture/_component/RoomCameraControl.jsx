@@ -51,7 +51,6 @@ export const handleARSession = async (isSessionActive, setSessionNotActive, setS
 };
 
 export const handleSessionValidation = (session, setSessionNotActive, setSessionActive) => {
-    console.log('current session: ',session);
     if (session) {
         setSessionActive();
     } else {
