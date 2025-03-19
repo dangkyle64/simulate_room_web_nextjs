@@ -37,7 +37,6 @@ export const useRoomCaptureState = () => {
         setIsSessionActive(true);
     };
 
-
     return {
         isCameraStarted,
         videoRef,

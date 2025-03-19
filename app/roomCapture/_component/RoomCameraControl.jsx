@@ -11,6 +11,11 @@ const RoomCameraControl = () => {
     console.log('Initial load', session);
 
     useEffect(() => {
+
+        if(session === null) {
+            return;
+        };
+
         if (session) {
             setSessionActive();
         } else {
@@ -38,7 +43,6 @@ const RoomCameraControl = () => {
 };
 
 export default RoomCameraControl;
-
 
 export const handleARSession = async (isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleStartARSession) => {
     try {
