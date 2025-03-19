@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useRoomCaptureState } from './useRoomCaptureState';
 import { useErrorState } from './useErrorState';
+import styles from '../_component/RoomCameraControl.module.css';
 
 export const useWebXR = () => {
     const { session, referenceSpace, setSessionState, setReferenceSpaceState, toggleIsSessionEnded } = useRoomCaptureState();
@@ -30,14 +31,24 @@ export const useWebXR = () => {
             const xrLayer = new XRWebGLLayer(session, webGL);
             session.updateRenderState({ baseLayer: xrLayer });
 
-            canvas.style.position = 'absolute';
-            canvas.style.top = '0';
-            canvas.style.left = '0';
-            canvas.style.width = '100%';
-            canvas.style.height = '100%';
-            canvas.style.zIndex = -1; 
-            canvas.style.pointerEvents = 'none';
-            document.body.appendChild(canvas); 
+            const overlayButton = document.createElement('button');
+            overlayButton.textContent = 'Start AR Session';
+            overlayButton.style.position = 'absolute'; 
+            overlayButton.style.top = '20px'; 
+            overlayButton.style.left = '20px';
+            overlayButton.style.zIndex = '9999'; 
+            overlayButton.style.padding = '10px 20px';
+            overlayButton.style.backgroundColor = '#fff';
+            overlayButton.style.color = '#000';
+            overlayButton.style.border = 'none';
+            overlayButton.style.borderRadius = '5px';
+            overlayButton.style.cursor = 'pointer';
+
+            document.body.appendChild(overlayButton);
+
+            overlayButton.addEventListener('click', () => {
+                console.log('Button clicked!');
+            });
 
             const referenceSpace = await session.requestReferenceSpace('viewer');
             setSessionState(session);
