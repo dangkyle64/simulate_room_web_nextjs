@@ -16,7 +16,7 @@ const RoomCameraControl = () => {
 
     return (
         <div className={styles.container}>
-            <button className={styles.buttonAR} onClick={() => {
+            <button id="xr-button" className={styles.buttonAR} onClick={() => {
                 handleARSession(isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleStartARSession);
             }}>
                 {session ? 'End AR Session' : 'Start AR Session'}

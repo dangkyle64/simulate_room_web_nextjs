@@ -19,8 +19,16 @@ export const useWebXR = () => {
 
             const session = await navigator.xr.requestSession('immersive-ar', {
                 requiredFeatures: ['local', 'hit-test'],
-            });
+                optionalFeatures: ["dom-overlay"],
+                domOverlay: {
+                root: document.getElementById("overlay")
+                }
+            }).then(onSessionStarted);
 
+            function onSessionStarted(session) {
+                document.getElementById("xr-button").innerHTML = "Exit AR";
+            }
+            
             const canvas = document.createElement('canvas');
             const webGL = canvas.getContext('webgl2', { xrCompatible: true });
 
@@ -30,21 +38,6 @@ export const useWebXR = () => {
 
             const xrLayer = new XRWebGLLayer(session, webGL);
             session.updateRenderState({ baseLayer: xrLayer });
-
-            const overlayButton = document.createElement('button');
-            overlayButton.textContent = 'Start AR Session';
-            overlayButton.style.position = 'absolute'; 
-            overlayButton.style.top = '20px'; 
-            overlayButton.style.left = '20px';
-            overlayButton.style.zIndex = '9999'; 
-            overlayButton.style.padding = '10px 20px';
-            overlayButton.style.backgroundColor = '#fff';
-            overlayButton.style.color = '#000';
-            overlayButton.style.border = 'none';
-            overlayButton.style.borderRadius = '5px';
-            overlayButton.style.cursor = 'pointer';
-
-            document.body.appendChild(overlayButton);
 
             overlayButton.addEventListener('click', () => {
                 console.log('Button clicked!');
