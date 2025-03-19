@@ -3,9 +3,9 @@ import { useState, useRef } from 'react';
 export const useRoomCaptureState = () => {
     const [isCameraStarted, setIsCameraStarted] = useState(false);
     const [session, setSession] = useState(null);
-    const [isSessionEnded, setIsSessionEnded] = useState(false);
     const [referenceSpace, setReferenceSpace] = useState(null);
     const [hitTestSource, setHitTestSource] = useState(null);
+    const [isSessionActive, setIsSessionActive] = useState(false);
 
     const videoRef = useRef(null);
 
@@ -25,26 +25,32 @@ export const useRoomCaptureState = () => {
         setReferenceSpace(referenceSpace);
     };
 
-    const toggleIsSessionEnded = () => {
-        setIsSessionEnded(!isSessionEnded);
-    };
-
     const setHitTestSourceState = (hitTestSource) => {
         setHitTestSource(hitTestSource);
     };
+
+    const setSessionNotActive = () => {
+        setIsSessionActive(false);
+    };
+
+    const setSessionActive = () => {
+        setIsSessionActive(true);
+    };
+
 
     return {
         isCameraStarted,
         videoRef,
         session,
         referenceSpace,
-        isSessionEnded,
         hitTestSource,
+        isSessionActive,
         startRoomCamera,
         stopRoomCamera,
         setSessionState,
         setReferenceSpaceState,
-        toggleIsSessionEnded,
         setHitTestSourceState,
+        setSessionNotActive,
+        setSessionActive,
     };
 };

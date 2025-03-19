@@ -5,25 +5,23 @@ import { useState, useEffect } from 'react';
 
 const RoomCameraControl = () => {
 
-    const { videoRef } = useRoomCaptureState();
+    const { videoRef, isSessionActive, setSessionNotActive, setSessionActive } = useRoomCaptureState();
     const { session, xrError, handleStartARSession, handleEndARSession } = useWebXR();
 
     console.log('Initial load', session);
-    
-    const [isSessionActive, setIsSessionActive] = useState(false);
 
     useEffect(() => {
         if (session) {
-            setIsSessionActive(true);
+            setSessionActive();
         } else {
-            setIsSessionActive(false);
+            setSessionNotActive();
         }
     }, [session]);
 
     return (
         <div className={styles.container}>
             <button className={styles.buttonAR} onClick={() => {
-                handleARSession(isSessionActive, setIsSessionActive, handleEndARSession, handleStartARSession);
+                handleARSession(isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleStartARSession);
             }}>
                 {session ? 'End AR Session' : 'Start AR Session'}
             </button>
@@ -42,14 +40,14 @@ const RoomCameraControl = () => {
 export default RoomCameraControl;
 
 
-export const handleARSession = async (isSessionActive, setIsSessionActive, handleEndARSession, handleStartARSession) => {
+export const handleARSession = async (isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleStartARSession) => {
     try {
         if (isSessionActive) {
             await handleEndARSession();
-            setIsSessionActive(false);
+            setSessionNotActive();
         } else {
             await handleStartARSession();
-            setIsSessionActive(true);
+            setSessionActive();
         };
     } catch (error) {
         console.error('Error handling AR session:', error);

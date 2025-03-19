@@ -3,7 +3,7 @@ import { useRoomCaptureState } from './useRoomCaptureState';
 import { useErrorState } from './useErrorState';
 
 export const useWebXR = () => {
-    const { session, referenceSpace, isSessionEnded, setSessionState, setReferenceSpaceState, toggleIsSessionEnded } = useRoomCaptureState();
+    const { session, referenceSpace, setSessionState, setReferenceSpaceState, toggleIsSessionEnded } = useRoomCaptureState();
     const { xrError, populateSetXRError } = useErrorState();
 
     const [hitTestSource, setHitTestSource] = useState(null);
