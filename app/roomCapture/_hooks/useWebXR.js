@@ -36,6 +36,7 @@ export const useWebXR = () => {
             canvas.style.width = '100%';
             canvas.style.height = '100%';
             canvas.style.zIndex = -1; 
+            canvas.style.pointerEvents = 'none';
             document.body.appendChild(canvas); 
 
             const referenceSpace = await session.requestReferenceSpace('viewer');

@@ -29,7 +29,7 @@
 }
 
 .buttonAR {
-    position: fixed;
+    position: absolute;
     top: 50px;
     z-index: 9999;
     padding: 10px 20px;
