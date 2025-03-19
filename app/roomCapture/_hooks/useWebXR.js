@@ -19,15 +19,8 @@ export const useWebXR = () => {
 
             const session = await navigator.xr.requestSession('immersive-ar', {
                 requiredFeatures: ['local', 'hit-test'],
-                optionalFeatures: ["dom-overlay"],
-                domOverlay: {
-                root: document.getElementById("overlay")
-                }
-            }).then(onSessionStarted);
+            });
 
-            function onSessionStarted(session) {
-                document.getElementById("xr-button").innerHTML = "Exit AR";
-            }
             
             const canvas = document.createElement('canvas');
             const webGL = canvas.getContext('webgl2', { xrCompatible: true });
