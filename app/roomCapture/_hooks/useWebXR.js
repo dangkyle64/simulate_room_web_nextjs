@@ -9,18 +9,8 @@ export const useWebXR = () => {
     const [hitTestSource, setHitTestSource] = useState(null);
 
     useEffect(() => {
-
         checkWebXRPossible(populateSetXRError);
-
-        return () => {
-            if (session && !isSessionEnded) {
-                session.end();
-                setSessionState(null);
-                setReferenceSpaceState(null);
-                toggleIsSessionEnded();
-            };
-        };
-    }, [session, setSessionState, setReferenceSpaceState]);
+    }, []);
 
     const handleStartARSession = async () => {
 
