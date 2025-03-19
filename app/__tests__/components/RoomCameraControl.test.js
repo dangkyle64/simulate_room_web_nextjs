@@ -1,24 +1,83 @@
 import { beforeEach, describe, vi, expect, it } from "vitest";
-import { handleARSession } from "../../roomCapture/_component/RoomCameraControl";
+import { handleARSession, handleSessionValidation } from "../../roomCapture/_component/RoomCameraControl";
+
+describe('handleSessionValidation', () => {
+    let setSessionActive;
+    let setSessionNotActive;
+    let session;
+
+    beforeEach(() => {
+        vi.clearAllMocks();
+
+        setSessionActive = vi.fn();
+        setSessionNotActive = vi.fn();
+
+        session = { requestAnimationFrame: () => {} };
+    });
+
+    it('should update the state when session is valid', async () => {
+    
+        handleSessionValidation(session, setSessionNotActive, setSessionActive);
+
+        expect(setSessionActive).toHaveBeenCalledTimes(1);
+        expect(setSessionNotActive).toHaveBeenCalledTimes(0);
+    });
+
+    it('should not update the state when session is null', async () => {
+        
+        session = null;
+
+        handleSessionValidation(session, setSessionNotActive, setSessionActive);
+
+        expect(setSessionActive).toHaveBeenCalledTimes(0);
+        expect(setSessionNotActive).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not update the state when session is undefined', async () => {
+        
+        session = undefined;
+        
+        handleSessionValidation(session, setSessionNotActive, setSessionActive);
+
+        expect(setSessionActive).toHaveBeenCalledTimes(0);
+        expect(setSessionNotActive).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not update the state when session is false', async () => {
+        
+        session = false;
+        
+        handleSessionValidation(session, setSessionNotActive, setSessionActive);
+
+        expect(setSessionActive).toHaveBeenCalledTimes(0);
+        expect(setSessionNotActive).toHaveBeenCalledTimes(1);
+    });
+});
 
 describe('handleARSession', () => {
 
     let handleStartARSession;
     let handleEndARSession;
-    let session;
+    let setSessionActive;
+    let setSessionNotActive;
+    let isSessionActive;
 
     beforeEach(() => {
         vi.clearAllMocks();
 
         handleStartARSession = vi.fn();
         handleEndARSession = vi.fn();
+        setSessionActive = vi.fn();
+        setSessionNotActive = vi.fn();
 
-        session = { requestAnimationFrame: () => {} };
+        isSessionActive = false;
     });
 
     it('should call handleEndARSession when session is truthy', async () => {
 
-        await handleARSession(session, handleEndARSession, handleStartARSession);
+        isSessionActive = true;
+
+        await handleARSession(isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleStartARSession);
 
         expect(handleEndARSession).toHaveBeenCalledTimes(1);
         expect(handleStartARSession).toHaveBeenCalledTimes(0);
@@ -26,9 +85,9 @@ describe('handleARSession', () => {
 
     it('should call handleStartARSession when session is null', async () => {
         
-        session = null;
+        isSessionActive = false;
         
-        await handleARSession(session, handleEndARSession, handleStartARSession);
+        await handleARSession(isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleStartARSession);
 
         expect(handleEndARSession).toHaveBeenCalledTimes(0);
         expect(handleStartARSession).toHaveBeenCalledTimes(1);
@@ -36,9 +95,9 @@ describe('handleARSession', () => {
 
     it('should call handleStartARSession when session is undefined', async () => {
         
-        session = undefined;
+        isSessionActive = false;
         
-        await handleARSession(session, handleEndARSession, handleStartARSession);
+        await handleARSession(isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleStartARSession);
 
         expect(handleEndARSession).toHaveBeenCalledTimes(0);
         expect(handleStartARSession).toHaveBeenCalledTimes(1);
@@ -46,9 +105,9 @@ describe('handleARSession', () => {
 
     it('should call handleStartARSession when session is false', async () => {
         
-        session = false;
+        isSessionActive = false;
         
-        await handleARSession(session, handleEndARSession, handleStartARSession);
+        await handleARSession(isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleStartARSession);
 
         expect(handleEndARSession).toHaveBeenCalledTimes(0);
         expect(handleStartARSession).toHaveBeenCalledTimes(1);

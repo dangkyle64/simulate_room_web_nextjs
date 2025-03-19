@@ -11,16 +11,7 @@ const RoomCameraControl = () => {
     console.log('Initial load', session);
 
     useEffect(() => {
-
-        if(session === null) {
-            return;
-        };
-
-        if (session) {
-            setSessionActive();
-        } else {
-            setSessionNotActive();
-        }
+        handleSessionValidation(session, setSessionNotActive, setSessionActive);
     }, [session]);
 
     return (
@@ -56,5 +47,14 @@ export const handleARSession = async (isSessionActive, setSessionNotActive, setS
     } catch (error) {
         console.error('Error handling AR session:', error);
         throw error;
+    };
+};
+
+export const handleSessionValidation = (session, setSessionNotActive, setSessionActive) => {
+    console.log('current session: ',session);
+    if (session) {
+        setSessionActive();
+    } else {
+        setSessionNotActive();
     };
 };
