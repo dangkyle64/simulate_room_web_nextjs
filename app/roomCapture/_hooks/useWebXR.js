@@ -25,7 +25,6 @@ export const useWebXR = () => {
                 domOverlay: { root: overlayElement}
             });
 
-            
             const canvas = document.createElement('canvas');
             const webGL = canvas.getContext('webgl2', { xrCompatible: true });
 

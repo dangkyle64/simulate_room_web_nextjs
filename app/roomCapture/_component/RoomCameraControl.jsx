@@ -31,13 +31,15 @@ const RoomCameraControl = () => {
             {session && <div className={styles.arStatus}>AR Session Active!</div>}
 
             
-            <div id="overlay">
-                <button id="testButton">Test Button</button>
+            <div id="overlay" onClick={() => {
+                handleARSession(isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleSessionValidation);
+            }}>
+                <button id="testButton">End Test Button</button>
             </div>
         </div>
     );
 };
-//style="position: absolute; top: 0; left: 0; z-index: 9999;"
+
 export default RoomCameraControl;
 
 export const handleARSession = async (isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleStartARSession) => {
@@ -62,3 +64,4 @@ export const handleSessionValidation = (session, setSessionNotActive, setSession
         setSessionNotActive();
     };
 };
+
