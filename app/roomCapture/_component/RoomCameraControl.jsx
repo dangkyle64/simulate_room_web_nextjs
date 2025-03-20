@@ -31,11 +31,11 @@ const RoomCameraControl = () => {
             {session && <div className={styles.arStatus}>AR Session Active!</div>}
 
             
-            <div id="overlay" className={styles.buttonAR} onClick={() => {
+            {session && <div id="overlay" className={styles.buttonAR} onClick={() => {
                 handleARSession(isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleSessionValidation);
             }}>
                 <button>End AR Session</button>
-            </div>
+            </div>}
         </div>
     );
 };
