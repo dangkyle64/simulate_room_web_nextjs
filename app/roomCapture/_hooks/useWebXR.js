@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useRoomCaptureState } from './useRoomCaptureState';
 import { useErrorState } from './useErrorState';
-import styles from '../_component/RoomCameraControl.module.css';
 
 export const useWebXR = () => {
     const { session, referenceSpace, setSessionState, setReferenceSpaceState, toggleIsSessionEnded } = useRoomCaptureState();

@@ -31,10 +31,10 @@ const RoomCameraControl = () => {
             {session && <div className={styles.arStatus}>AR Session Active!</div>}
 
             
-            <div id="overlay" onClick={() => {
+            <div id="overlay" className={styles.buttonAR} onClick={() => {
                 handleARSession(isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleSessionValidation);
             }}>
-                <button id="testButton">End Test Button</button>
+                <button>End AR Session</button>
             </div>
         </div>
     );
