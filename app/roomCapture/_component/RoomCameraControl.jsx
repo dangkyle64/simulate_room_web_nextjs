@@ -16,11 +16,6 @@ const RoomCameraControl = () => {
 
     return (
         <div className={styles.container}>
-            <button id="xr-button" className={styles.buttonAR} onClick={() => {
-                handleARSession(isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleStartARSession);
-            }}>
-                {session ? 'End AR Session' : 'Start AR Session'}
-            </button>
 
             {/* Display WebXR session error, if any */}
             {xrError && <div className={styles.error}>{xrError}</div>}
@@ -31,10 +26,10 @@ const RoomCameraControl = () => {
             {session && <div className={styles.arStatus}>AR Session Active!</div>}
 
             
-            {session && <div id="overlay" className={styles.buttonAR} onClick={() => {
+            {<div id="overlay" className={styles.buttonAR} onClick={() => {
                 handleARSession(isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleSessionValidation);
             }}>
-                <button>End AR Session</button>
+                {session ? 'End AR Session' : 'Start AR Session'}
             </div>}
         </div>
     );
@@ -65,3 +60,10 @@ export const handleSessionValidation = (session, setSessionNotActive, setSession
     };
 };
 
+/**
+ * <button id="xr-button" className={styles.buttonAR} onClick={() => {
+                handleARSession(isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleStartARSession);
+            }}>
+                {session ? 'End AR Session' : 'Start AR Session'}
+            </button>
+ */
