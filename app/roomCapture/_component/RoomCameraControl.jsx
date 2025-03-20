@@ -29,6 +29,10 @@ const RoomCameraControl = () => {
 
             {/* Display AR session info if it's active */}
             {session && <div className={styles.arStatus}>AR Session Active!</div>}
+
+            <div id="overlay" style="position: absolute; top: 0; left: 0; z-index: 9999;">
+                <button id="testButton">Test Button</button>
+            </div>
         </div>
     );
 };

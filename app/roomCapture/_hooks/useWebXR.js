@@ -15,10 +15,14 @@ export const useWebXR = () => {
 
     const handleStartARSession = async () => {
 
+        const overlayElement = document.getElementById('overlay');
+        
         try {
 
             const session = await navigator.xr.requestSession('immersive-ar', {
                 requiredFeatures: ['local', 'hit-test'],
+                optionalFeatures: ['dom-overlay'],
+                domOverlay: { root: overlayElement}
             });
 
             
@@ -31,10 +35,6 @@ export const useWebXR = () => {
 
             const xrLayer = new XRWebGLLayer(session, webGL);
             session.updateRenderState({ baseLayer: xrLayer });
-
-            overlayButton.addEventListener('click', () => {
-                console.log('Button clicked!');
-            });
 
             const referenceSpace = await session.requestReferenceSpace('viewer');
             setSessionState(session);
