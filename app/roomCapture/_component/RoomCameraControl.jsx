@@ -61,11 +61,3 @@ export const handleSessionValidation = (session, setSessionNotActive, setSession
         setSessionNotActive();
     };
 };
-
-/**
- * <button id="xr-button" className={styles.buttonAR} onClick={() => {
-                handleARSession(isSessionActive, setSessionNotActive, setSessionActive, handleEndARSession, handleStartARSession);
-            }}>
-                {session ? 'End AR Session' : 'Start AR Session'}
-            </button>
- */
