@@ -23,17 +23,6 @@ export const useWebXR = () => {
                 optionalFeatures: ['dom-overlay'],
                 domOverlay: { root: overlayElement}
             });
-            /*
-            const canvas = document.createElement('canvas');
-            const webGL = canvas.getContext('webgl2', { xrCompatible: true });
-
-            if (!webGL) {
-                throw new Error('WebGL context not available.');
-            };
-
-            const xrLayer = new XRWebGLLayer(session, webGL);
-            session.updateRenderState({ baseLayer: xrLayer });
-            */
 
             initializeWebGl2(session);
             
@@ -146,6 +135,8 @@ export const onXRFrame = (session, referenceSpace, time, frame, hitTestSource) =
     session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame, hitTestSource));
 };
 
+let hitTestData = [];
+
 const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
     const hitTestResults = frame.getHitTestResults(hitTestSource);
 
@@ -155,8 +146,16 @@ const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
         const hitPose = hitTestResults[0].getPose(referenceSpace);
         if (hitPose) {
             console.log('Hit Pose:', hitPose);
-        }
+
+            hitTestData.push({
+                time: time,
+                hitPose: hitPose,
+                orientation: hitPose.transform.orientation,  
+            });
+        };
     } else {
         console.log('No hit test results found');
-    }
+    };
+
+    console.log('Hit test data test: ', hitTestData);
 };
