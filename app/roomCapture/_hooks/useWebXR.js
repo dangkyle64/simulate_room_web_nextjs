@@ -23,7 +23,7 @@ export const useWebXR = () => {
                 optionalFeatures: ['dom-overlay'],
                 domOverlay: { root: overlayElement}
             });
-
+            /*
             const canvas = document.createElement('canvas');
             const webGL = canvas.getContext('webgl2', { xrCompatible: true });
 
@@ -33,7 +33,10 @@ export const useWebXR = () => {
 
             const xrLayer = new XRWebGLLayer(session, webGL);
             session.updateRenderState({ baseLayer: xrLayer });
+            */
 
+            initializeWebGl2(session);
+            
             const referenceSpace = await session.requestReferenceSpace('viewer');
             setSessionState(session);
             setReferenceSpaceState(referenceSpace);
@@ -102,6 +105,20 @@ export const checkWebXRPossible = async (populateSetXRError) => {
         populateSetXRError('AR is not supported on this device.');
         return;
     };
+};
+
+const initializeWebGl2 = (session) => {
+    const canvas = document.createElement('canvas');
+    const webGL = canvas.getContext('webgl2', { xrCompatible: true });
+
+    if (!webGL) {
+        throw new Error('WebGL context not available.');
+    };
+
+    const xrLayer = new XRWebGLLayer(session, webGL);
+    session.updateRenderState({ baseLayer: xrLayer });
+
+    return xrLayer;
 };
 
 export const onXRFrame = (session, referenceSpace, time, frame, hitTestSource) => {
