@@ -96,7 +96,7 @@ export const checkWebXRPossible = async (populateSetXRError) => {
     };
 };
 
-const initializeWebGl2 = (session) => {
+export const initializeWebGl2 = (session) => {
     const canvas = document.createElement('canvas');
     const webGL = canvas.getContext('webgl2', { xrCompatible: true });
 

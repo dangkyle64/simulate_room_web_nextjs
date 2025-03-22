@@ -1,5 +1,5 @@
-import { vi, beforeEach, describe, expect } from 'vitest';
-import { useWebXR, checkWebXRPossible, onXRFrame } from '../../roomCapture/_hooks/useWebXR';
+import { vi, beforeEach, describe, expect, it } from 'vitest';
+import { useWebXR, checkWebXRPossible, onXRFrame, initializeWebGl2 } from '../../roomCapture/_hooks/useWebXR';
 
 describe('useWebXR', () => {
     let populateSetXRErrorMock;
@@ -57,4 +57,54 @@ describe('onXRFrame', () => {
         onXRFrame(mockSession, undefined, 0, mockFrame);
         expect(mockSession.requestAnimationFrame).toHaveBeenCalled();
     });
+});
+
+describe('initializeWebGl2', () => {
+    let mockSession;
+    let xrLayer;
+
+    beforeEach(() => {
+        mockSession = {
+            updateRenderState: vi.fn(),
+        };
+        
+        const mockWebGLContext = {
+            someWebGLProperty: 'test',
+          };
+
+        global.document.createElement = vi.fn(() => ({
+            getContext: vi.fn(() => mockWebGLContext)
+        }));
+
+        global.XRWebGLLayer = vi.fn().mockImplementation(() => ({
+            mockLayerProperty: 'mockValue',
+        }));
+    });
+
+    it('should verify that createElement called to create canvas', () => {
+        xrLayer = initializeWebGl2(mockSession);
+
+        expect(global.document.createElement).toHaveBeenCalledWith('canvas');
+    });
+
+    // test webGL here
+
+    it('should verify that XRWebGLLayer was created', () => {
+        xrLayer = initializeWebGl2(mockSession);
+
+        expect(global.XRWebGLLayer).toHaveBeenCalledWith(mockSession, {
+            "someWebGLProperty": "test",
+        });
+        expect(xrLayer).toEqual({ mockLayerProperty: 'mockValue' });
+
+        expect(mockSession.updateRenderState).toHaveBeenCalledWith({ baseLayer: xrLayer });
+    });
+
+    it('should throw an error if WebGL2 context is not available', () => {
+        global.document.createElement = vi.fn(() => ({
+          getContext: vi.fn(() => null),
+        }));
+    
+        expect(() => initializeWebGl2(mockSession)).toThrowError('WebGL context not available.');
+      });
 });
