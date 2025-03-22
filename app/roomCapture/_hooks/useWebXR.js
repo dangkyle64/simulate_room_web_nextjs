@@ -146,11 +146,14 @@ const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
         const hitPose = hitTestResults[0].getPose(referenceSpace);
         if (hitPose) {
             console.log('Hit Pose:', hitPose);
+            
+            const { x, y, z } = hitPose.transform.position;
+            const { x: qx, y: qy, z: qz, w: qw } = hitPose.transform.orientation;
 
             hitTestData.push({
                 time: time,
-                hitPose: hitPose,
-                orientation: hitPose.transform.orientation,  
+                hitPose: { x, y, z },
+                orientation: { x: qx, y: qy, z: qz, w: qw },  
             });
         };
     } else {
