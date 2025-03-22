@@ -136,6 +136,7 @@ export const onXRFrame = (session, referenceSpace, time, frame, hitTestSource) =
 };
 
 let hitTestData = [];
+let maxEntriesForHitPoints = 5;
 
 const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
     const hitTestResults = frame.getHitTestResults(hitTestSource);
@@ -155,6 +156,10 @@ const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
                 hitPose: { x, y, z },
                 orientation: { x: qx, y: qy, z: qz, w: qw },  
             });
+
+            if (hitTestData.length > maxEntriesForHitPoints) {
+                hitTestData.shift();  
+            }
         };
     } else {
         console.log('No hit test results found');
