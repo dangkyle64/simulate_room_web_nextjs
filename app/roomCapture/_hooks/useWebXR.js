@@ -23,11 +23,10 @@ export const useWebXR = () => {
                 optionalFeatures: ['dom-overlay'],
                 domOverlay: { root: overlayElement}
             });
-
+            setSessionState(session);
             initializeWebGl2(session);
             
-            const referenceSpace = await session.requestReferenceSpace('viewer');
-            setSessionState(session);
+            requestReferenceSpace(session);
             setReferenceSpaceState(referenceSpace);
 
             const initializedHitTestSource = await session.requestHitTestSource({ space: referenceSpace });
@@ -108,6 +107,15 @@ export const initializeWebGl2 = (session) => {
     session.updateRenderState({ baseLayer: xrLayer });
 
     return xrLayer;
+};
+
+export const requestReferenceSpace = async (session) => {
+    try {
+        const referenceSpace = await session.requestReferenceSpace('viewer');
+        return referenceSpace;
+    } catch(error) {
+        throw new Error(`Failed to request reference space: ${error.message || error}`);
+    };
 };
 
 export const onXRFrame = (session, referenceSpace, time, frame, hitTestSource) => {

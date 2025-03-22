@@ -1,5 +1,5 @@
 import { vi, beforeEach, describe, expect, it } from 'vitest';
-import { useWebXR, checkWebXRPossible, onXRFrame, initializeWebGl2 } from '../../roomCapture/_hooks/useWebXR';
+import { useWebXR, checkWebXRPossible, onXRFrame, initializeWebGl2, requestReferenceSpace } from '../../roomCapture/_hooks/useWebXR';
 
 describe('useWebXR', () => {
     let populateSetXRErrorMock;
@@ -107,4 +107,39 @@ describe('initializeWebGl2', () => {
     
         expect(() => initializeWebGl2(mockSession)).toThrowError('WebGL context not available.');
       });
+});
+
+describe('requestReferenceSpace', () => {
+    let mockSession;
+
+    beforeEach(() => {
+        mockSession = {
+            requestReferenceSpace: vi.fn(),
+        };
+    });
+
+    it('should request a reference space successfully', async () => {
+        const mockReferenceSpace = { someReferenceProperty: 'test' };
+        mockSession.requestReferenceSpace.mockResolvedValue(mockReferenceSpace);
+
+        const result = await requestReferenceSpace(mockSession);
+
+        expect(mockSession.requestReferenceSpace).toHaveBeenCalledWith('viewer');
+
+        expect(result).toEqual(mockReferenceSpace);
+    });
+
+    it('should throw an error if requestReferenceSpace fails', async () => {
+
+        const mockError = new Error('Test error');
+        mockSession.requestReferenceSpace.mockRejectedValue(mockError);
+
+        try {
+            await requestReferenceSpace(mockSession);
+        } catch (error) {
+            expect(error).toBeInstanceOf(Error);
+            expect(error.message).toContain('Failed to request reference space: ');
+            expect(error.message).toContain(mockError.message);
+        }
+    });
 });
