@@ -26,11 +26,10 @@ export const useWebXR = () => {
             setSessionState(session);
             initializeWebGl2(session);
             
-            requestReferenceSpace(session);
-            setReferenceSpaceState(referenceSpace);
+            const returnedReferenceSpace = requestReferenceSpace(session);
+            setReferenceSpaceState(returnedReferenceSpace);
 
-            const initializedHitTestSource = await session.requestHitTestSource({ space: referenceSpace });
-            console.log('HitTestSource initialized:', initializedHitTestSource);
+            const initializedHitTestSource = initializeHitSource(session, referenceSpace);
             setHitTestSource(initializedHitTestSource);
 
             session.addEventListener('end', () => {
@@ -115,6 +114,16 @@ export const requestReferenceSpace = async (session) => {
         return referenceSpace;
     } catch(error) {
         throw new Error(`Failed to request reference space: ${error.message || error}`);
+    };
+};
+
+export const initializeHitSource = async (session, referenceSpace) => {
+    try {
+        const initializedHitTestSource = await session.requestHitTestSource({ space: referenceSpace });
+        //console.log('HitTestSource initialized:', initializedHitTestSource);
+        return initializedHitTestSource;
+    } catch (error) {
+        throw new Error(`Failed to initialize the hit source: ${error.message || error}`);
     };
 };
 
