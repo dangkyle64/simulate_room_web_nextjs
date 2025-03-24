@@ -133,8 +133,12 @@ export const initializeHitSource = async (session, referenceSpace) => {
              throw new Error('Failed to initialize the hit source: Missing referenceSpace.');
         };
 
+        if (!(referenceSpace instanceof XRSpace)) {
+            throw new Error('Failed to initialize the hit source: referenceSpace is not of type XRSpace.');
+        };
+
         const initializedHitTestSource = await session.requestHitTestSource({ space: referenceSpace });
-        //console.log('HitTestSource initialized:', initializedHitTestSource);
+        console.log('HitTestSource initialized:', initializedHitTestSource);
         return initializedHitTestSource;
     } catch (error) {
         throw new Error(`Failed to initialize the hit source: ${error.message || error}`);
