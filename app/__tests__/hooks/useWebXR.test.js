@@ -1,5 +1,5 @@
 import { vi, beforeEach, describe, expect, it } from 'vitest';
-import { useWebXR, checkWebXRPossible, onXRFrame, initializeWebGl2, requestReferenceSpace } from '../../roomCapture/_hooks/useWebXR';
+import { useWebXR, checkWebXRPossible, onXRFrame, initializeWebGl2, requestReferenceSpace, initializeHitSource } from '../../roomCapture/_hooks/useWebXR';
 
 describe('useWebXR', () => {
     let populateSetXRErrorMock;
@@ -140,6 +140,70 @@ describe('requestReferenceSpace', () => {
             expect(error).toBeInstanceOf(Error);
             expect(error.message).toContain('Failed to request reference space: ');
             expect(error.message).toContain(mockError.message);
-        }
+        };
+    });
+
+    it('should throw an error if session is missing', async () => {
+        await expect(requestReferenceSpace(undefined)).rejects.toThrowError(
+            'Failed to request reference space: Missing session.'
+        );
+    });
+
+    it('should throw a generic error if error has no message', async () => {
+        const mockErrorWithoutMessage = new Error();
+        mockSession.requestReferenceSpace.mockRejectedValue(mockErrorWithoutMessage);
+
+        await expect(requestReferenceSpace(mockSession)).rejects.toThrowError(
+            'Failed to request reference space: Error'
+        );
+    });
+});
+
+describe('initializeHitSource', () => {
+    let mockSession;
+    let mockReferenceSpace;
+
+    beforeEach(() => {
+        mockSession = { requestHitTestSource: vi.fn() };
+        mockReferenceSpace = {};
+    });
+
+    it('should return an initialized hit source on success', async () => {
+        const mockHitSource = { id: 1 };
+        mockSession.requestHitTestSource.mockResolvedValue(mockHitSource);
+
+        const result  = await initializeHitSource(mockSession, mockReferenceSpace);
+
+        expect(result).toEqual(mockHitSource);
+        expect(mockSession.requestHitTestSource).toHaveBeenCalledWith({ space: mockReferenceSpace });
+    });
+
+    it('should throw an error if requestHitTestSource fails', async () => {
+        const mockErrorMessage = 'Some error occurred';
+        mockSession.requestHitTestSource.mockRejectedValue(new Error(mockErrorMessage)); 
+
+        await expect(initializeHitSource(mockSession, mockReferenceSpace)).rejects.toThrowError(
+            `Failed to initialize the hit source: ${mockErrorMessage}`
+        );
+    });
+
+    it('should handle missing session or referenceSpace parameters', async () => {
+        
+        await expect(initializeHitSource(undefined, mockReferenceSpace)).rejects.toThrowError(
+            'Failed to initialize the hit source: Missing session.'
+        );
+
+        await expect(initializeHitSource(mockSession, undefined)).rejects.toThrowError(
+            'Failed to initialize the hit source: Missing referenceSpace.'
+        );
+    });
+
+    it('should throw a generic error message if no message is present in the error object', async () => {
+        const mockErrorWithoutMessage = new Error();
+        mockSession.requestHitTestSource.mockRejectedValue(mockErrorWithoutMessage);
+
+        await expect(initializeHitSource(mockSession, mockReferenceSpace)).rejects.toThrowError(
+            'Failed to initialize the hit source: Error'
+        );
     });
 });

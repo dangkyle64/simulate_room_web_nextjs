@@ -110,6 +110,11 @@ export const initializeWebGl2 = (session) => {
 
 export const requestReferenceSpace = async (session) => {
     try {
+
+        if (!session) {
+            throw new Error('Failed to request reference space: Missing session.');
+        }
+        
         const referenceSpace = await session.requestReferenceSpace('viewer');
         return referenceSpace;
     } catch(error) {
@@ -119,6 +124,15 @@ export const requestReferenceSpace = async (session) => {
 
 export const initializeHitSource = async (session, referenceSpace) => {
     try {
+
+        if (!session) {
+            throw new Error('Failed to initialize the hit source: Missing session.');
+        };
+
+        if (!referenceSpace) {
+             throw new Error('Failed to initialize the hit source: Missing referenceSpace.');
+        };
+
         const initializedHitTestSource = await session.requestHitTestSource({ space: referenceSpace });
         //console.log('HitTestSource initialized:', initializedHitTestSource);
         return initializedHitTestSource;
@@ -156,9 +170,7 @@ let hitTestData = [];
 let maxEntriesForHitPoints = 5;
 
 const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
-    const hitTestResults = frame.getHitTestResults(hitTestSource);
-
-    console.log('Hit Test Results: ', hitTestResults);
+    const hitTestResults = getHitTestResults(frame, hitTestSource);
 
     if (hitTestResults.length > 0) {
         const hitPose = hitTestResults[0].getPose(referenceSpace);
@@ -171,16 +183,23 @@ const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
             hitTestData.push({
                 time: time,
                 hitPose: { x, y, z },
-                orientation: { x: qx, y: qy, z: qz, w: qw },  
+                orientation: { x: qx, y: qy, z: qz, w: qw },
             });
 
             if (hitTestData.length > maxEntriesForHitPoints) {
                 hitTestData.shift();  
-            }
+            };
         };
     } else {
         console.log('No hit test results found');
     };
 
     console.log('Hit test data test: ', hitTestData);
+};
+
+export const getHitTestResults = (frame, hitTestSource) => {
+    const hitTestResults = frame.getHitTestResults(hitTestSource);
+    console.log('Hit Test Results: ', hitTestResults);
+    
+    return hitTestResults;
 };
