@@ -29,15 +29,15 @@ export const useWebXR = () => {
             const returnedReferenceSpace = requestReferenceSpace(session);
             setReferenceSpaceState(returnedReferenceSpace);
 
-            const initializedHitTestSource = initializeHitSource(session, referenceSpace);
+            const initializedHitTestSource = initializeHitSource(session, returnedReferenceSpace);
             setHitTestSource(initializedHitTestSource);
 
             session.addEventListener('end', () => {
                 setSessionState(null);
             });
-            console.log('onXRFRame started. referenceSpace: ', referenceSpace);
+            console.log('onXRFRame started. referenceSpace: ', returnedReferenceSpace);
 
-            session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame, initializedHitTestSource));
+            session.requestAnimationFrame((time, frame) => onXRFrame(session, returnedReferenceSpace, time, frame, initializedHitTestSource));
 
         } catch (error) {
             console.log('Error: ', error);
