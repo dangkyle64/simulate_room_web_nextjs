@@ -26,10 +26,10 @@ export const useWebXR = () => {
             setSessionState(session);
             initializeWebGl2(session);
             
-            const returnedReferenceSpace = requestReferenceSpace(session);
+            const returnedReferenceSpace = await requestReferenceSpace(session);
             setReferenceSpaceState(returnedReferenceSpace);
 
-            const initializedHitTestSource = initializeHitSource(session, returnedReferenceSpace);
+            const initializedHitTestSource = await initializeHitSource(session, returnedReferenceSpace);
             setHitTestSource(initializedHitTestSource);
 
             session.addEventListener('end', () => {
