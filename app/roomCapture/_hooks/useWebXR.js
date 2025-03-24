@@ -138,7 +138,7 @@ export const initializeHitSource = async (session, referenceSpace) => {
         };
 
         const initializedHitTestSource = await session.requestHitTestSource({ space: referenceSpace });
-        console.log('HitTestSource initialized:', initializedHitTestSource);
+        //console.log('HitTestSource initialized:', initializedHitTestSource);
         return initializedHitTestSource;
     } catch (error) {
         throw new Error(`Failed to initialize the hit source: ${error.message || error}`);
@@ -170,7 +170,7 @@ export const onXRFrame = (session, referenceSpace, time, frame, hitTestSource) =
     session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame, hitTestSource));
 };
 
-
+let hitTestData = [];
 let maxEntriesForHitPoints = 5;
 
 const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
@@ -208,7 +208,6 @@ export const getHitTestResults = (frame, hitTestSource) => {
 };
 
 export const getHitPosePositionOrientation = (time, hitTestResults, referenceSpace) => {
-    var hitTestData = [];
 
     const hitPose = hitTestResults[0].getPose(referenceSpace);
     if (hitPose) {
@@ -228,5 +227,5 @@ export const getHitPosePositionOrientation = (time, hitTestResults, referenceSpa
         };
     };
 
-    return hitTestData;
+    return hitTestData || [];
 };
