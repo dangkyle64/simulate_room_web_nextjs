@@ -198,8 +198,23 @@ const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
 };
 
 export const getHitTestResults = (frame, hitTestSource) => {
-    const hitTestResults = frame.getHitTestResults(hitTestSource);
-    console.log('Hit Test Results: ', hitTestResults);
+
+    let hitTestResults = [];
+    if (frame === null || frame === undefined ) {
+        throw new Error('Failed to get hit results: frame is null or undefined');
+    };
+
+    if (hitTestSource === null || hitTestSource === undefined) {
+        throw new Error('Failed to get hit results: hitTestSource is null or undefined');
+    };
+
+    try {
+        hitTestResults = frame.getHitTestResults(hitTestSource);
+    } catch(error) {
+        throw new Error('Failed to get hit test results: ' + error.message);
+    };
     
-    return hitTestResults;
+    //console.log('Hit Test Results: ', hitTestResults);
+
+    return hitTestResults || [];
 };

@@ -1,5 +1,13 @@
 import { vi, beforeEach, describe, expect, it } from 'vitest';
-import { useWebXR, checkWebXRPossible, onXRFrame, initializeWebGl2, requestReferenceSpace, initializeHitSource } from '../../roomCapture/_hooks/useWebXR';
+import { 
+    useWebXR, 
+    checkWebXRPossible, 
+    onXRFrame, 
+    initializeWebGl2, 
+    requestReferenceSpace, 
+    initializeHitSource, 
+    getHitTestResults 
+} from '../../roomCapture/_hooks/useWebXR';
 
 describe('useWebXR', () => {
     let populateSetXRErrorMock;
@@ -205,5 +213,88 @@ describe('initializeHitSource', () => {
         await expect(initializeHitSource(mockSession, mockReferenceSpace)).rejects.toThrowError(
             'Failed to initialize the hit source: Error'
         );
+    });
+});
+
+describe('getHitTestResults', () => {
+    let frameMock;
+    let hitTestSourceMock;
+
+    beforeEach(() => {
+        frameMock = {
+            getHitTestResults: vi.fn(),
+        };
+
+        hitTestSourceMock = {};
+    });
+
+    it('should return hit test results when valid data is returned', () => {
+        const mockHitTestResults  = [
+            {
+                getPose: vi.fn(() => ({
+                    transform: {
+                        position: { x: 1, y: 2, z: 3 },
+                        orientation: { x: 0, y: 0, z: 0, w: 1 },
+                    },
+                })),
+            },
+        ];
+
+        frameMock.getHitTestResults.mockReturnValue(mockHitTestResults);
+
+        const result = getHitTestResults(frameMock, hitTestSourceMock);
+
+        expect(result).toEqual(mockHitTestResults);
+
+    });
+
+    it('should return an empty array if no hit test results are found', () => {
+        frameMock.getHitTestResults.mockReturnValue([]);
+    
+        const result = getHitTestResults(frameMock, hitTestSourceMock);
+    
+        expect(result).toEqual([]);
+    });
+
+    it('should throw an error if frame is null', () => {
+        expect(() => {
+            getHitTestResults(null, hitTestSourceMock);
+        }).toThrow('Failed to get hit results: frame is null or undefined');
+    });
+
+    it('should throw an error if frame is undefined', () => {
+        expect(() => {
+            getHitTestResults(undefined, hitTestSourceMock);
+        }).toThrow('Failed to get hit results: frame is null or undefined');
+    });
+
+    it('should throw an error if hitTestSource is null', () => {
+        expect(() => {
+            getHitTestResults(frameMock, null);
+        }).toThrow('Failed to get hit results: hitTestSource is null or undefined');
+    });
+    
+      it('should throw an error if hitTestSource is undefined', () => {
+        expect(() => {
+            getHitTestResults(frameMock, undefined);
+        }).toThrow('Failed to get hit results: hitTestSource is null or undefined');
+    });
+
+    it('should handle error in getHitTestResults method gracefully', () => {
+        frameMock.getHitTestResults.mockImplementation(() => {
+            throw new Error('Some internal error');
+        });
+    
+        expect(() => {
+            getHitTestResults(frameMock, hitTestSourceMock);
+        }).toThrow('Failed to get hit test results: Some internal error');
+    });
+
+    it('should return an empty array if no hit test results are found', () => {
+        frameMock.getHitTestResults.mockReturnValue([]);
+    
+        const result = getHitTestResults(frameMock, hitTestSourceMock);
+    
+        expect(result).toEqual([]);
     });
 });
