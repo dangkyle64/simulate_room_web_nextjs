@@ -177,7 +177,7 @@ const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
     const hitTestResults = getHitTestResults(frame, hitTestSource);
 
     if (hitTestResults.length > 0) {
-        var hitPosePositionOrientationData = getHitPosePositionOrientation(hitTestResults, referenceSpace);
+        var hitPosePositionOrientationData = getHitPosePositionOrientation(time, hitTestResults, referenceSpace);
     } else {
         console.log('No hit test results found');
     };
@@ -207,7 +207,7 @@ export const getHitTestResults = (frame, hitTestSource) => {
     return hitTestResults || [];
 };
 
-export const getHitPosePositionOrientation = (hitTestResults, referenceSpace) => {
+export const getHitPosePositionOrientation = (time, hitTestResults, referenceSpace) => {
     var hitTestData = [];
 
     const hitPose = hitTestResults[0].getPose(referenceSpace);
