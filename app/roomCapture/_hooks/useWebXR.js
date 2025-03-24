@@ -166,35 +166,19 @@ export const onXRFrame = (session, referenceSpace, time, frame, hitTestSource) =
     session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame, hitTestSource));
 };
 
-let hitTestData = [];
+
 let maxEntriesForHitPoints = 5;
 
 const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
     const hitTestResults = getHitTestResults(frame, hitTestSource);
 
     if (hitTestResults.length > 0) {
-        const hitPose = hitTestResults[0].getPose(referenceSpace);
-        if (hitPose) {
-            console.log('Hit Pose:', hitPose);
-            
-            const { x, y, z } = hitPose.transform.position;
-            const { x: qx, y: qy, z: qz, w: qw } = hitPose.transform.orientation;
-
-            hitTestData.push({
-                time: time,
-                hitPose: { x, y, z },
-                orientation: { x: qx, y: qy, z: qz, w: qw },
-            });
-
-            if (hitTestData.length > maxEntriesForHitPoints) {
-                hitTestData.shift();  
-            };
-        };
+        var hitPosePositionOrientationData = getHitPosePositionOrientation(hitTestResults, referenceSpace);
     } else {
         console.log('No hit test results found');
     };
 
-    console.log('Hit test data test: ', hitTestData);
+    console.log('Hit test data test: ', hitPosePositionOrientationData);
 };
 
 export const getHitTestResults = (frame, hitTestSource) => {
@@ -217,4 +201,28 @@ export const getHitTestResults = (frame, hitTestSource) => {
     //console.log('Hit Test Results: ', hitTestResults);
 
     return hitTestResults || [];
+};
+
+export const getHitPosePositionOrientation = (hitTestResults, referenceSpace) => {
+    var hitTestData = [];
+
+    const hitPose = hitTestResults[0].getPose(referenceSpace);
+    if (hitPose) {
+        console.log('Hit Pose:', hitPose);
+            
+        const { x, y, z } = hitPose.transform.position;
+        const { x: qx, y: qy, z: qz, w: qw } = hitPose.transform.orientation;
+
+        hitTestData.push({
+            time: time,
+            hitPose: { x, y, z },
+            orientation: { x: qx, y: qy, z: qz, w: qw },
+        });
+
+        if (hitTestData.length > maxEntriesForHitPoints) {
+            hitTestData.shift();  
+        };
+    };
+
+    return hitTestData;
 };
