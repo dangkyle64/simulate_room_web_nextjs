@@ -204,7 +204,7 @@ const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
     const hitTestResults = getHitTestResults(frame, hitTestSource);
 
     if (hitTestResults.length > 0) {
-        const hitTestData = hitPoseTracker(time, hitTestSource, referenceSpace);
+        const hitTestData = hitPoseTracker(time, hitTestResults, referenceSpace);
         console.log('Hit Test Data:', hitTestData);
     } else {
         console.log('No hit test results found');
