@@ -170,7 +170,7 @@ export const onXRFrame = (session, referenceSpace, time, frame, hitTestSource) =
     session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame, hitTestSource));
 };
 
-const createHitPosePositionOrientationTest = () => {
+const createHitPosePositionOrientation = () => {
 
     const hitTestData = [];
     const maxEntriesForHitPoints = 5;
@@ -198,7 +198,7 @@ const createHitPosePositionOrientationTest = () => {
     };
 };
 
-const hitPoseTracker = createHitPosePositionOrientationTest();
+const hitPoseTracker = createHitPosePositionOrientation();
 
 const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
     const hitTestResults = getHitTestResults(frame, hitTestSource);
@@ -231,27 +231,4 @@ export const getHitTestResults = (frame, hitTestSource) => {
     //console.log('Hit Test Results: ', hitTestResults);
 
     return hitTestResults || [];
-};
-
-export const getHitPosePositionOrientation = (time, hitTestResults, referenceSpace) => {
-
-    const hitPose = hitTestResults[0].getPose(referenceSpace);
-    if (hitPose) {
-        console.log('Hit Pose:', hitPose);
-            
-        const { x, y, z } = hitPose.transform.position;
-        const { x: qx, y: qy, z: qz, w: qw } = hitPose.transform.orientation;
-
-        hitTestData.push({
-            time: time,
-            hitPose: { x, y, z },
-            orientation: { x: qx, y: qy, z: qz, w: qw },
-        });
-
-        if (hitTestData.length > maxEntriesForHitPoints) {
-            hitTestData.shift();  
-        };
-    };
-
-    return hitTestData || [];
 };
