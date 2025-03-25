@@ -170,16 +170,45 @@ export const onXRFrame = (session, referenceSpace, time, frame, hitTestSource) =
     session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame, hitTestSource));
 };
 
+const createHitPosePositionOrientationTest = () => {
+
+    const hitTestData = [];
+    const maxEntriesForHitPoints = 5;
+
+    return (time, hitTestResults, referenceSpace) => {
+        const hitPose = hitTestResults[0].getPose(referenceSpace);
+        if (hitPose) {
+            console.log('Hit Pose:', hitPose);
+                
+            const { x, y, z } = hitPose.transform.position;
+            const { x: qx, y: qy, z: qz, w: qw } = hitPose.transform.orientation;
+
+            hitTestData.push({
+                time: time,
+                hitPose: { x, y, z },
+                orientation: { x: qx, y: qy, z: qz, w: qw },
+            });
+
+            if (hitTestData.length > maxEntriesForHitPoints) {
+                hitTestData.shift();  
+            };
+        };
+
+        return hitTestData || [];
+    };
+};
+
+const hitPoseTracker = createHitPosePositionOrientationTest();
+
 const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
     const hitTestResults = getHitTestResults(frame, hitTestSource);
 
     if (hitTestResults.length > 0) {
-        var hitPosePositionOrientationData = getHitPosePositionOrientation(time, hitTestResults, referenceSpace);
+        const hitTestData = hitPoseTracker(time, hitTestSource, referenceSpace);
+        console.log('Hit Test Data:', hitTestData);
     } else {
         console.log('No hit test results found');
     };
-
-    console.log('Hit test data test: ', hitPosePositionOrientationData);
 };
 
 export const getHitTestResults = (frame, hitTestSource) => {
@@ -203,9 +232,6 @@ export const getHitTestResults = (frame, hitTestSource) => {
 
     return hitTestResults || [];
 };
-
-let hitTestData = [];
-let maxEntriesForHitPoints = 5;
 
 export const getHitPosePositionOrientation = (time, hitTestResults, referenceSpace) => {
 
