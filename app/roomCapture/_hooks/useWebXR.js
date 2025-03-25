@@ -170,9 +170,6 @@ export const onXRFrame = (session, referenceSpace, time, frame, hitTestSource) =
     session.requestAnimationFrame((time, frame) => onXRFrame(session, referenceSpace, time, frame, hitTestSource));
 };
 
-let hitTestData = [];
-let maxEntriesForHitPoints = 5;
-
 const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
     const hitTestResults = getHitTestResults(frame, hitTestSource);
 
@@ -206,6 +203,9 @@ export const getHitTestResults = (frame, hitTestSource) => {
 
     return hitTestResults || [];
 };
+
+let hitTestData = [];
+let maxEntriesForHitPoints = 5;
 
 export const getHitPosePositionOrientation = (time, hitTestResults, referenceSpace) => {
 
