@@ -133,10 +133,6 @@ export const initializeHitSource = async (session, referenceSpace) => {
              throw new Error('Failed to initialize the hit source: Missing referenceSpace.');
         };
 
-        if (!(referenceSpace instanceof XRSpace)) {
-            throw new Error('Failed to initialize the hit source: referenceSpace is not of type XRSpace.');
-        };
-
         const initializedHitTestSource = await session.requestHitTestSource({ space: referenceSpace });
         //console.log('HitTestSource initialized:', initializedHitTestSource);
         return initializedHitTestSource;
@@ -178,7 +174,7 @@ const createHitPosePositionOrientation = () => {
     return (time, hitTestResults, referenceSpace) => {
         const hitPose = hitTestResults[0].getPose(referenceSpace);
         if (hitPose) {
-            console.log('Hit Pose:', hitPose);
+            //console.log('Hit Pose:', hitPose);
                 
             const { x, y, z } = hitPose.transform.position;
             const { x: qx, y: qy, z: qz, w: qw } = hitPose.transform.orientation;
@@ -205,7 +201,7 @@ const performHitTest = (time, frame, referenceSpace, hitTestSource) => {
 
     if (hitTestResults.length > 0) {
         const hitTestData = hitPoseTracker(time, hitTestResults, referenceSpace);
-        console.log('Hit Test Data:', hitTestData);
+        //console.log('Hit Test Data:', hitTestData);
     } else {
         console.log('No hit test results found');
     };
@@ -225,6 +221,7 @@ export const getHitTestResults = (frame, hitTestSource) => {
     try {
         hitTestResults = frame.getHitTestResults(hitTestSource);
     } catch(error) {
+        //console.log('Hit Test Results: ', hitTestResults);
         throw new Error('Failed to get hit test results: ' + error.message);
     };
     
